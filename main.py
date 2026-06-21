@@ -332,7 +332,7 @@ def check_fb_token():
         return False, "FB_ACCESS_TOKEN or FB_PAGE_ID not set"
     try:
         resp = requests.get(
-            f"https://graph.facebook.com/v22.0/{page_id}",
+            f"https://graph.facebook.com/v25.0/{page_id}",
             params={"access_token": token, "fields": "id,name"},
             timeout=15,
         )
@@ -368,7 +368,7 @@ def post_to_facebook(video_path, caption):
         notify_telegram(f"[BLOCKED] {err}")
         raise PermissionError(err)
 
-    url = f"https://graph.facebook.com/v22.0/{page_id}/video_reels"
+    url = f"https://graph.facebook.com/v25.0/{page_id}/video_reels"
     with open(video_path, "rb") as f:
         files = {"source": (os.path.basename(video_path), f, "video/mp4")}
         data = {"description": caption, "access_token": token}
@@ -385,8 +385,9 @@ def post_to_facebook(video_path, caption):
         notify_telegram(f"[RATE_LIMITED] Facebook rate limited. Response: {resp.text}")
         raise RuntimeError("Rate limited")
     else:
-        notify_telegram(f"[ERROR] Facebook upload failed: {resp.status_code} {resp.text}")
-        raise RuntimeError(f"Facebook upload failed: {resp.status_code}")
+        body = resp.text[:500]
+        notify_telegram(f"[ERROR] Facebook upload failed: {resp.status_code} {body}")
+        raise RuntimeError(f"Facebook upload failed: {resp.status_code} - {body}")
 
 
 def format_caption(narasi, topic):
