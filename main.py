@@ -308,7 +308,7 @@ def render_video(narasi, topic, filename):
             else:
                 repeats = int(video.duration / audio.duration) + 1
                 audio = concatenate_audioclips([audio] * repeats).subclipped(0, video.duration)
-            video = video.set_audio(audio)
+            video = video.with_audio(audio)
         else:
             print("[INFO] No BGM files found in audio/, rendering without audio")
 
