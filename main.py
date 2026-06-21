@@ -304,10 +304,10 @@ def render_video(narasi, topic, filename):
             print(f"[INFO] Using BGM: {bgm_path}")
             audio = AudioFileClip(bgm_path)
             if audio.duration > video.duration:
-                audio = audio.subclip(0, video.duration)
+                audio = audio.subclipped(0, video.duration)
             else:
                 repeats = int(video.duration / audio.duration) + 1
-                audio = concatenate_audioclips([audio] * repeats).subclip(0, video.duration)
+                audio = concatenate_audioclips([audio] * repeats).subclipped(0, video.duration)
             video = video.set_audio(audio)
         else:
             print("[INFO] No BGM files found in audio/, rendering without audio")
