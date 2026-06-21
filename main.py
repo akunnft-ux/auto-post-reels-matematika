@@ -280,7 +280,7 @@ def render_frame_pembahasan(narasi, topic, output_path):
 
 
 def render_video(narasi, topic, filename):
-    from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips
+    from moviepy import ImageClip, AudioFileClip, concatenate_videoclips, concatenate_audioclips
 
     tmpdir = tempfile.mkdtemp()
     try:
@@ -306,8 +306,8 @@ def render_video(narasi, topic, filename):
             if audio.duration > video.duration:
                 audio = audio.subclip(0, video.duration)
             else:
-                from moviepy.audio.fx import audio_loop
-                audio = audio_loop(audio, duration=video.duration)
+                repeats = int(video.duration / audio.duration) + 1
+                audio = concatenate_audioclips([audio] * repeats).subclip(0, video.duration)
             video = video.set_audio(audio)
         else:
             print("[INFO] No BGM files found in audio/, rendering without audio")
