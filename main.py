@@ -368,7 +368,7 @@ def post_to_facebook(video_path, caption):
         notify_telegram(f"[BLOCKED] {err}")
         raise PermissionError(err)
 
-    url = f"https://graph.facebook.com/v25.0/{page_id}/video_reels"
+    url = f"https://graph.facebook.com/v20.0/{page_id}/videos"
     with open(video_path, "rb") as f:
         files = {"source": (os.path.basename(video_path), f, "video/mp4")}
         data = {"description": caption, "access_token": token}
