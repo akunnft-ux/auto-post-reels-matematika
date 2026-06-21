@@ -292,9 +292,9 @@ def render_video(narasi, topic, filename):
         render_frame_pilihan(narasi, topic, frame2)
         render_frame_pembahasan(narasi, topic, frame3)
 
-        clip1 = ImageClip(frame1, duration=8).fadein(1).fadeout(1)
-        clip2 = ImageClip(frame2, duration=8).fadein(1).fadeout(1)
-        clip3 = ImageClip(frame3, duration=10).fadein(1).fadeout(1)
+        clip1 = ImageClip(frame1, duration=8)
+        clip2 = ImageClip(frame2, duration=8)
+        clip3 = ImageClip(frame3, duration=10)
 
         video = concatenate_videoclips([clip1, clip2, clip3], method="compose")
 
