@@ -348,12 +348,12 @@ def check_fb_token():
 
 def compliance_check(caption):
     disallowed = [
-        "comment", "tag", "share this",
+        "comment", "tag", "share this", "subscri", "follow",
     ]
     caption_lower = caption.lower()
     for pattern in disallowed:
         if pattern in caption_lower:
-            print(f"[WARN] Compliance: possible engagement bait pattern '{pattern}' found in caption")
+            raise ValueError(f"Compliance: engagement bait pattern '{pattern}' detected in caption")
     return True
 
 
@@ -393,13 +393,16 @@ def post_to_facebook(video_path, caption):
 def format_caption(narasi, topic):
     topic_label = TOPICS.get(topic, topic)
     op = ", ".join(narasi["pilihan"])
-    caption = (
-        f"🧮 SOAL MATEMATIKA — {topic_label}\n\n"
-        f"{narasi['soal']}\n\n"
-        f"{op}\n\n"
-        f"Jawaban ada di akhir video! Tulis jawabanmu di komentar 👇\n\n"
-        f"#SoalMatematika #CPNS2026 #TIUCPNS #BelajarMatematika "
-        f"#{topic_label.replace(' & ', '').replace(' ', '')} #MathReels #FacebookReels"
+    template = random.choice([
+        "🧮 SOAL MATEMATIKA — {topic}\n\n{soal}\n\n{pilihan}\n\nJawaban ada di akhir video.\n\n#SoalMatematika #CPNS2026 #BelajarMatematika #{tag}",
+        "🖊️ Latihan soal {topic}\n\n{soal}\n\n{pilihan}\n\nSimak pembahasan lengkapnya di video.\n\n#SoalMatematika #CPNS #BelajarMatematika #{tag}",
+        "📐 {topic}\n\n{soal}\n\n{pilihan}\n\nCocokkan jawabanmu dengan yang ada di video.\n\n#SoalMatematika #CPNS2026 #BelajarMatematika #{tag}",
+    ])
+    caption = template.format(
+        topic=topic_label,
+        soal=narasi["soal"],
+        pilihan=op,
+        tag=topic_label.replace(" & ", "").replace(" ", ""),
     )
     return caption
 
