@@ -43,6 +43,31 @@ JAWABAN_TEXT = "#166534"
 PENJELASAN_TEXT = "#475569"
 FOOTER_TEXT = "#94A3B8"
 
+HASHTAG_POOL = [
+    "#SoalMatematika", "#CPNS2026", "#BelajarMatematika",
+    "#MatematikaDasar", "#CPNS", "#TIUCPNS", "#SKDCPNS",
+    "#TryoutCPNS", "#RuangBelajar", "#Matematika",
+    "#LatihanCPNS", "#StudiCPNS",
+]
+
+EMOJI_POOL = ["🧮", "📐", "📝", "✏️", "📊", "➗", "➕", "❌"]
+
+FOOTER_POOL_SOAL = [
+    "",
+    "Simak pilihan jawaban di video ini",
+]
+
+FOOTER_POOL_PILIHAN = [
+    "",
+    "Pembahasan di akhir video",
+]
+
+FOOTER_POOL_PEMBAHASAN = [
+    "",
+    "Semoga membantu",
+    "Selamat belajar",
+]
+
 
 def notify_telegram(message):
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -210,7 +235,9 @@ def render_frame_soal(narasi, topic, output_path):
         text_y += line_h
 
     footer_y = IMG_HEIGHT - 80
-    draw.text((IMG_WIDTH // 2, footer_y), "Simak pilihan jawaban di video ini  ▶️", fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+    footer = random.choice(FOOTER_POOL_SOAL)
+    if footer:
+        draw.text((IMG_WIDTH // 2, footer_y), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
 
     img.save(output_path)
     return output_path
@@ -239,7 +266,9 @@ def render_frame_pilihan(narasi, topic, output_path):
         draw.text((margin_x + 40, box_y + 50), pil, fill=PILIHAN_TEXT, font=font_pil, anchor="lm")
 
     footer_y = IMG_HEIGHT - 80
-    draw.text((IMG_WIDTH // 2, footer_y), "Jawab di komentar! Jawaban benar ada di akhir video  ✅", fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+    footer = random.choice(FOOTER_POOL_PILIHAN)
+    if footer:
+        draw.text((IMG_WIDTH // 2, footer_y), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
 
     img.save(output_path)
     return output_path
@@ -273,7 +302,9 @@ def render_frame_pembahasan(narasi, topic, output_path):
         penjelasan_y += line_h
 
     footer_y = IMG_HEIGHT - 80
-    draw.text((IMG_WIDTH // 2, footer_y), "Ikuti terus untuk soal-soal CPNS/TKA/SNBT lainnya  📚", fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+    footer = random.choice(FOOTER_POOL_PEMBAHASAN)
+    if footer:
+        draw.text((IMG_WIDTH // 2, footer_y), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
 
     img.save(output_path)
     return output_path
@@ -349,6 +380,7 @@ def check_fb_token():
 def compliance_check(caption):
     disallowed = [
         "comment", "tag", "share this", "subscri", "follow",
+        "like", "komentar",
     ]
     caption_lower = caption.lower()
     for pattern in disallowed:
@@ -393,16 +425,21 @@ def post_to_facebook(video_path, caption):
 def format_caption(narasi, topic):
     topic_label = TOPICS.get(topic, topic)
     op = ", ".join(narasi["pilihan"])
-    template = random.choice([
-        "🧮 SOAL MATEMATIKA — {topic}\n\n{soal}\n\n{pilihan}\n\nJawaban ada di akhir video.\n\n#SoalMatematika #CPNS2026 #BelajarMatematika #{tag}",
-        "🖊️ Latihan soal {topic}\n\n{soal}\n\n{pilihan}\n\nSimak pembahasan lengkapnya di video.\n\n#SoalMatematika #CPNS #BelajarMatematika #{tag}",
-        "📐 {topic}\n\n{soal}\n\n{pilihan}\n\nCocokkan jawabanmu dengan yang ada di video.\n\n#SoalMatematika #CPNS2026 #BelajarMatematika #{tag}",
-    ])
+    emoji = random.choice(EMOJI_POOL)
+    tags = " ".join(random.sample(HASHTAG_POOL, k=random.randint(2, 3)))
+
+    templates = [
+        f"{{emoji}} {{topic}}\n\n{{soal}}\n\n{{pilihan}}\n\n{{tags}}",
+        f"{{topic}}\n\n{{soal}}\n\n{{emoji}} {{pilihan}}\n\n{{tags}}",
+        f"{{emoji}} Latihan {{topic}}\n\n{{soal}}\n\n{{pilihan}}\n\n{{tags}}",
+        f"{{soal}}\n\n{{pilihan}}\n\n{{tags}}",
+        f"{{emoji}} {{topic}}\n\n{{soal}}\n\n{{emoji}} {{pilihan}}\n\n{{tags}}",
+        f"Soal {{topic}}:\n\n{{soal}}\n\n{{emoji}} {{pilihan}}\n\n{{tags}}",
+    ]
+    template = random.choice(templates)
     caption = template.format(
-        topic=topic_label,
-        soal=narasi["soal"],
-        pilihan=op,
-        tag=topic_label.replace(" & ", "").replace(" ", ""),
+        emoji=emoji, topic=topic_label,
+        soal=narasi["soal"], pilihan=op, tags=tags,
     )
     return caption
 

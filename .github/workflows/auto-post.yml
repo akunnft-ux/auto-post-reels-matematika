@@ -2,9 +2,7 @@ name: Auto Post Reels Matematika
 
 on:
   schedule:
-    - cron: "15 6 * * *"
-    - cron: "15 10 * * *"
-    - cron: "15 13 * * *"
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 permissions:
