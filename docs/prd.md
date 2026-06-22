@@ -428,7 +428,7 @@ Upload fail → cleanup → Telegram notif → exit code 1
 
 | ID | Method | Path | Purpose | Auth | Rate Limit |
 |---|---|---|---|---|---|
-| API-001 | POST | https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent | Generate narasi soal | API Key | 60 RPM (free tier) |
+| API-001 | POST | https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent | Generate narasi soal | API Key | 60 RPM (free tier) |
 | API-002 | POST | https://graph.facebook.com/v22.0/{FB_PAGE_ID}/videos | Upload video Reels | Page Access Token | 200 calls/6h/user |
 | API-003 | POST | https://api.telegram.org/bot{TOKEN}/sendMessage | Kirim notifikasi error | Bot Token | 30 msg/sec |
 
@@ -688,7 +688,7 @@ Estimates are indicative based on project complexity, not committed.
 
 | Term | Definition |
 |---|---|
-| Gemini | Google AI model (gemini-2.5-flash) untuk generate teks |
+| Gemini | Google AI model (gemini-3.1-flash-lite) untuk generate teks |
 | Reels | Format video pendek portrait di Facebook |
 | MoviePy | Library Python untuk video editing |
 | Pillow | Library Python untuk image processing |

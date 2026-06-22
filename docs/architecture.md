@@ -189,7 +189,7 @@ Step 5 fails (Facebook API error)
 
 | Aspek | Detail |
 |---|---|
-| Endpoint | `POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent` |
+| Endpoint | `POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent` |
 | Auth | `GEMINI_API_KEY` in URL query param |
 | Request | JSON with prompt + responseMimeType: application/json |
 | Retry | 3 attempts, different topic on retry |
