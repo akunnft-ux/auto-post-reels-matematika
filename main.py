@@ -444,6 +444,63 @@ def format_caption(narasi, topic):
     return caption
 
 
+MODE_FILE = "data/mode.json"
+
+
+def check_telegram_mode():
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        return "facebook"
+
+    current_mode = "facebook"
+    last_id = 0
+    if os.path.exists(MODE_FILE):
+        with open(MODE_FILE) as f:
+            d = json.load(f)
+            current_mode = d.get("mode", "facebook")
+            last_id = d.get("last_update_id", 0)
+
+    try:
+        resp = requests.get(
+            f"https://api.telegram.org/bot{token}/getUpdates",
+            params={"offset": last_id + 1, "timeout": 5},
+        )
+        if resp.ok:
+            for upd in resp.json().get("result", []):
+                uid = upd["update_id"]
+                if uid > last_id:
+                    last_id = uid
+                    text = (upd.get("message") or {}).get("text", "").strip().lower()
+                    if text == "/mode facebook":
+                        current_mode = "facebook"
+                    elif text == "/mode telegram":
+                        current_mode = "telegram"
+    except Exception as e:
+        print(f"[WARN] Telegram mode check failed: {e}")
+
+    os.makedirs("data", exist_ok=True)
+    with open(MODE_FILE, "w") as f:
+        json.dump({"mode": current_mode, "last_update_id": last_id}, f)
+    return current_mode
+
+
+def post_to_telegram(video_path, caption):
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        raise ValueError("TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID required")
+    url = f"https://api.telegram.org/bot{token}/sendVideo"
+    with open(video_path, "rb") as f:
+        files = {"video": f}
+        data = {"chat_id": chat_id, "caption": caption[:1024], "supports_streaming": True}
+        resp = requests.post(url, files=files, data=data, timeout=120)
+    if not resp.ok:
+        raise RuntimeError(f"Telegram sendVideo failed: {resp.status_code} {resp.text}")
+    msg_id = resp.json()["result"]["message_id"]
+    print(f"[OK] Sent to Telegram. Message ID: {msg_id}")
+
+
 def main():
     print(f"[START] Auto Post Reels Matematika — {datetime.now().isoformat()}")
 
@@ -465,8 +522,12 @@ def main():
     caption = format_caption(narasi, topic)
     compliance_check(caption)
 
-    print(f"[INFO] Posting to Facebook Reels...")
-    post_to_facebook(video_filename, caption)
+    post_mode = check_telegram_mode()
+    print(f"[INFO] Post mode: {post_mode.upper()}")
+    if post_mode == "telegram":
+        post_to_telegram(video_filename, caption)
+    else:
+        post_to_facebook(video_filename, caption)
     print(f"[OK] Posted successfully")
 
     history.append({
