@@ -22,5 +22,11 @@
     "jawaban": "B. 10 lampu",
     "topik": "geometri",
     "tanggal": "2026-06-22"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 5 bola merah dan 3 bola biru. Jika diambil dua bola sekaligus secara acak, berapakah peluang terambilnya bola yang berbeda warna?",
+    "jawaban": "A. 15/28",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-22"
   }
 ]
