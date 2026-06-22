@@ -28,20 +28,38 @@ TOPICS = {
 FONT_BOLD = "fonts/DejaVuSans-Bold.ttf"
 FONT_REGULAR = "fonts/DejaVuSans.ttf"
 
-BG_COLOR = "#F0FDFA"
-HEADER_BG = "#0D9488"
+BG_COLOR = "#FFF8E7"
+HEADER_BG = "#1B2A4A"
 HEADER_TEXT = "#FFFFFF"
-TOPIC_BG = "#CCFBF1"
-TOPIC_TEXT = "#0F766E"
-SOAL_TEXT = "#1E293B"
+TOPIC_BG = {"deret_angka": "#FF6B9D", "aritmatika_aljabar": "#FF8C42", "peluang_statistika": "#A8E6CF", "geometri": "#7EC8E3", "fungsi_grafik": "#DDA0DD"}
+TOPIC_TEXT = "#FFFFFF"
+SOAL_TEXT = "#2C3E50"
 PILIHAN_BG = "#FFFFFF"
-PILIHAN_ACCENT = "#0D9488"
-PILIHAN_TEXT = "#334155"
-JAWABAN_BG = "#DCFCE7"
-JAWABAN_ACCENT = "#16A34A"
-JAWABAN_TEXT = "#166534"
+PILIHAN_ACCENT = "#FF8C42"
+PILIHAN_TEXT = "#2C3E50"
+JAWABAN_BG = "#FFE0EC"
+JAWABAN_ACCENT = "#FF6B9D"
+JAWABAN_TEXT = "#8B2252"
 PENJELASAN_TEXT = "#475569"
 FOOTER_TEXT = "#94A3B8"
+
+DODDLE_ICONS = ["✦", "★", "✧", "◆", "⬟", "⟡"]
+FOOTER_POOL_SOAL = [
+    "Semangat belajar! 🚀", "Terus berlatih! 💪",
+    "Kunci sukses adalah latihan! 📚", "Satu soal hari ini, juara besok! 🏆",
+    "Yakin bisa! ⚡", "Pantang menyerah! 🔥",
+    "Latihan dulu, baru ujian! ✅", "Belajar itu menyenangkan! 😊",
+    "Jangan lupa istirahat! ☕", None,
+]
+FOOTER_POOL_PILIHAN = [
+    "Coba tebak dulu sebelum lihat jawaban! 🤔", "Pilih jawabanmu! ✏️",
+    "Yakin dengan pilihanmu? 🧐", None, None,
+]
+FOOTER_POOL_PEMBAHASAN = [
+    "Paham penjelasannya? 🔍", "Semoga membantu! 📖",
+    "Jangan sungkan bertanya! 💬", "Share ke temanmu! 👥",
+    None, None,
+]
 
 HASHTAG_POOL = [
     "#SoalMatematika", "#CPNS2026", "#BelajarMatematika",
@@ -51,22 +69,6 @@ HASHTAG_POOL = [
 ]
 
 EMOJI_POOL = ["🧮", "📐", "📝", "✏️", "📊", "➗", "➕", "❌"]
-
-FOOTER_POOL_SOAL = [
-    "",
-    "Simak pilihan jawaban di video ini",
-]
-
-FOOTER_POOL_PILIHAN = [
-    "",
-    "Pembahasan di akhir video",
-]
-
-FOOTER_POOL_PEMBAHASAN = [
-    "",
-    "Semoga membantu",
-    "Selamat belajar",
-]
 
 
 def notify_telegram(message):
@@ -211,33 +213,48 @@ def render_frame_soal(narasi, topic, output_path):
     font_soal = ImageFont.truetype(FONT_REGULAR, 42)
     font_badge = ImageFont.truetype(FONT_BOLD, 28)
     font_footer = ImageFont.truetype(FONT_REGULAR, 24)
+    font_icon = ImageFont.truetype(FONT_BOLD, 36)
 
-    header_h = 200
+    topic_accent = TOPIC_BG.get(topic, "#FF8C42")
+    topic_bg = hex_to_rgb(topic_accent)
+
+    header_h = 180
     draw.rounded_rectangle([0, 0, IMG_WIDTH, header_h], radius=0, fill=HEADER_BG)
-    draw.text((IMG_WIDTH // 2, 70), "SOAL MATEMATIKA", fill=HEADER_TEXT, font=font_bold, anchor="mt")
-    draw.text((IMG_WIDTH // 2, 130), "CPNS  •  TKA  •  SNBT", fill=HEADER_TEXT, font=font_reg, anchor="mt")
+    draw.rounded_rectangle([0, header_h - 6, IMG_WIDTH, header_h + 6], radius=0, fill="#FF8C42")
+    draw.text((IMG_WIDTH // 2, 65), "SOAL MATEMATIKA", fill=HEADER_TEXT, font=font_bold, anchor="mt")
+    draw.text((IMG_WIDTH // 2, 120), "CPNS  •  TKA  •  SNBT", fill="#FFC896", font=font_reg, anchor="mt")
+
+    # Sticky note corner
+    draw.text((IMG_WIDTH - 80, 30), "✏️", fill="#FFE0B2", anchor="mm", font=font_icon)
+    draw.text((60, 140), "★", fill="#FFC896", anchor="mm", font=font_icon)
 
     topic_label = TOPICS.get(topic, topic)
     badge_padding = 30
-    bbox = draw.textbbox((0, 0), topic_label, font=font_badge)
+    bbox = draw.textbbox((0, 0), f"★ {topic_label}", font=font_badge)
     badge_w = bbox[2] - bbox[0] + badge_padding * 2
     badge_h = bbox[3] - bbox[1] + 16
     badge_x = (IMG_WIDTH - badge_w) // 2
-    badge_y = header_h + 30
-    draw_rounded_rect(draw, [badge_x, badge_y, badge_x + badge_w, badge_y + badge_h], 20, TOPIC_BG)
-    draw.text((badge_x + badge_padding, badge_y + 8), topic_label, fill=TOPIC_TEXT, font=font_badge)
+    badge_y = header_h + 35
+    draw_rounded_rect(draw, [badge_x, badge_y, badge_x + badge_w, badge_y + badge_h], 22, topic_bg)
+    draw.text((badge_x + badge_padding, badge_y + 8), f"★ {topic_label}", fill="#FFFFFF", font=font_badge)
 
     soal_lines = wrap_text(narasi["soal"], font_soal, draw, IMG_WIDTH - 120)
     line_h = 60
-    text_y = badge_y + badge_h + 60
+    text_y = badge_y + badge_h + 55
     for line in soal_lines:
         draw.text((IMG_WIDTH // 2, text_y), line, fill=SOAL_TEXT, font=font_soal, anchor="mt")
         text_y += line_h
 
     footer_y = IMG_HEIGHT - 80
+    draw.line([(80, footer_y), (IMG_WIDTH - 80, footer_y)], fill=topic_bg, width=3)
+    deco = random.choice(DODDLE_ICONS)
     footer = random.choice(FOOTER_POOL_SOAL)
     if footer:
-        draw.text((IMG_WIDTH // 2, footer_y), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+        draw.text((IMG_WIDTH // 2 - 20, footer_y + 30), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+        fw = draw.textlength(footer, font=font_footer)
+        draw.text((IMG_WIDTH // 2 + fw / 2 + 10, footer_y + 30), f" {deco}", fill="#FF8C42", font=font_footer, anchor="mt")
+    else:
+        draw.text((IMG_WIDTH // 2, footer_y + 30), deco, fill="#FF8C42", font=font_icon, anchor="mt")
 
     img.save(output_path)
     return output_path
@@ -249,10 +266,17 @@ def render_frame_pilihan(narasi, topic, output_path):
     font_bold = ImageFont.truetype(FONT_BOLD, 44)
     font_pil = ImageFont.truetype(FONT_REGULAR, 38)
     font_footer = ImageFont.truetype(FONT_REGULAR, 24)
+    font_icon = ImageFont.truetype(FONT_BOLD, 32)
+
+    topic_accent = TOPIC_BG.get(topic, "#FF8C42")
+    topic_bg = hex_to_rgb(topic_accent)
 
     header_h = 160
     draw.rounded_rectangle([0, 0, IMG_WIDTH, header_h], radius=0, fill=HEADER_BG)
+    draw.rounded_rectangle([0, header_h - 6, IMG_WIDTH, header_h + 6], radius=0, fill="#FF8C42")
     draw.text((IMG_WIDTH // 2, header_h // 2), "PILIHAN JAWABAN", fill=HEADER_TEXT, font=font_bold, anchor="mt")
+
+    draw.text((IMG_WIDTH - 70, 35), "✏️", fill="#FFE0B2", anchor="mm", font=font_icon)
 
     margin_x = 100
     box_w = IMG_WIDTH - margin_x * 2
@@ -260,15 +284,23 @@ def render_frame_pilihan(narasi, topic, output_path):
     spacing = 140
 
     for i, pil in enumerate(narasi["pilihan"]):
+        letter = chr(65 + i)
         box_y = start_y + i * spacing
         draw_rounded_rect(draw, [margin_x, box_y, margin_x + box_w, box_y + 100], 16, PILIHAN_BG)
-        draw.rounded_rectangle([margin_x, box_y, margin_x + 12, box_y + 100], radius=16, fill=PILIHAN_ACCENT)
-        draw.text((margin_x + 40, box_y + 50), pil, fill=PILIHAN_TEXT, font=font_pil, anchor="lm")
+        draw.rounded_rectangle([margin_x + 2, box_y + 2, margin_x + box_w - 2, box_y + 98], radius=14, fill=None, outline=topic_bg, width=2)
+        draw.rounded_rectangle([margin_x, box_y, margin_x + 14, box_y + 100], radius=16, fill=topic_bg)
+        draw.text((margin_x + 40, box_y + 50), f"{letter}.  {pil}", fill=PILIHAN_TEXT, font=font_pil, anchor="lm")
 
     footer_y = IMG_HEIGHT - 80
+    draw.line([(80, footer_y), (IMG_WIDTH - 80, footer_y)], fill=topic_bg, width=3)
+    deco = random.choice(DODDLE_ICONS)
     footer = random.choice(FOOTER_POOL_PILIHAN)
     if footer:
-        draw.text((IMG_WIDTH // 2, footer_y), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+        draw.text((IMG_WIDTH // 2 - 20, footer_y + 30), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+        fw = draw.textlength(footer, font=font_footer)
+        draw.text((IMG_WIDTH // 2 + fw / 2 + 10, footer_y + 30), f" {deco}", fill="#FF8C42", font=font_footer, anchor="mt")
+    else:
+        draw.text((IMG_WIDTH // 2, footer_y + 30), deco, fill="#FF8C42", font=font_icon, anchor="mt")
 
     img.save(output_path)
     return output_path
@@ -281,17 +313,24 @@ def render_frame_pembahasan(narasi, topic, output_path):
     font_jawab = ImageFont.truetype(FONT_BOLD, 42)
     font_penjelasan = ImageFont.truetype(FONT_REGULAR, 36)
     font_footer = ImageFont.truetype(FONT_REGULAR, 24)
+    font_icon = ImageFont.truetype(FONT_BOLD, 32)
+
+    topic_accent = TOPIC_BG.get(topic, "#FF8C42")
 
     header_h = 160
-    draw.rounded_rectangle([0, 0, IMG_WIDTH, header_h], radius=0, fill="#16A34A")
-    draw.text((IMG_WIDTH // 2, header_h // 2), "JAWABAN & PEMBAHASAN", fill="#FFFFFF", font=font_bold, anchor="mt")
+    draw.rounded_rectangle([0, 0, IMG_WIDTH, header_h], radius=0, fill=HEADER_BG)
+    draw.rounded_rectangle([0, header_h - 6, IMG_WIDTH, header_h + 6], radius=0, fill="#FF8C42")
+    draw.text((IMG_WIDTH // 2, header_h // 2), "JAWABAN & PEMBAHASAN", fill=HEADER_TEXT, font=font_bold, anchor="mt")
+
+    draw.text((IMG_WIDTH - 70, 35), "💡", fill="#FFE0B2", anchor="mm", font=font_icon)
 
     jawab_box_h = 100
     jawab_y = header_h + 60
     margin_x = 100
     box_w = IMG_WIDTH - margin_x * 2
     draw_rounded_rect(draw, [margin_x, jawab_y, margin_x + box_w, jawab_y + jawab_box_h], 16, JAWABAN_BG)
-    draw.rounded_rectangle([margin_x, jawab_y, margin_x + 12, jawab_y + jawab_box_h], radius=16, fill=JAWABAN_ACCENT)
+    draw.rounded_rectangle([margin_x + 2, jawab_y + 2, margin_x + box_w - 2, jawab_y + jawab_box_h - 2], radius=14, fill=None, outline=JAWABAN_ACCENT, width=2)
+    draw.rounded_rectangle([margin_x, jawab_y, margin_x + 14, jawab_y + jawab_box_h], radius=16, fill=JAWABAN_ACCENT)
     draw.text((margin_x + 40, jawab_y + jawab_box_h // 2), f"✓  {narasi['jawaban']}", fill=JAWABAN_TEXT, font=font_jawab, anchor="lm")
 
     penjelasan_y = jawab_y + jawab_box_h + 50
@@ -302,9 +341,15 @@ def render_frame_pembahasan(narasi, topic, output_path):
         penjelasan_y += line_h
 
     footer_y = IMG_HEIGHT - 80
+    draw.line([(80, footer_y), (IMG_WIDTH - 80, footer_y)], fill=hex_to_rgb(topic_accent), width=3)
+    deco = random.choice(DODDLE_ICONS)
     footer = random.choice(FOOTER_POOL_PEMBAHASAN)
     if footer:
-        draw.text((IMG_WIDTH // 2, footer_y), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+        draw.text((IMG_WIDTH // 2 - 20, footer_y + 30), footer, fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+        fw = draw.textlength(footer, font=font_footer)
+        draw.text((IMG_WIDTH // 2 + fw / 2 + 10, footer_y + 30), f" {deco}", fill="#FF8C42", font=font_footer, anchor="mt")
+    else:
+        draw.text((IMG_WIDTH // 2, footer_y + 30), deco, fill="#FF8C42", font=font_icon, anchor="mt")
 
     img.save(output_path)
     return output_path
