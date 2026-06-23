@@ -6,13 +6,15 @@
 
 **Justification:** Proyek ini hanya menyimpan riwayat posting (~180 records max). Single writer (GitHub Actions sequential cron). Tidak perlu query engine, report, atau concurency. JSON file + git tracking adalah solusi paling sederhana.
 
-**File path:** `data/history.json`
+**File path:** `data/history.json` (history), `data/analytics.json` (analytics), `data/growth.json` (follower growth)
 
 ## 2. Entity List
 
 | Entity | Description | Records Max | Persistence |
 |---|---|---|---|
 | history_entry | Riwayat setiap soal yang pernah dipost | 180 | JSON array |
+| analytics_record | Data performa per post (views, likes, comments, shares) | 180 | JSON array |
+| growth_record | Daily follower count tracking | 90 | JSON array |
 
 ## 3. Entity Definitions
 
@@ -35,9 +37,34 @@
 }
 ```
 
+### analytics_entry (NEW)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| post_id | string | Yes | Facebook post ID |
+| post_date | string | Yes | Tanggal post (YYYY-MM-DD) |
+| views | integer | Yes | View count dari Insights API |
+| likes | integer | Yes | Like count |
+| comments | integer | Yes | Comment count |
+| shares | integer | Yes | Share count |
+| source | string | Yes | Must be "api" |
+| content_type | string | Yes | quiz/fakta/tips |
+| hook_template | string | No | Template hook yang digunakan |
+| fetched_at | string | Yes | ISO8601 timestamp |
+
+### growth_entry (NEW)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| date | string | Yes | YYYY-MM-DD |
+| follower_count | integer | Yes | Total followers |
+| source | string | Yes | Always "api" |
+| daily_growth | integer | Yes | follower_count - previous_day |
+| fetched_at | string | Yes | ISO8601 timestamp |
+
 ## 4. Relationship Map
 
-Tidak ada relationship. Single flat array.
+Tidak ada relationship. Tiga flat array terpisah: history, analytics, growth.
 
 ## 5. ERD
 

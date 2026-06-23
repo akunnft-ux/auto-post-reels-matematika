@@ -4,8 +4,9 @@
 
 ### Document Version History
 | Version | Date | Author | Summary of Changes |
-|---|---|---|---|
+|---|---|---|---|---|
 | 0.1 | 2026-06-21 | Tech Lead | Initial draft |
+| 0.2 | 2026-06-23 | Tech Lead | Added 5K-follower growth target: analytics engine, content hooks/CTAs, self-learning loop, engagement tracking |
 
 ### Approval / Sign-off
 | Role | Name | Status | Date |
@@ -26,21 +27,24 @@
 
 **Target Users:** Pengikut Facebook Page yang mencari konten edukasi matematika untuk persiapan CPNS/TKA/SNBT.
 
-**Expected Outcomes:** 3 video Reels edukasi terposting otomatis setiap hari, growth engagement akun Facebook, audiens terbantu dengan soal latihan rutin.
+**Expected Outcomes:** 3-5 video Reels edukasi terposting otomatis setiap hari, 5.000 followers Facebook Page dalam 30 hari, audiens terbantu dengan soal latihan rutin.
 
-**Success Definition:** Bot berjalan 3×/hari tanpa intervensi manual, video sukses terposting ke Facebook Reels, error rate <5% per bulan.
+**Success Definition:** Bot berjalan 3-5×/hari tanpa intervensi manual, video sukses terposting ke Facebook Reels, follower count mencapai 5.000 dalam 30 hari, error rate <5% per bulan, tidak ada pelanggaran platform policy.
 
 ---
 
 ## 2. Business Objectives
 
 | ID | Objective | Type | Success Metric |
-|---|---|---|---|
-| BO-001 | Mengotomatisasi produksi konten Reels edukasi matematika | Primary | 90 video/bulan tanpa campur tangan manual |
-| BO-002 | Menjaga konsistensi posting 3×/hari | Operational | 100% jadwal terpenuhi setiap hari |
+|---|---|---|---|---|
+| BO-001 | Mengotomatisasi produksi konten Reels edukasi matematika | Primary | 90-150 video/bulan tanpa campur tangan manual |
+| BO-002 | Menjaga konsistensi posting 3-5×/hari | Operational | 100% jadwal terpenuhi setiap hari |
 | BO-003 | Menghindari duplikasi konten | Operational | Tidak ada soal yang sama dalam 60 hari |
 | BO-004 | Meminimalkan biaya operasional | Strategic | Semua komponen gratis/open source |
 | BO-005 | Notifikasi error real-time ke admin | Secondary | Admin tahu dalam <5 menit jika bot gagal |
+| BO-006 | Mencapai 5.000 followers dalam 30 hari | Primary | Follower count ≥5.000 pada H+30, growth rate ≥167 follower/hari |
+| BO-007 | Optimasi konten berdasarkan data | Strategic | Setiap konten memiliki data views/likes/comments/shares/followers; self-learning loop berjalan setiap minggu |
+| BO-008 | Zero platform policy violation | Operational | 0 banned/suspended/demoed content selama masa pertumbuhan |
 
 ---
 
@@ -60,17 +64,15 @@
 ### Out of Scope
 - Dashboard admin / UI
 - Multi-platform (TikTok, Instagram, YouTube Shorts)
-- Analytics / statistik engagement
 - User-generated content
-- Komentar/feedback loop
-- A/B testing konten
+- Komentar/feedback loop manual
+- Paid ads / boosting
 
 ### Future Scope
-- Cross-platform posting
+- Cross-platform posting (Instagram, TikTok)
 - Dashboard monitoring
-- Analytics engagement
-- Multiple BGM randomisasi
 - Efek transisi/animasi lebih kompleks
+- Voiceover AI
 
 ---
 
@@ -288,18 +290,110 @@ Edge cases:
 | Acceptance Criteria | AC-010 |
 | Dependencies | FR-002 |
 
+### FR-011: Content Hook & CTA (Core)
+
+| Field | Value |
+|---|---|
+| Description | Setiap caption harus memiliki hook (1-2 kalimat curiosity gap) dan CTA (ajakan follow/comment) untuk maksimalkan engagement dan follower growth |
+| Business Purpose | Meningkatkan view-to-follow conversion rate |
+| Traces to | BO-006, BO-007 |
+| Inputs | Narasi JSON (soal, jawaban, penjelasan, topik) |
+| Outputs | Caption dengan hook + body + CTA + hashtags |
+| Validation Rules | Hook harus create curiosity gap; CTA must be compliance-approved; maksimal 6 kalimat total caption |
+| Permissions | None |
+| Error Handling | Jika compliance check gagal → block posting + log; fallback ke template safe |
+| Acceptance Criteria | AC-011 |
+| Dependencies | FR-003, FR-015 (compliance check) |
+
+Edge cases:
+- EC-013: Hook terlalu clickbaity → compliance check reject
+- EC-014: CTA terdeteksi sebagai engagement bait → ganti dengan CTA safe alternatif
+
+### FR-012: Analytics Engine (Core)
+
+| Field | Value |
+|---|---|
+| Description | Mengumpulkan data performa setiap post (views, likes, comments, shares, followers count) untuk mengukur efektivitas konten |
+| Business Purpose | Mengetahui konten mana yang viral/good/bad untuk self-learning |
+| Traces to | BO-006, BO-007 |
+| Inputs | Facebook Page post ID (dari FR-003 response) |
+| Outputs | Analytics record: views, likes, comments, shares, follower_count, source, fetched_at |
+| Validation Rules | source field must be "api" (from Facebook Insights API); data diambil H+1 setelah post |
+| Permissions | FB_ACCESS_TOKEN with pages_read_engagement scope |
+| Error Handling | Jika Insights API gagal → log warning, skip, jangan block posting |
+| Acceptance Criteria | AC-012 |
+| Dependencies | FR-003, Facebook Insights API |
+
+Edge cases:
+- EC-015: Post terlalu baru (0 views) → skip analytics, coba lagi H+1
+- EC-016: Insights API return error → retry 1× next run, jika terus gagal → log
+
+### FR-013: Follower Count Tracking (Supporting)
+
+| Field | Value |
+|---|---|
+| Description | Catat jumlah followers setiap hari untuk tracking growth menuju 5.000 |
+| Business Purpose | Memonitor progress daily follower growth |
+| Traces to | BO-006 |
+| Inputs | Facebook Page ID |
+| Outputs | Daily follower_count record ke data/growth.json |
+| Validation Rules | Source must be from Facebook Page API (field: followers_count) |
+| Permissions | FB_ACCESS_TOKEN with pages_read_engagement scope |
+| Error Handling | Jika API gagal → skip, record hari sebelumnya |
+| Acceptance Criteria | AC-013 |
+| Dependencies | Facebook Graph API |
+
+### FR-014: Self-Learning Loop (Should Have)
+
+| Field | Value |
+|---|---|
+| Description | Analisa performa konten periodic (setiap 7 hari) dan rekomendasikan penyesuaian: format konten mana yang dipertahankan/dihentikan/diubah |
+| Business Purpose | Iterasi cepat menuju format konten paling viral |
+| Traces to | BO-006, BO-007 |
+| Inputs | Analytics records (FR-012), growth records (FR-013) |
+| Outputs | Recommendations: which hook/format/CTA to keep/change/stop |
+| Validation Rules | Hanya bertindak pada record dengan source: "api"; change hanya SATU variable per iterasi (§6 social-media-growth-engine) |
+| Permissions | None |
+| Error Handling | Jika data analytics tidak cukup (<7 hari) → skip loop |
+| Acceptance Criteria | AC-014 |
+| Dependencies | FR-012, FR-013 |
+
+Edge cases:
+- EC-017: Data analytics kosong → skip loop, log "insufficient data"
+
+### FR-015: Compliance Check — Block on Violation (Core)
+
+| Field | Value |
+|---|---|
+| Description | Compliance check HARUS block posting jika engagement bait pattern terdeteksi, bukan hanya log warning |
+| Business Purpose | Mencegah banned akibat engagement bait atau policy violation |
+| Traces to | BO-008 |
+| Inputs | Caption text |
+| Outputs | Pass → proceed; Fail → block posting + log + notify admin |
+| Validation Rules | Cek terhadap disallowed patterns: "comment X if Y", "tag 5 friends", "share this", vote-baiting; run ulang compliance check saat posting time (bukan cuma saat content creation) |
+| Permissions | None |
+| Error Handling | Blocked post → Telegram notif + skip session (jangan simpan history) |
+| Acceptance Criteria | AC-015 |
+| Dependencies | None |
+
+Edge cases:
+- EC-018: False positive (safe CTA flagged) → log, admin review
+
 ---
 
 ## 9. Non-Functional Requirements
 
 | ID | Requirement | Target | Measurement | Traces to |
-|---|---|---|---|---|
+|---|---|---|---|---|---|
 | NFR-001 | Durasi video | 15-30 detik | MoviePy duration check | BO-001 |
 | NFR-002 | Resolusi video | 1080×1920 (9:16 portrait) | ffprobe check | BO-001 |
 | NFR-003 | Eksekusi <5 menit | 100% run <300 detik | GitHub Actions duration | BO-002 |
 | NFR-004 | Error rate | <5% per bulan | Log analysis | BO-005 |
 | NFR-005 | Gratis/open source | 0 biaya lisensi | Dependency audit | BO-004 |
 | NFR-006 | History retention | Minimal 60 hari | history.json length cap | BO-003 |
+| NFR-007 | Follower growth rate | ≥167 follower/hari (5.000/30 hari) | growth.json daily diff | BO-006 |
+| NFR-008 | Analytics data freshness | Data ≤24 jam setelah post | analytics_record.fetched_at | BO-007 |
+| NFR-009 | Compliance block rate | 0 posting terlarang lolos | Audit log compliance_check | BO-008 |
 
 ---
 
@@ -327,6 +421,31 @@ Edge cases:
 | tanggal | String | Yes | Tanggal post |
 
 Retention: Max 180 entries (~60 days at 3/day). Oldest entries auto-purged.
+
+### Entity: Analytics Record (NEW)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| post_id | String | Yes | Facebook post ID |
+| post_date | String | Yes | Tanggal post (YYYY-MM-DD) |
+| views | Integer | Yes | View count (from Insights API) |
+| likes | Integer | Yes | Like count |
+| comments | Integer | Yes | Comment count |
+| shares | Integer | Yes | Share count |
+| source | String | Yes | Must be "api" (not "manual" or "estimated") |
+| content_type | String | Yes | Format: quiz/fakta/tips |
+| hook_template | String | No | Template hook yang digunakan |
+| fetched_at | String | Yes | ISO8601 timestamp |
+
+### Entity: Growth Record (NEW)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| date | String | Yes | YYYY-MM-DD |
+| follower_count | Integer | Yes | Total followers on that date |
+| source | String | Yes | Always "api" (from Graph API) |
+| daily_growth | Integer | Yes | follower_count - previous_day_count |
+| fetched_at | String | Yes | ISO8601 timestamp |
 
 ---
 
@@ -489,9 +608,12 @@ N/A — Bot-only project. Tidak ada user interface.
 ## 18. Reporting Requirements
 
 | Report | Description | Trigger | Method |
-|---|---|---|---|
+|---|---|---|---|---|
 | Error Report | Error message + timestamp | Setiap error fatal | Telegram message |
 | Execution Log | Full log each run | Setiap eksekusi | GitHub Actions log |
+| Follower Growth Report | Daily follower count + growth rate | Setiap hari | data/growth.json |
+| Content Performance Report | Top 3 best/worst performing posts by views | Setiap minggu | GitHub Actions log + growth.json |
+| Weekly Growth Summary | Total followers, avg daily growth, best content format | Setiap hari ke-7 | Telegram message + growth.json |
 
 ---
 
@@ -585,13 +707,17 @@ N/A — Single Facebook Page, single user.
 ## 27. Risk Assessment
 
 | ID | Risk | Likelihood | Impact | Mitigation | Linked Assumption |
-|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|
 | RISK-001 | Facebook API endpoint berubah | Low | High | Gunakan versioned API (v22.0) | ASM-001 |
 | RISK-002 | MoviePy tidak kompatibel di Ubuntu runner | Low | High | Test di ubuntu-latest sebelum deploy | ASM-002 |
 | RISK-003 | Video rendering melebihi 5 menit | Medium | Medium | Optimasi resolusi/frame count | ASM-004 |
-| RISK-004 | Gemini rate limit harian | Low | Medium | 3 panggilan/hari, well within limit | |
-| RISK-005 | Facebook token 60-day expiry | Medium | High | Gunakan System User token (long-lived) | |
+| RISK-004 | Gemini rate limit harian | Low | Medium | 3-5 panggilan/hari, well within limit | |
+| RISK-005 | Facebook token 60-day expiry | Medium | Medium | Gunakan System User token (long-lived) | |
 | RISK-006 | Git conflict history.json (concurrent runs) | Low | Low | Sequential cron, 1 run at a time | |
+| RISK-007 | Target 5.000 followers tidak tercapai dalam 30 hari | High | High | Realistic content strategy; jika gagal → evaluasi platform mix di bulan ke-2 | |
+| RISK-008 | Facebook flag sebagai spam karena volume posting tinggi | Medium | High | Gradual ramp-up: mulai 3×/hari, naik 5× setelah minggu 2; compliance check ketat | |
+| RISK-009 | Engagement bait detection menyebabkan shadow ban | Medium | Critical | Compliance check WAJIB block posting, bukan log; run ulang saat posting time | |
+| RISK-010 | Insights API rate limit untuk analytics | Low | Medium | 1 call per post per hari; well within limit | |
 
 ---
 
@@ -609,18 +735,26 @@ N/A — Single Facebook Page, single user.
 | AC-008 | FR-008 | Topik hari ini sudah dipakai | Bot pilih topik lain | Topik unik untuk hari ini |
 | AC-009 | FR-009 | BGM tersedia | Bot render video | Video memiliki audio track |
 | AC-010 | FR-010 | Video selesai | Inspeksi frame | 3 frame visible |
+| AC-011 | FR-011 | Caption digenerate | Cek hook + CTA | Caption memiliki hook (curiosity gap) + CTA (follow/comment) |
+| AC-012 | FR-012 | Post sudah >24 jam | Bot fetch analytics | Record dengan views, likes, comments, shares, source:"api" |
+| AC-013 | FR-013 | Setiap hari | Bot fetch followers count | growth.json memiliki entry per hari dengan follower_count |
+| AC-014 | FR-014 | 7 hari berlalu | Bot running self-learning | Recommendations dihasilkan berdasarkan data analytics |
+| AC-015 | FR-015 | Caption dengan engagement bait | Compliance check | Posting BLOCKED, notifikasi admin, history tidak tersimpan |
 
 ---
 
 ## 28a. Traceability Matrix
 
 | BO | FR/NFR | AC | Risk |
-|---|---|---|---|
-| BO-001 | FR-001, FR-002, FR-003, FR-007, FR-009, FR-010 | AC-001, AC-002, AC-003, AC-007, AC-009, AC-010 | RISK-001, RISK-002 |
+|---|---|---|---|---|
+| BO-001 | FR-001, FR-002, FR-003, FR-007, FR-009, FR-010, FR-011 | AC-001, AC-002, AC-003, AC-007, AC-009, AC-010, AC-011 | RISK-001, RISK-002 |
 | BO-002 | FR-004, FR-008 | AC-004, AC-008 | |
 | BO-003 | FR-005 | AC-005 | |
 | BO-004 | NFR-005 | — | |
 | BO-005 | FR-006 | AC-006 | |
+| BO-006 | FR-011, FR-012, FR-013, FR-014, NFR-007 | AC-011, AC-012, AC-013, AC-014 | RISK-007 |
+| BO-007 | FR-011, FR-012, FR-014, NFR-008 | AC-011, AC-012, AC-014 | |
+| BO-008 | FR-015, NFR-009 | AC-015 | RISK-008, RISK-009 |
 | | NFR-001, NFR-002, NFR-003, NFR-004, NFR-006 | — | |
 | | NFR-001 | — | |
 | | NFR-002 | — | |
@@ -633,11 +767,16 @@ N/A — Single Facebook Page, single user.
 ## 29. Release Strategy
 
 | Phase | Scope | Timeline |
-|---|---|---|
+|---|---|---|---|
 | Phase 1 (MVP) | Single script: generate → render → post → history | Day 1 |
 | Phase 1a | GitHub Actions workflow + cron | Day 1 |
-| Phase 2 | Testing live di Facebook Page | Day 2 |
-| Future | Multiple BGM, efek transisi, multi-platform | TBD |
+| Phase 2 | Content hook + CTA templates, compliance block | Day 1-2 |
+| Phase 3 | Analytics engine + follower tracking (FR-012, FR-013) | Day 2-3 |
+| Phase 4 | Content strategy: quiz challenge, fakta, tips cepat + variasi format | Day 3-4 |
+| Phase 5 | Self-learning loop (FR-014) | Day 4-5 |
+| Phase 6 | Growth ramp: scale 3→5 post/hari + monitoring | Day 5-7 |
+| Growth Month | Full operation: 5 post/hari, daily analytics, weekly self-learning | Day 7-30 |
+| Future | Cross-platform (Instagram, TikTok), dashboard monitoring | TBD |
 
 ---
 

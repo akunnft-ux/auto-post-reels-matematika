@@ -3,13 +3,24 @@ name: Auto Post Reels Matematika
 on:
   schedule:
     - cron: "0 7 * * *"
+    - cron: "0 10 * * *"
+    - cron: "0 13 * * *"
+    - cron: "0 22 * * *"
+    - cron: "0 1 * * *"
+    - cron: "30 0 * * *"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode"
+        type: choice
+        options: [post, analytics, review]
 
 permissions:
   contents: write
 
 jobs:
   post:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'post')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -36,9 +47,9 @@ jobs:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python main.py
+        run: python main.py post
 
-      - name: Commit and push history
+      - name: Commit and push data
         if: always()
         run: |
           git config user.name "Auto Post Bot"
@@ -51,3 +62,68 @@ jobs:
           git add data/history.json data/mode.json
           git diff --staged --quiet || git commit -m "chore: update history [skip ci]"
           git push
+
+  analytics:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'analytics')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Sync to latest main
+        run: |
+          git fetch origin
+          git reset --hard origin/main
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run analytics batch
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py analytics
+
+      - name: Commit and push analytics
+        if: always()
+        run: |
+          git config user.name "Analytics Bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/analytics.json data/growth.json
+          git stash
+          git fetch origin
+          git reset --hard origin/main
+          git stash pop || true
+          git add data/analytics.json data/growth.json
+          git diff --staged --quiet || git commit -m "chore: update analytics [skip ci]"
+          git push
+
+  weekly_review:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'review'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Sync to latest main
+        run: |
+          git fetch origin
+          git reset --hard origin/main
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run self-learning review
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py review
