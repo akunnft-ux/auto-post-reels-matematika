@@ -48,5 +48,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-23",
     "content_type": "tips"
+  },
+  {
+    "soal": "Tahukah kamu bahwa ada sebuah fungsi grafik bernama 'Fungsi Weierstrass' yang kontinu di setiap titik, tetapi tidak memiliki garis singgung (turunan) di mana pun? Ini berarti grafiknya tidak bisa dihaluskan karena terlalu 'kasar' di setiap skala.",
+    "jawaban": "Karena fungsinya merupakan fraktal yang memiliki detail tak terhingga",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-23",
+    "content_type": "fakta"
   }
 ]
