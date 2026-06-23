@@ -34,5 +34,12 @@
     "jawaban": "C. Rp176.000",
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-06-23"
+  },
+  {
+    "soal": "Sebuah persegi memiliki panjang sisi 10 cm. Jika panjang sisi persegi tersebut diperbesar sebesar 20%, berapakah persentase kenaikan luas persegi tersebut?",
+    "jawaban": "D. 44%",
+    "topik": "geometri",
+    "tanggal": "2026-06-23",
+    "content_type": "quiz"
   }
 ]
