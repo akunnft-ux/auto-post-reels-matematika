@@ -348,8 +348,8 @@ def render_frame_soal(narasi, topic, output_path, content_type="quiz"):
         draw.text((IMG_WIDTH // 2, text_y), line, fill=SOAL_TEXT, font=font_soal, anchor="mt")
         text_y += line_h
 
-    hint_y = IMG_HEIGHT - 150
-    draw.text((IMG_WIDTH // 2, hint_y), "Jawaban di akhir video 👇", fill=FOOTER_TEXT, font=font_footer, anchor="mt")
+    hint_y = IMG_HEIGHT - 160
+    draw.text((IMG_WIDTH // 2, hint_y), "Jawaban di akhir video 👇", fill=FOOTER_TEXT, font=font_soal, anchor="mt")
 
     footer_y = IMG_HEIGHT - 80
     draw.line([(80, footer_y), (IMG_WIDTH - 80, footer_y)], fill=topic_bg, width=3)
@@ -390,17 +390,20 @@ def render_frame_pilihan(narasi, topic, output_path):
     line_h = 50
 
     for i, pil in enumerate(narasi["pilihan"]):
+        letter = chr(65 + i)
+        if not pil.startswith(f"{letter}."):
+            pil = f"{letter}.  {pil}"
         box_y = start_y + i * spacing
         text_x = margin_x + 40
         max_text_w = box_w - 80
         lines = wrap_text(pil, font_pil, draw, max_text_w)
-        box_h = max(100, len(lines) * line_h + 30)
+        box_h = max(120, len(lines) * line_h + 40)
         draw_rounded_rect(draw, [margin_x, box_y, margin_x + box_w, box_y + box_h], 16, PILIHAN_BG)
         draw.rounded_rectangle([margin_x + 2, box_y + 2, margin_x + box_w - 2, box_y + box_h - 2], radius=14, fill=None, outline=topic_bg, width=2)
         draw.rounded_rectangle([margin_x, box_y, margin_x + 14, box_y + box_h], radius=16, fill=topic_bg)
         text_y_start = box_y + (box_h - len(lines) * line_h) // 2
         for j, line in enumerate(lines):
-            draw.text((text_x, text_y_start + j * line_h), line, fill=PILIHAN_TEXT, font=font_pil, anchor="lm")
+            draw.text((text_x, text_y_start + j * line_h), line, fill=PILIHAN_TEXT, font=font_pil, anchor="lt")
 
     footer_y = IMG_HEIGHT - 80
     draw.line([(80, footer_y), (IMG_WIDTH - 80, footer_y)], fill=topic_bg, width=3)
@@ -441,13 +444,13 @@ def render_frame_pembahasan(narasi, topic, output_path):
     max_text_w = box_w - 80
     jawab_lines = wrap_text(jawab_text, font_jawab, draw, max_text_w)
     line_h = 50
-    jawab_box_h = max(100, len(jawab_lines) * line_h + 30)
+    jawab_box_h = max(120, len(jawab_lines) * line_h + 40)
     draw_rounded_rect(draw, [margin_x, jawab_y, margin_x + box_w, jawab_y + jawab_box_h], 16, JAWABAN_BG)
     draw.rounded_rectangle([margin_x + 2, jawab_y + 2, margin_x + box_w - 2, jawab_y + jawab_box_h - 2], radius=14, fill=None, outline=JAWABAN_ACCENT, width=2)
     draw.rounded_rectangle([margin_x, jawab_y, margin_x + 14, jawab_y + jawab_box_h], radius=16, fill=JAWABAN_ACCENT)
-    jawab_text_y = jawab_y + (jawab_box_h - len(jawab_lines) * line_h) // 2
+    jawab_text_y_start = jawab_y + (jawab_box_h - len(jawab_lines) * line_h) // 2
     for j, line in enumerate(jawab_lines):
-        draw.text((margin_x + 40, jawab_text_y + j * line_h), line, fill=JAWABAN_TEXT, font=font_jawab, anchor="lm")
+        draw.text((margin_x + 40, jawab_text_y_start + j * line_h), line, fill=JAWABAN_TEXT, font=font_jawab, anchor="lt")
 
     penjelasan_y = jawab_y + jawab_box_h + 50
     penjelasan_lines = wrap_text(narasi["penjelasan"], font_penjelasan, draw, IMG_WIDTH - 120)
