@@ -2,6 +2,7 @@ import glob
 import json
 import os
 import random
+import re
 import shutil
 import sys
 import tempfile
@@ -526,7 +527,6 @@ def compliance_check(caption):
     ]
     caption_lower = caption.lower()
     for pattern in disallowed_bait_patterns:
-        import re
         if re.search(pattern, caption_lower):
             raise ValueError(f"Compliance: engagement bait pattern '{pattern}' detected in caption")
     return True
@@ -609,7 +609,7 @@ def check_telegram_mode():
                     last_id = uid
                     text = (upd.get("message") or {}).get("text", "").strip().lower()
                     if text == "/mode facebook":
-                        current_mode = "telegram"
+                        current_mode = "facebook"
                         requests.post(
                             f"https://api.telegram.org/bot{token}/sendMessage",
                             json={"chat_id": chat_id, "text": "\u2705 Mode berubah ke FACEBOOK"},
@@ -678,8 +678,12 @@ def download_telegram_file(file_id, dest_path):
     return True
 
 def parse_csv_with_gemini(csv_path):
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        print("[WARN] GEMINI_API_KEY not set, skipping CSV parse")
+        return []
+    client = genai.Client(api_key=api_key)
     model_name = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
-    model = genai.GenerativeModel(model_name)
     with open(csv_path) as f:
         raw = f.read()
     prompt = (
@@ -690,8 +694,11 @@ def parse_csv_with_gemini(csv_path):
         f"CSV:\n{raw[:50000]}"
     )
     try:
-        resp = model.generate_content(prompt)
-        text = resp.text.strip()
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt,
+        )
+        text = response.text.strip()
         text = text.replace("```json", "").replace("```", "").strip()
         parsed = json.loads(text)
         if isinstance(parsed, list):
