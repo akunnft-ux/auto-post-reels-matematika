@@ -41,5 +41,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-23",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan dua angka selanjutnya dari deret: 2, 3, 5, 8, 12, ...",
+    "jawaban": "C. Gunakan metode selisih bertingkat (selisih dari selisih)",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-23",
+    "content_type": "tips"
   }
 ]
