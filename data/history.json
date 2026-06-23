@@ -55,5 +55,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-23",
     "content_type": "fakta"
+  },
+  {
+    "soal": "Dalam sebuah ruangan berisi 23 orang, peluang setidaknya ada dua orang yang berulang tahun pada tanggal yang sama sebenarnya lebih dari 50%. Fenomena ini sering disebut sebagai Paradoks Ulang Tahun.",
+    "jawaban": "Peluang ini dihitung berdasarkan perbandingan pasangan orang dalam kelompok",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-23",
+    "content_type": "fakta"
   }
 ]
