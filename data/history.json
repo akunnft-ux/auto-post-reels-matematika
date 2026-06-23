@@ -62,5 +62,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-23",
     "content_type": "fakta"
+  },
+  {
+    "soal": "Sebuah roda dengan diameter 28 cm berputar sebanyak 100 kali menempuh jarak tertentu. Berapakah jarak total yang ditempuh roda tersebut? (Gunakan π = 22/7)",
+    "jawaban": "A. 88 meter",
+    "topik": "geometri",
+    "tanggal": "2026-06-23",
+    "content_type": "quiz"
   }
 ]
