@@ -69,5 +69,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-23",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Apakah kamu tahu bahwa ada fungsi matematika yang kontinu di setiap titik, namun tidak memiliki turunan sama sekali di titik mana pun?",
+    "jawaban": "Fungsi Weierstrass",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-23",
+    "content_type": "fakta"
   }
 ]
