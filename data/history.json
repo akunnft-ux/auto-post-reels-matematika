@@ -76,5 +76,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-23",
     "content_type": "fakta"
+  },
+  {
+    "soal": "Berapa banyak cara menyusun huruf pada kata 'MATEMATIKA'?",
+    "jawaban": "C. 10! / (2! x 3! x 2!)",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-24",
+    "content_type": "tips"
   }
 ]
