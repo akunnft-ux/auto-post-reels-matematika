@@ -118,5 +118,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-24",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Apakah kamu tahu bahwa luas permukaan bola selalu dua pertiga dari luas permukaan tabung yang membungkusnya? Fakta ini bahkan dianggap sebagai pencapaian terbesar Archimedes.",
+    "jawaban": "Berlaku untuk semua bola dan tabung pembungkusnya",
+    "topik": "geometri",
+    "tanggal": "2026-06-24",
+    "content_type": "fakta"
   }
 ]
