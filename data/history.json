@@ -97,5 +97,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-24",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan dua angka selanjutnya dari deret: 2, 4, 8, 10, 20, 22, ...",
+    "jawaban": "C. Gunakan pola operasi matematika berulang (x2, +2)",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-24",
+    "content_type": "tips"
   }
 ]
