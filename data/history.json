@@ -83,5 +83,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-24",
     "content_type": "tips"
+  },
+  {
+    "soal": "Tahukah kamu bahwa dalam geometri bola, jumlah sudut sebuah segitiga selalu lebih besar dari 180 derajat? Fenomena ini sangat berbeda dengan geometri bidang datar yang kita pelajari di sekolah.",
+    "jawaban": "Karena kelengkungan permukaan bola membuat sisi segitiga menjadi busur",
+    "topik": "geometri",
+    "tanggal": "2026-06-24",
+    "content_type": "fakta"
   }
 ]
