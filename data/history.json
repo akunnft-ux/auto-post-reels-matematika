@@ -90,5 +90,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-24",
     "content_type": "fakta"
+  },
+  {
+    "soal": "Diketahui fungsi f(x) = |x - 2| + |x + 3|. Berapakah nilai minimum dari fungsi tersebut untuk setiap nilai x bilangan real?",
+    "jawaban": "C. 5",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-24",
+    "content_type": "quiz"
   }
 ]
