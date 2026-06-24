@@ -104,5 +104,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-24",
     "content_type": "tips"
+  },
+  {
+    "soal": "Jika x adalah 33,33% dari 150 dan y adalah 1/8 dari 100, berapakah nilai dari x - y?",
+    "jawaban": "B. 42,5",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-06-24",
+    "content_type": "quiz"
   }
 ]
