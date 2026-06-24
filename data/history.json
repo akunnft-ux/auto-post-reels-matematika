@@ -125,5 +125,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-24",
     "content_type": "fakta"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret berikut: 2, 3, 5, 8, 13, 21, 34, ...",
+    "jawaban": "B. 55",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-24",
+    "content_type": "quiz"
   }
 ]
