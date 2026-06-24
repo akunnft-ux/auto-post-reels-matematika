@@ -308,7 +308,7 @@ def render_frame_soal(narasi, topic, output_path, content_type="quiz"):
     draw = ImageDraw.Draw(img)
     font_bold = ImageFont.truetype(FONT_BOLD, 48)
     font_reg = ImageFont.truetype(FONT_REGULAR, 36)
-    font_soal = ImageFont.truetype(FONT_REGULAR, 42)
+    font_soal = ImageFont.truetype(FONT_REGULAR, 50)
     font_badge = ImageFont.truetype(FONT_BOLD, 28)
     font_footer = ImageFont.truetype(FONT_REGULAR, 24)
     font_icon = ImageFont.truetype(FONT_BOLD, 36)
@@ -342,13 +342,13 @@ def render_frame_soal(narasi, topic, output_path, content_type="quiz"):
     draw.text((badge_x + badge_padding, badge_y + 8), f"\u2605 {topic_label}", fill="#FFFFFF", font=font_badge)
 
     soal_lines = wrap_text(narasi["soal"], font_soal, draw, IMG_WIDTH - 120)
-    line_h = 60
+    line_h = 72
     text_y = badge_y + badge_h + 55
     for line in soal_lines:
         draw.text((IMG_WIDTH // 2, text_y), line, fill=SOAL_TEXT, font=font_soal, anchor="mt")
         text_y += line_h
 
-    hint_y = IMG_HEIGHT - 160
+    hint_y = IMG_HEIGHT - 180
     draw.text((IMG_WIDTH // 2, hint_y), "Jawaban di akhir video 👇", fill=FOOTER_TEXT, font=font_soal, anchor="mt")
 
     footer_y = IMG_HEIGHT - 80
@@ -423,8 +423,8 @@ def render_frame_pembahasan(narasi, topic, output_path):
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(BG_COLOR))
     draw = ImageDraw.Draw(img)
     font_bold = ImageFont.truetype(FONT_BOLD, 44)
-    font_jawab = ImageFont.truetype(FONT_BOLD, 42)
-    font_penjelasan = ImageFont.truetype(FONT_REGULAR, 36)
+    font_jawab = ImageFont.truetype(FONT_BOLD, 50)
+    font_penjelasan = ImageFont.truetype(FONT_REGULAR, 43)
     font_footer = ImageFont.truetype(FONT_REGULAR, 24)
     font_icon = ImageFont.truetype(FONT_BOLD, 32)
 
@@ -443,7 +443,7 @@ def render_frame_pembahasan(narasi, topic, output_path):
     jawab_text = f"\u2713  {narasi['jawaban']}"
     max_text_w = box_w - 80
     jawab_lines = wrap_text(jawab_text, font_jawab, draw, max_text_w)
-    line_h = 50
+    line_h = 60
     jawab_box_h = max(120, len(jawab_lines) * line_h + 40)
     draw_rounded_rect(draw, [margin_x, jawab_y, margin_x + box_w, jawab_y + jawab_box_h], 16, JAWABAN_BG)
     draw.rounded_rectangle([margin_x + 2, jawab_y + 2, margin_x + box_w - 2, jawab_y + jawab_box_h - 2], radius=14, fill=None, outline=JAWABAN_ACCENT, width=2)
@@ -454,7 +454,7 @@ def render_frame_pembahasan(narasi, topic, output_path):
 
     penjelasan_y = jawab_y + jawab_box_h + 50
     penjelasan_lines = wrap_text(narasi["penjelasan"], font_penjelasan, draw, IMG_WIDTH - 120)
-    line_h = 50
+    line_h = 60
     for line in penjelasan_lines:
         draw.text((IMG_WIDTH // 2, penjelasan_y), line, fill=PENJELASAN_TEXT, font=font_penjelasan, anchor="mt")
         penjelasan_y += line_h
