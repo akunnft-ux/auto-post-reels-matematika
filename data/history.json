@@ -111,5 +111,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-06-24",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret berikut: 1, 2, 6, 15, 31, ...",
+    "jawaban": "B. 56",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-24",
+    "content_type": "quiz"
   }
 ]
