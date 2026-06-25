@@ -139,5 +139,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-24",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika 3^(x+2) + 3^x = 90, berapakah nilai dari 2^x?",
+    "jawaban": "B. 4",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-06-25",
+    "content_type": "quiz"
   }
 ]
