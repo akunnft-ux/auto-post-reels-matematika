@@ -146,5 +146,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-06-25",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Grafik fungsi f(x) = (x^2 - 4) / (x - 2) akan membentuk garis lurus yang kontinu dengan sebuah lubang pada titik tertentu. Berapakah koordinat lubang tersebut?",
+    "jawaban": "C. (2, 4)",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-25",
+    "content_type": "quiz"
   }
 ]
