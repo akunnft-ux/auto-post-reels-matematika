@@ -51,6 +51,43 @@ JAWABAN_TEXT = "#8B2252"
 PENJELASAN_TEXT = "#475569"
 FOOTER_TEXT = "#94A3B8"
 
+SUPERSCRIPT_MAP = {
+    "0": "\u2070", "1": "\u00B9", "2": "\u00B2", "3": "\u00B3",
+    "4": "\u2074", "5": "\u2075", "6": "\u2076", "7": "\u2077",
+    "8": "\u2078", "9": "\u2079",
+    "+": "\u207A", "-": "\u207B", "=": "\u207C",
+    "(": "\u207D", ")": "\u207E",
+    "a": "\u1D43", "b": "\u1D47", "c": "\u1D9C", "d": "\u1D48",
+    "e": "\u1D49", "f": "\u1DA0", "g": "\u1D4D", "h": "\u02B0",
+    "i": "\u2071", "j": "\u1DA8", "k": "\u1D4F", "l": "\u02E1",
+    "m": "\u1D50", "n": "\u207F", "o": "\u1D52", "p": "\u1D56",
+    "r": "\u02B3", "s": "\u02E2", "t": "\u1D57", "u": "\u1D58",
+    "v": "\u1D5B", "w": "\u02B7", "x": "\u02E3", "y": "\u02B8",
+    "z": "\u1DBB",
+}
+
+FRACTION_MAP = {
+    "1/2": "\u00BD", "1/3": "\u2153", "2/3": "\u2154",
+    "1/4": "\u00BC", "3/4": "\u00BE",
+    "1/5": "\u2155", "2/5": "\u2156", "3/5": "\u2157", "4/5": "\u2158",
+    "1/6": "\u2159", "5/6": "\u215A",
+    "1/7": "\u2150",
+    "1/8": "\u215B", "3/8": "\u215C", "5/8": "\u215D", "7/8": "\u215E",
+    "1/9": "\u2151",
+    "1/10": "\u2152",
+}
+
+SUBSCRIPT_MAP = {
+    "0": "\u2080", "1": "\u2081", "2": "\u2082", "3": "\u2083",
+    "4": "\u2084", "5": "\u2085", "6": "\u2086", "7": "\u2087",
+    "8": "\u2088", "9": "\u2089",
+    "+": "\u208A", "-": "\u208B", "=": "\u208C",
+    "(": "\u208D", ")": "\u208E",
+    "a": "\u2090", "e": "\u2091", "o": "\u2092", "x": "\u2093",
+    "h": "\u2095", "k": "\u2096", "l": "\u2097", "m": "\u2098",
+    "n": "\u2099", "p": "\u209A", "s": "\u209B", "t": "\u209C",
+}
+
 DODDLE_ICONS = ["\u2726", "\u2605", "\u2727", "\u25C6", "\u2B1F", "\u27A1"]
 FOOTER_POOL_SOAL = [
     "Semangat belajar! \U0001F680", "Terus berlatih! \U0001F4AA",
@@ -179,6 +216,40 @@ def get_hook(content_type):
 def get_cta():
     return random.choice(CTA_POOL)
 
+def fix_exponents(text):
+    if not text:
+        return text
+    text = re.sub(
+        r"\^\{([^}]*)\}",
+        lambda m: "".join(SUPERSCRIPT_MAP.get(c, c) for c in m.group(1)),
+        text,
+    )
+    text = re.sub(
+        r"\^(\d+)",
+        lambda m: "".join(SUPERSCRIPT_MAP.get(c, c) for c in m.group(1)),
+        text,
+    )
+    text = re.sub(
+        r"\^([a-z])",
+        lambda m: SUPERSCRIPT_MAP.get(m.group(1), m.group(1)),
+        text,
+    )
+    return text
+
+def fix_fractions(text):
+    if not text:
+        return text
+    def _replace_frac(m):
+        frac = m.group(0)
+        if frac in FRACTION_MAP:
+            return FRACTION_MAP[frac]
+        num, den = frac.split("/")
+        sup = "".join(SUPERSCRIPT_MAP.get(c, c) for c in num)
+        sub = "".join(SUBSCRIPT_MAP.get(c, c) for c in den)
+        return sup + "\u2044" + sub
+    text = re.sub(r"(?<!\d)(\d+)/(\d+)(?!\d)", _replace_frac, text)
+    return text
+
 def generate_narasi(topic, history, content_type, max_retry=3):
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -271,6 +342,10 @@ Aturan:
             if is_duplicate(narasi["soal"], history):
                 print(f"[WARN] Duplicate soalan, retry {attempt}")
                 continue
+            narasi["soal"] = fix_exponents(fix_fractions(narasi["soal"]))
+            narasi["pilihan"] = [fix_exponents(fix_fractions(p)) for p in narasi["pilihan"]]
+            narasi["jawaban"] = fix_exponents(fix_fractions(narasi["jawaban"]))
+            narasi["penjelasan"] = fix_exponents(fix_fractions(narasi["penjelasan"]))
             return narasi
         except (json.JSONDecodeError, KeyError, ValueError) as e:
             print(f"[WARN] Gemini attempt {attempt} failed: {e}")
