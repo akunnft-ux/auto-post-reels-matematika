@@ -52,13 +52,13 @@ jobs:
         run: |
           git config user.name "Auto Post Bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/*.json 2>/dev/null || true
+          git add data/*.json self_learning/learning_config.json 2>/dev/null || true
           git stash
           git fetch origin
           git reset --hard origin/main
           git stash pop || true
-          git add data/*.json 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "chore: update history [skip ci]"
+          git add data/*.json self_learning/learning_config.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: update data [skip ci]"
           git push
 
   analytics:
@@ -93,12 +93,12 @@ jobs:
         run: |
           git config user.name "Analytics Bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/*.json 2>/dev/null || true
+          git add data/*.json self_learning/learning_config.json 2>/dev/null || true
           git stash
           git fetch origin
           git reset --hard origin/main
           git stash pop || true
-          git add data/*.json 2>/dev/null || true
+          git add data/*.json self_learning/learning_config.json 2>/dev/null || true
           git diff --staged --quiet || git commit -m "chore: update analytics [skip ci]"
           git push
 

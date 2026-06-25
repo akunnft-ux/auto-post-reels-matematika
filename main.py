@@ -17,6 +17,7 @@ ANALYTICS_FILE = "data/analytics.json"
 GROWTH_FILE = "data/growth.json"
 MODE_FILE = "data/mode.json"
 PROCESSED_CSV_FILE = "data/processed_msg.json"
+LEARNING_CONFIG_FILE = "self_learning/learning_config.json"
 MAX_HISTORY_ITEMS = 180
 IMG_WIDTH = 1080
 IMG_HEIGHT = 1920
@@ -676,6 +677,99 @@ def post_to_facebook(video_path, caption):
         notify_telegram(f"[ERROR] Facebook upload failed: {resp.status_code} {body}")
         raise RuntimeError(f"Facebook upload failed: {resp.status_code} - {body}")
 
+def load_and_apply_learning_config():
+    """Load learning_config.json and override global constants."""
+    if not os.path.exists(LEARNING_CONFIG_FILE):
+        return None
+    try:
+        with open(LEARNING_CONFIG_FILE) as f:
+            cfg = json.load(f)
+    except Exception as e:
+        print(f"[WARN] Failed to load learning config: {e}")
+        return None
+
+    global CONTENT_TYPE_WEIGHTS, HOOK_TEMPLATES, CTA_POOL, HASHTAG_POOL
+    changed = []
+    if "content_type_weights" in cfg and cfg["content_type_weights"]:
+        CONTENT_TYPE_WEIGHTS = cfg["content_type_weights"]
+        changed.append("weights")
+    if "hook_templates" in cfg and cfg["hook_templates"]:
+        HOOK_TEMPLATES = cfg["hook_templates"]
+        changed.append("hooks")
+    if "cta_pool" in cfg and cfg["cta_pool"]:
+        CTA_POOL = cfg["cta_pool"]
+        changed.append("CTA")
+    if "hashtag_pool" in cfg and cfg["hashtag_pool"]:
+        HASHTAG_POOL = cfg["hashtag_pool"]
+        changed.append("hashtags")
+    if changed:
+        print(f"[SL] Applied learning config: {', '.join(changed)}")
+    return cfg
+
+
+def process_telegram_csv():
+    """Check Telegram for CSV file uploads and run self-learning."""
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        return
+
+    last_id = 0
+    mode_data = {}
+    if os.path.exists(MODE_FILE):
+        with open(MODE_FILE) as f:
+            mode_data = json.load(f)
+            last_id = mode_data.get("last_update_id", 0)
+
+    try:
+        resp = requests.get(
+            f"https://api.telegram.org/bot{token}/getUpdates",
+            params={"offset": last_id + 1, "timeout": 5},
+        )
+        if not resp.ok:
+            return
+
+        for upd in resp.json().get("result", []):
+            uid = upd["update_id"]
+            if uid <= last_id:
+                continue
+            msg = upd.get("message") or {}
+            doc = msg.get("document")
+            if doc and doc.get("file_name", "").lower().endswith(".csv"):
+                print(f"[SL] CSV detected: {doc['file_name']}")
+                tmp_path = f"/tmp/sl_csv_{doc['file_id']}.csv"
+                if download_telegram_file(doc["file_id"], tmp_path):
+                    try:
+                        from self_learning import run_self_learning
+                        result = run_self_learning(tmp_path)
+                        summary = _format_learning_summary(result)
+                        notify_telegram(summary)
+                    except Exception as e:
+                        notify_telegram(f"[SL] Self-learning FAILED: {e}")
+                        print(f"[SL] Error: {e}")
+                    finally:
+                        if os.path.exists(tmp_path):
+                            os.remove(tmp_path)
+
+    except Exception as e:
+        print(f"[WARN] process_telegram_csv failed: {e}")
+
+
+def _format_learning_summary(result: dict) -> str:
+    if result.get("status") == "skipped":
+        reason = result.get("reason", "unknown")
+        return f"[SL] Self-learning skipped: {reason}"
+    lines = ["[SL] Self-learning selesai!"]
+    lines.append(f"Records diproses: {result.get('records_parsed', 0)}")
+    cls = result.get("classifications", {})
+    if cls:
+        lines.append(f"Viral: {cls.get('viral', 0)} | Good: {cls.get('good', 0)} | Bad: {cls.get('bad', 0)}")
+    changes = result.get("changes_made", [])
+    if changes:
+        lines.append(f"Perubahan: {', '.join(changes)}")
+    return "\n".join(lines)
+
+
 def check_telegram_mode():
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
@@ -1048,6 +1142,9 @@ def run_self_learning_review():
 def main():
     today_str = date.today().isoformat()
     print(f"[START] Auto Post Reels Matematika (Growth Mode) — {datetime.now().isoformat()}")
+
+    load_and_apply_learning_config()
+    process_telegram_csv()
 
     history = load_history()
     print(f"[INFO] History loaded: {len(history)} entries")
