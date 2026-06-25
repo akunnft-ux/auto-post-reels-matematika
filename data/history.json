@@ -160,5 +160,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-25",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret berikut: 1, 4, 9, 16, 25, 121, ...",
+    "jawaban": "D. 169",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-25",
+    "content_type": "quiz"
   }
 ]
