@@ -153,5 +153,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-25",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Sebuah bak air berbentuk balok memiliki ukuran panjang 80 cm, lebar 60 cm, dan tinggi 50 cm. Jika bak tersebut diisi air hingga ketinggian 40 cm, berapa liter air yang dibutuhkan untuk memenuhi bak tersebut?",
+    "jawaban": "A. 48 liter",
+    "topik": "geometri",
+    "tanggal": "2026-06-25",
+    "content_type": "quiz"
   }
 ]
