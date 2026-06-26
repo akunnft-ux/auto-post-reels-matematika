@@ -167,5 +167,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-25",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret berikut: 2, 3, 5, 7, 11, 13, 17, ...",
+    "jawaban": "B. 19",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-26",
+    "content_type": "quiz"
   }
 ]
