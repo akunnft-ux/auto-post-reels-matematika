@@ -181,5 +181,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-26",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 5 bola merah dan 3 bola biru. Jika diambil 2 bola secara acak satu per satu tanpa pengembalian, berapakah peluang terambilnya bola yang berbeda warna?",
+    "jawaban": "B. ¹⁵⁄₂₈",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-26",
+    "content_type": "quiz"
   }
 ]
