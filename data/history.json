@@ -188,5 +188,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-26",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika x adalah 15% dari 20 dan y adalah 20% dari 15, berapakah nilai dari (x - y) / (x + y)?",
+    "jawaban": "A. 0",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-06-26",
+    "content_type": "quiz"
   }
 ]
