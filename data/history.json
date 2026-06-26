@@ -174,5 +174,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-26",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika f(x) = x² - 4x + 7, manakah pernyataan yang benar mengenai grafik fungsi tersebut?",
+    "jawaban": "B. Memiliki nilai minimum 3",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-26",
+    "content_type": "quiz"
   }
 ]
