@@ -209,5 +209,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-27",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Sebuah persegi panjang memiliki keliling 40 cm. Berapakah luas maksimum yang dapat dicapai oleh persegi panjang tersebut?",
+    "jawaban": "A. 100 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-06-27",
+    "content_type": "quiz"
   }
 ]
