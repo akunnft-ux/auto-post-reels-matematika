@@ -202,5 +202,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-27",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Manakah di antara fungsi berikut yang grafiknya memotong sumbu-x di dua titik yang berbeda?",
+    "jawaban": "C. f(x) = 2x² - 8",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-27",
+    "content_type": "quiz"
   }
 ]
