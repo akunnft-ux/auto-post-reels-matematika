@@ -216,5 +216,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-27",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret berikut: 1, 3, 4, 7, 11, 18, 29, ...",
+    "jawaban": "B. 47",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-27",
+    "content_type": "quiz"
   }
 ]
