@@ -195,5 +195,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-06-26",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Dalam sebuah kelas, rata-rata nilai ujian matematika dari 10 siswa adalah 70. Jika ada satu siswa susulan dengan nilai 100 masuk ke dalam kelompok tersebut, berapakah rata-rata nilai baru kelas itu?",
+    "jawaban": "B. 73,0",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-27",
+    "content_type": "quiz"
   }
 ]
