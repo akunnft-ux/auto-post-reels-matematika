@@ -230,5 +230,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-28",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Dalam sebuah keluarga, terdapat 3 orang anak. Berapakah peluang bahwa keluarga tersebut memiliki paling sedikit 2 anak laki-laki?",
+    "jawaban": "D. ½",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-28",
+    "content_type": "quiz"
   }
 ]
