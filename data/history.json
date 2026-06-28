@@ -223,5 +223,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-27",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret angka berikut: 3, 4, 7, 11, 18, 29, 47, ...",
+    "jawaban": "C. 76",
+    "topik": "deret_angka",
+    "tanggal": "2026-06-28",
+    "content_type": "quiz"
   }
 ]
