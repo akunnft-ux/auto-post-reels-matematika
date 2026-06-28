@@ -244,5 +244,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-06-28",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika f(x) = |x - 2| + |x + 3|, berapakah nilai minimum dari fungsi tersebut untuk semua bilangan real x?",
+    "jawaban": "C. 5",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-28",
+    "content_type": "quiz"
   }
 ]
