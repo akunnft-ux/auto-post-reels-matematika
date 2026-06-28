@@ -237,5 +237,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-28",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika a = 2^(2026) dan b = 2^(2024) + 2^(2023) + 2^(2022) + ... + 2⁰, berapakah nilai dari a - b?",
+    "jawaban": "A. 1",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-06-28",
+    "content_type": "quiz"
   }
 ]
