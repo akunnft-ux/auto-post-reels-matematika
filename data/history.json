@@ -272,5 +272,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-29",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Sebuah kubus dengan panjang rusuk 6 cm akan dipotong menjadi kubus-kubus kecil dengan panjang rusuk 2 cm. Jika seluruh permukaan luar kubus besar tersebut dicat dengan warna merah sebelum dipotong, berapakah jumlah kubus kecil yang tidak terkena cat sama sekali?",
+    "jawaban": "B. 1",
+    "topik": "geometri",
+    "tanggal": "2026-06-29",
+    "content_type": "quiz"
   }
 ]
