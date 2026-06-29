@@ -286,5 +286,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-29",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Dalam sebuah ujian, rata-rata nilai dari 20 siswa adalah 75. Jika nilai tertinggi dan terendah dikeluarkan, rata-ratanya menjadi 76 untuk 18 siswa sisanya; jika nilai tertinggi adalah 95, berapakah nilai terendah siswa tersebut?",
+    "jawaban": "A. 55",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-29",
+    "content_type": "quiz"
   }
 ]
