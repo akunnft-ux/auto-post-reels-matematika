@@ -265,5 +265,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-29",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Dalam sebuah kantong terdapat 5 kelereng putih dan 3 kelereng hitam. Jika dua kelereng diambil sekaligus secara acak, berapakah peluang terambilnya setidaknya satu kelereng putih?",
+    "jawaban": "C. ²⁷⁄₂₈",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-29",
+    "content_type": "quiz"
   }
 ]
