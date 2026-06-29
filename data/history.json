@@ -279,5 +279,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-29",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Manakah di antara fungsi berikut yang memiliki grafik simetris terhadap sumbu-y?",
+    "jawaban": "C. f(x) = x² + cos(x)",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-29",
+    "content_type": "quiz"
   }
 ]
