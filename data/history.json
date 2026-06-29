@@ -251,5 +251,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-06-28",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Berapakah nilai dari 2026² - 2025² + 2024² - 2023² + ... + 2² - 1²?",
+    "jawaban": "B. 2.053.191",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-06-29",
+    "content_type": "quiz"
   }
 ]
