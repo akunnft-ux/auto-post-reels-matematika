@@ -300,5 +300,12 @@
     "topik": "geometri",
     "tanggal": "2026-06-30",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika f(x) = (x - 2026)(x - 2025)(x - 2024) / (x - 2026), manakah pernyataan yang tepat mengenai grafik fungsi tersebut pada x = 2026?",
+    "jawaban": "C. Grafik memiliki lubang (hole) pada titik (2026, 2)",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-06-30",
+    "content_type": "quiz"
   }
 ]
