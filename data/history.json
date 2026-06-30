@@ -314,5 +314,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-06-30",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Sebuah dadu dilempar sebanyak 2 kali. Berapakah peluang munculnya jumlah mata dadu 7 atau munculnya mata dadu 4 pada lemparan pertama?",
+    "jawaban": "B. ⁵⁄₁₈",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-06-30",
+    "content_type": "quiz"
   }
 ]
