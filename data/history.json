@@ -293,5 +293,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-29",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Sebuah lingkaran dengan jari-jari 10 cm digambar di dalam sebuah persegi. Jika lingkaran tersebut menyentuh keempat sisi persegi, berapakah selisih antara luas persegi dan luas lingkaran? (Gunakan π = 3,14)",
+    "jawaban": "A. 86 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-06-30",
+    "content_type": "quiz"
   }
 ]
