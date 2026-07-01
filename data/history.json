@@ -342,5 +342,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-07-01",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika x + 1/x = 3, berapakah nilai dari x³ + 1/x³?",
+    "jawaban": "A. 18",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-01",
+    "content_type": "quiz"
   }
 ]
