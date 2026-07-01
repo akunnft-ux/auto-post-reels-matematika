@@ -346,6 +346,8 @@ Aturan:
 - Soal dalam Bahasa Indonesia
 - Tingkat kesulitan sedang-cukup sulit (CPNS/TKA/SNBT)
 - Jawaban harus sesuai dengan salah satu pilihan (teks lengkap)
+- Setiap pilihan jawaban harus berupa nilai EKSAK, bukan pembulatan atau pendekatan — jawaban yang benar harus persis sama dengan salah satu pilihan
+- JANGAN membuat pilihan jawaban yang hanya mendekati nilai sebenarnya; semua pilihan harus nilai eksak
 - Jangan buat soal yang sama dengan soal-soal sebelumnya
 - Soal sebelumnya: {json.dumps(recent, ensure_ascii=False)}
 - Maksimal 3 kalimat untuk soal
@@ -406,9 +408,6 @@ Aturan:
             if len(narasi["pilihan"]) != 4:
                 print(f"[WARN] Not 4 options, retry {attempt}")
                 continue
-            if narasi["jawaban"] not in narasi["pilihan"]:
-                print(f"[WARN] Jawaban not in pilihan, retry {attempt}")
-                continue
             if is_duplicate(narasi["soal"], history):
                 print(f"[WARN] Duplicate soalan, retry {attempt}")
                 continue
@@ -416,6 +415,9 @@ Aturan:
             narasi["pilihan"] = [fix_exponents(fix_fractions(p)) for p in narasi["pilihan"]]
             narasi["jawaban"] = fix_exponents(fix_fractions(narasi["jawaban"]))
             narasi["penjelasan"] = fix_exponents(fix_fractions(narasi["penjelasan"]))
+            if narasi["jawaban"] not in narasi["pilihan"]:
+                print(f"[WARN] Jawaban not in pilihan after formatting, retry {attempt}")
+                continue
             return narasi
         except (json.JSONDecodeError, KeyError, ValueError) as e:
             print(f"[WARN] Gemini attempt {attempt} failed: {e}")
