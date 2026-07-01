@@ -335,5 +335,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-07-01",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Diberikan fungsi f(x) = x² - 4x + 7. Berapakah nilai minimum dari fungsi g(x) = f(x - 3) + 2?",
+    "jawaban": "A. 5",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-01",
+    "content_type": "quiz"
   }
 ]
