@@ -328,5 +328,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-07-01",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 4 bola merah dan 6 bola biru. Jika dua bola diambil satu per satu tanpa pengembalian, berapakah peluang terambilnya bola dengan warna yang berbeda?",
+    "jawaban": "B. ⁸⁄₁₅",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-01",
+    "content_type": "quiz"
   }
 ]
