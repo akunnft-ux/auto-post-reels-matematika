@@ -321,5 +321,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-06-30",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret angka berikut: 2, 3, 5, 8, 13, 21, 34, 55, ...",
+    "jawaban": "B. 89",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-01",
+    "content_type": "quiz"
   }
 ]
