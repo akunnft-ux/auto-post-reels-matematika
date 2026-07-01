@@ -349,5 +349,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-07-01",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Sebuah segitiga sama sisi memiliki panjang sisi 6 cm. Jika titik pusat segitiga tersebut dihubungkan dengan ketiga titik sudutnya, berapakah luas dari salah satu dari tiga segitiga kecil yang terbentuk di dalamnya?",
+    "jawaban": "A. 3√3 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-07-01",
+    "content_type": "quiz"
   }
 ]
