@@ -356,5 +356,12 @@
     "topik": "geometri",
     "tanggal": "2026-07-01",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika a, b, dan c adalah bilangan bulat positif yang memenuhi persamaan a + b + c = abc, berapakah nilai dari a³ + b³ + c³?",
+    "jawaban": "A. 18",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-01",
+    "content_type": "quiz"
   }
 ]
