@@ -384,5 +384,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-07-02",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Diberikan fungsi f(x) = (x² - 9) / (x - 3). Manakah pernyataan yang paling tepat mengenai grafik fungsi tersebut pada titik x = 3?",
+    "jawaban": "B. Grafik memiliki lubang (hole) pada titik (3, 6)",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-02",
+    "content_type": "quiz"
   }
 ]
