@@ -370,5 +370,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-07-02",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Sebuah persegi panjang memiliki keliling 40 cm. Jika panjangnya ditambah 2 cm dan lebarnya dikurangi 2 cm, luas persegi panjang tersebut menjadi 96 cm². Berapakah luas persegi panjang tersebut semula?",
+    "jawaban": "B. 99 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-07-02",
+    "content_type": "quiz"
   }
 ]
