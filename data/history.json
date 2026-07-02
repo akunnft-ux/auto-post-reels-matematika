@@ -363,5 +363,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-07-01",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika x adalah bilangan real yang memenuhi persamaan 2^(2x) - 6 * 2ˣ + 8 = 0, berapakah jumlah dari semua nilai x yang mungkin?",
+    "jawaban": "B. 3",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-02",
+    "content_type": "quiz"
   }
 ]
