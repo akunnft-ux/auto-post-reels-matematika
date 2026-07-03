@@ -722,8 +722,19 @@ def render_product_slides(product, tmpdir):
     slides = []
     for i, img_path in enumerate(product["images"]):
         try:
-            slide = ImageClip(img_path, duration=2)
-            slide = slide.resized((IMG_WIDTH, IMG_HEIGHT))
+            frame_path = os.path.join(tmpdir, f"product_{i}.png")
+            img = Image.open(img_path).convert("RGBA")
+            img_w, img_h = img.size
+            scale = IMG_WIDTH / img_w
+            new_h = int(img_h * scale)
+            img = img.resized((IMG_WIDTH, new_h))
+
+            canvas = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), (0, 0, 0))
+            y_offset = (IMG_HEIGHT - new_h) // 2
+            canvas.paste(img, (0, y_offset), img if img.mode == "RGBA" else None)
+            canvas.save(frame_path)
+
+            slide = ImageClip(frame_path, duration=2)
             slides.append(slide)
         except Exception as e:
             print(f"[WARN] Failed to load product image {img_path}: {e}")
