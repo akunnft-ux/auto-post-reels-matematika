@@ -414,9 +414,15 @@
     "content_type": "quiz"
   },
   {
+<<<<<<< Updated upstream
     "soal": "Jika f(x) = |x - 2| + |x + 3|, berapakah nilai minimum dari fungsi tersebut?",
     "jawaban": "B. 5",
     "topik": "fungsi_grafik",
+=======
+    "soal": "Jika x adalah bilangan real positif yang memenuhi persamaan (x²)ˣ = x^(x²), berapakah nilai dari x + 1/x?",
+    "jawaban": "B. 2,5",
+    "topik": "aritmatika_aljabar",
+>>>>>>> Stashed changes
     "tanggal": "2026-07-03",
     "content_type": "quiz"
   }
