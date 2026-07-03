@@ -73,6 +73,8 @@ Modular monolith dalam 1 file Python dengan fungsi terpisah per modul:
 | **Self-Learning** | `weekly_review(analytics, growth)` | Analisa performa 7 hari, rekomendasi format konten terbaik |
 | **History Manager** | `load_history()`, `save_history(history)`, `is_duplicate(soal, history)` | Baca/tulis/cari duplikat di history.json |
 | **Compliance Checker** | `compliance_check(caption)` → raise on violation | Cek engagement bait pattern, BLOCK posting jika terdeteksi (bukan log) |
+| **Hook Renderer** | `render_frame_hook(hook_text, topic, output_path)` | Render opening hook visual (2 detik) — teks hook besar di tengah frame 1080×1920 dengan background gradient dan topic badge |
+| **Product Slide Manager** | `pick_product()`, `render_product_slides(tmpdir)`, `save_product_rotation(index)` | Kelola rotasi produk bergantian (product1→product2→product3), load 3 gambar dari assets/shopee/, render sebagai slide 1080×1920 |
 | **Growth Tracker** | `record_growth(follower_count)` | Simpan follower count harian ke data/growth.json |
 | **Error Notifier** | `notify_telegram(message)` | Kirim notifikasi error ke Telegram |
 | **Orchestrator** | `main()` | Koordinasi urutan eksekusi |
@@ -86,6 +88,10 @@ CaptionBuilder     ───→ NarasiGenerator (output), ContentStrategist (out
 CaptionBuilder     ───→ ComplianceChecker (validation)
 TopicManager       ───→ HistoryManager (read)
 VideoRenderer      ───→ NarasiGenerator (output), fonts/, audio/ (local files)
+VideoRenderer      ───→ HookRenderer (hook frame before konten utama)
+VideoRenderer      ───→ ProductSlideManager (product slides setelah pembahasan)
+HookRenderer       ───→ fonts/, HOOK_TEMPLATES config
+ProductSlideManager───→ assets/shopee/ (product images), data/product_rotation.json
 FacebookPoster     ───→ VideoRenderer (output)
 FacebookPoster     ───→ ComplianceChecker (re-run at posting time)
 FacebookPoster     ───→ HistoryManager (save on success)
@@ -104,9 +110,9 @@ Orchestrator       ───→ semua modul di atas
 |---|---|
 | **Presentation** | N/A (bot-only, no UI) |
 | **Application** | `main()` — orchestrator |
-| **Domain** | NarasiGenerator, TopicManager, VideoRenderer, FacebookPoster, HistoryManager |
-| **Infrastructure** | Gemini client, Facebook Graph client, Telegram client, File I/O, FFmpeg |
-| **Data** | history.json (file system) |
+| **Domain** | NarasiGenerator, TopicManager, VideoRenderer, FacebookPoster, HistoryManager, HookRenderer, ProductSlideManager |
+| **Infrastructure** | Gemini client, Facebook Graph client, Telegram client, File I/O, FFmpeg, Pillow (image loading for product slides) |
+| **Data** | history.json, data/product_rotation.json, assets/shopee/ (file system) |
 
 ## 5. Feature Architecture
 
@@ -159,6 +165,26 @@ Orchestrator       ───→ semua modul di atas
 | Dependencies | AnalyticsEngine, GrowthTracker |
 | Error Handling | Jika data <7 hari → skip loop |
 
+### Feature: Opening Hook Visual
+
+| Aspek | Detail |
+|---|---|
+| Purpose | Slide hook 2 detik di awal video untuk menarik perhatian penonton |
+| Inputs | Hook text (dari HOOK_TEMPLATES sesuai content_type), topic |
+| Outputs | Image file 1080×1920 dengan teks hook besar di tengah + background gradient + topic badge |
+| Dependencies | fonts/, HOOK_TEMPLATES config |
+| Error Handling | Jika render gagal → skip hook, render tanpa hook (graceful degradation) |
+
+### Feature: Product Slide Insertion
+
+| Aspek | Detail |
+|---|---|
+| Purpose | Sisipkan 3 gambar produk Shopee di akhir video, rotasi bergantian per posting |
+| Inputs | 3 file .webp dari `assets/shopee/product{N}/` |
+| Outputs | 3 ImageClip objects (masing-masing 2 detik) digabung setelah frame pembahasan |
+| Dependencies | assets/shopee/ (min 3 produk × 3 gambar), data/product_rotation.json |
+| Error Handling | Jika folder/gambar tidak lengkap → skip slides + log warning; jika rotation file corrupt → reset ke index 0 |
+
 ### Feature: Token Management (dari social-media-growth-engine §4.1)
 
 | Aspek | Detail |
@@ -203,11 +229,24 @@ main()
   │     └─ Compliance check → BLOCK if bait detected                │
   │                                                                  │
   ├─ 7. render_video(narasi, filename, content_type)                 │
-  │     ├─ Layout menyesuaikan content_type                          │
-  │     ├─ Duraasi: 15-30 detik                                      │
+  │     ├─ render_hook(hook_text, topic) → frame hook (2 dtk)       │
+  │     ├─ Layout konten utama menyesuaikan content_type             │
+  │     │  └─ Frame 1 soal (5-8 dtk)                                │
+  │     │  └─ Frame 2 pilihan (5-8 dtk)                             │
+  │     │  └─ Frame 3 pembahasan (5-10 dtk)                         │
+  │     ├─ pick_product() → product index                            │
+  │     ├─ render_product_slides(product_idx) → 3 slides (masing2 @2 dtk)
+  │     ├─ Gabung: [hook, frame1, frame2, frame3, slide1, slide2, slide3]
+  │     ├─ Durasi: 15-30 detik (termasuk hook 2s + produk 6s)       │
   │     └─ Composite with BGM → MP4 (H.264, 1080×1920)              │
   │                                                                  │
   ├─ 8. post_to_facebook(video_path, caption)                        │
+  │     ├─ Check token expiry (pre-emptive)                          │
+  │     ├─ Compliance check (re-run at posting time, §4.3)           │
+  │     ├─ POST to /{page_id}/videos (multipart)                    │
+  │     └─ Return post_id on success                                 │
+  │                                                                  │
+  ├─ 9. save_product_rotation(product_index + 1)                     │                        │
   │     ├─ Check token expiry (pre-emptive)                          │
   │     ├─ Compliance check (re-run at posting time, §4.3)           │
   │     ├─ POST to /{page_id}/videos (multipart)                    │
@@ -269,10 +308,20 @@ Step 3 fails (Gemini 3× retry exhausted)
   → exit(1)
   → history unchanged
 
-Step 4 fails (render error)
+Step 4a fails (hook render error)
+  → skip hook, render konten utama tanpa hook
+  → log warning
+  → continue ke step 4b (graceful degradation)
+
+Step 4b fails (konten utama render error)
   → cleanup temp files
   → notify_telegram("Video render failed: {error}")
   → exit(1)
+
+Step 4c fails (product slide render error)
+  → skip product slides, render tanpa slides
+  → log warning
+  → continue ke step 5 (graceful degradation)
 
 Step 5 fails (Facebook API error)
   → cleanup temp files
@@ -280,6 +329,7 @@ Step 5 fails (Facebook API error)
   → If rate limited: retry with backoff, else notify
   → exit(1)
   → JANGAN simpan history
+  → JANGAN increment product rotation index
 ```
 
 ## 7. Integration Design
@@ -525,7 +575,47 @@ Step 5 fails (Facebook API error)
 | Tradeoff | Lebih lambat konvergensi, tapi hasil terukur |
 | Chosen | One variable at a time |
 
-### ADR-010: Gradual Posting Frequency Ramp
+### ADR-010: Product Rotation by Index (Bukan Random)
+
+| Aspek | Detail |
+|---|---|
+| Decision | Produk dipilih secara rotasi bergantian menggunakan counter index yang disimpan di `data/product_rotation.json` |
+| Reason | Produk harus tampil merata (fair distribution), bukan random — random bisa menyebabkan produk tertentu tidak pernah muncul |
+| Alternatives | Random selection, topic-based selection |
+| Tradeoff | Perlu tracking state file; jika file corrupt, reset ke product1 |
+| Chosen | Sequential rotation with persistence (fair distribution guaranteed) |
+
+### ADR-011: Graceful Degradation for Product Slides
+
+| Aspek | Detail |
+|---|---|
+| Decision | Jika product assets tidak lengkap/corrupt, skip slides dan tetap posting konten utama |
+| Reason | Satu video gagal produk tidak boleh menghentikan seluruh jadwal posting |
+| Alternatives | Hard fail → skip sesi |
+| Tradeoff | Produk mungkin tidak muncul di beberapa video tanpa admin sadar |
+| Chosen | Graceful degradation + log warning + Telegram alert jika 3× berturut-turut gagal |
+
+### ADR-012: Opening Hook as Visual Frame (Bukan Animasi)
+
+| Aspek | Detail |
+|---|---|
+| Decision | Hook dirender sebagai static image frame (sama seperti frame konten utama), bukan animasi terpisah |
+| Reason | Konsisten dengan rendering pipeline yang sudah ada (Pillow static frames + MoviePy compositing), minimal perubahan kode |
+| Alternatives | Manim animation (project manim), FFmpeg filter, Lottie animation |
+| Tradeoff | Kurang dinamis, tapi 2 detik static hook cukup untuk curiosity gap |
+| Chosen | Static frame (Pillow) — reuse existing rendering pattern |
+
+### ADR-013: Use WebP Images As-Is (No Conversion)
+
+| Aspek | Detail |
+|---|---|
+| Decision | Product images tetap dalam format .webp, di-load langsung oleh Pillow tanpa konversi ke PNG |
+| Reason | Pillow mendukung WebP natively; konversi memakan waktu dan storage |
+| Alternatives | Convert ke PNG di pre-processing, convert saat render |
+| Tradeoff | WebP support tergantung Pillow version (pillow ≥8.0 required) |
+| Chosen | Load WebP langsung (zero extra steps) |
+
+### ADR-014: Gradual Posting Frequency Ramp
 
 | Aspek | Detail |
 |---|---|
@@ -549,6 +639,9 @@ Step 5 fails (Facebook API error)
 | Facebook flag spam (volume tinggi) | Medium | High | Gradual ramp 3→5 post/hari, compliance check ketat |
 | Engagement bait → shadow ban | Medium | Critical | Compliance block, re-run check saat posting time |
 | Insights API rate limit | Low | Medium | 1 call/post/hari, well within limit |
+| Product assets tidak tersedia | Medium | Medium | Graceful degradation: skip slides, log warning, Telegram notif jika 3× kosong |
+| Product rotation index conflict | Low | Low | Sequential cron (1 run at a time), update hanya setelah post sukses |
+| Hook visual 2 detik tidak efektif | Medium | Low | Evaluasi after 7 days via engagement stats; adjust durasi/jenis jika perlu |
 
 ## 17. Recommendations
 
@@ -561,4 +654,8 @@ Step 5 fails (Facebook API error)
 7. **Gradual posting ramp: 3→5 post/hari** — hindari spam flag
 8. **Analytics H+1 via Insights API** — data source:"api" untuk self-learning
 9. **Testing: jalankan workflow_dispatch** sebelum andalkan cron
+10. **Hook visual: gunakan font besar (48-64pt)** — teks hook harus dominan di frame
+11. **Product slides: gradient overlay tipis** — pastikan gambar produk tetap terlihat dengan latar konsisten
+12. **Product rotation: update index hanya setelah post sukses** — mencegah skip produk jika post gagal
+13. **Minimal Pillow version: 8.0** — WebP support wajib ada
 10. **Monitoring: pantau GitHub Actions** untuk failed runs

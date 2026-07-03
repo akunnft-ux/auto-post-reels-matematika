@@ -7,6 +7,7 @@
 |---|---|---|---|---|
 | 0.1 | 2026-06-21 | Tech Lead | Initial draft |
 | 0.2 | 2026-06-23 | Tech Lead | Added 5K-follower growth target: analytics engine, content hooks/CTAs, self-learning loop, engagement tracking |
+| 0.3 | 2026-07-03 | Tech Lead | Added visual opening hook (2s) at start of video + product slide insertion (3 images from assets/shopee/) at end of video with rotation |
 
 ### Approval / Sign-off
 | Role | Name | Status | Date |
@@ -21,7 +22,7 @@
 
 **Project Name:** Auto Post Reels Matematika
 
-**Project Overview:** Bot otomatis yang menghasilkan dan memposting video Reels edukasi matematika ke Facebook Page. Setiap video berisi soal matematika bergaya CPNS/TKA/SNBT dengan pilihan ganda dan pembahasan, di-render sebagai video pendek 15-30 detik dengan background music. Bot berjalan 3×/hari menggunakan GitHub Actions scheduler.
+**Project Overview:** Bot otomatis yang menghasilkan dan memposting video Reels edukasi matematika ke Facebook Page. Setiap video berisi opening hook (2 detik), soal matematika bergaya CPNS/TKA/SNBT dengan pilihan ganda dan pembahasan, serta penutup berupa slide produk Shopee (3 gambar, masing-masing 2 detik). Video di-render sebagai video pendek 15-30 detik dengan background music. Bot berjalan 3×/hari menggunakan GitHub Actions scheduler.
 
 **Business Problem:** Membutuhkan konten Reels edukasi matematika yang konsisten setiap hari untuk pertumbuhan akun Facebook. Produksi video manual memakan waktu dan tidak scalable.
 
@@ -58,6 +59,9 @@
 - Scheduling 3×/hari via GitHub Actions cron
 - History anti-duplikat berbasis JSON
 - Rotasi topik harian
+- Opening hook visual (2 detik) di awal setiap video
+- Slide produk Shopee (3 gambar × 2 detik) di akhir setiap video
+- Rotasi produk bergantian (product1 → product2 → product3)
 - Notifikasi error via Telegram
 - Retry logic untuk Gemini API (3×)
 
@@ -67,6 +71,8 @@
 - User-generated content
 - Komentar/feedback loop manual
 - Paid ads / boosting
+- Generate gambar produk baru (pakai asset yang sudah ada)
+- Overlay teks pada slide produk
 
 ### Future Scope
 - Cross-platform posting (Instagram, TikTok)
@@ -105,6 +111,9 @@
 | ASM-004 | GitHub Actions Ubuntu runner cukup kuat render video <5 menit | Runner spec: 2-core CPU, 7GB RAM | Medium | Inferred | RISK-003 |
 | ASM-005 | BGM bundle MP3 bebas royalti aman untuk konten edukasi | Banyak sumber music free | Medium | Confirmed | |
 | ASM-006 | H.264 codec compatible dengan Facebook Reels | Standar industri | High | Confirmed | |
+| ASM-007 | Product images di assets/shopee/ selalu tersedia (min 3 produk × 3 gambar) | User menyediakan asset | Critical jika tidak ada | Inferred | RISK-011 |
+| ASM-008 | WebP format gambar bisa di-load oleh Pillow untuk dijadikan frame video | Pillow Image.open support WebP | High | Confirmed | |
+| ASM-009 | Hook visual 2 detik cukup menarik perhatian | Best practice short-form video | Medium | Inferred | RISK-012 |
 
 ---
 
@@ -117,6 +126,9 @@
 | US-003 | Admin | Notifikasi jika bot gagal | Saya bisa segera troubleshoot | FR-006 |
 | US-004 | Admin | Topik berganti setiap sesi | Variasi konten setiap hari | FR-007, FR-008 |
 | US-005 | Audiens | Video pendek dengan soal dan pembahasan | Belajar matematika dengan cepat | FR-009, FR-010 |
+| US-006 | Admin | Produk Shopee muncul bergiliran di akhir video | Promosi produk tanpa bikin konten manual | FR-017 |
+| US-007 | Admin | Opening hook visual sebelum konten dimulai | Penonton tertarik nonton dari awal | FR-016 |
+| US-008 | Audiens | Lihat produk rekomendasi setelah belajar | Bisa membeli produk yang mendukung konten | FR-017 |
 
 ---
 
@@ -379,6 +391,46 @@ Edge cases:
 Edge cases:
 - EC-018: False positive (safe CTA flagged) → log, admin review
 
+### FR-016: Opening Hook Visual (Core)
+
+| Field | Value |
+|---|---|
+| Description | Render frame hook visual (2 detik) sebelum frame soal. Menampilkan teks hook dipilih dari HOOK_TEMPLATES dengan latar belakang tematik. Hook yang sebelumnya hanya ada di caption kini divisualisasikan sebagai slide pertama video. |
+| Business Purpose | Meningkatkan retention rate dengan memikat perhatian penonton di 2 detik pertama |
+| Traces to | BO-001, BO-006 |
+| Inputs | hook text dari HOOK_TEMPLATES (dipilih random per content type), topic ID |
+| Outputs | Image file (1080×1920) dengan teks hook besar di tengah, background gradient, topic badge |
+| Validation Rules | Teks hook tidak boleh kosong; durasi frame 2 detik |
+| Permissions | None |
+| Error Handling | Jika render hook gagal → skip hook, lanjut ke konten utama (graceful degradation) |
+| Acceptance Criteria | AC-016 |
+| Dependencies | fonts/, HOOK_TEMPLATES config |
+
+Edge cases:
+- EC-019: Teks hook terlalu panjang untuk satu layar → auto font-size scaling agar muat dalam viewport
+- EC-020: Hook template kosong (misal learning config belum diisi) → fallback ke generic "Yakin bisa jawab?"
+
+### FR-017: Product Slide Insertion (Core)
+
+| Field | Value |
+|---|---|
+| Description | Setelah frame pembahasan, sisipkan 3 slide produk dari `assets/shopee/` (masing-masing 2 detik). Produk dipilih secara rotasi bergantian: product1 → product2 → product3 → product1 → ... Track rotasi disimpan di file `data/product_rotation.json`. |
+| Business Purpose | Promosi produk Shopee affiliate tanpa perlu membuat konten promosi terpisah |
+| Traces to | BO-001 |
+| Inputs | 3 file gambar dari `assets/shopee/product{N}/` (1.webp, 2.webp, 3.webp) |
+| Outputs | 3 ImageClip objects (masing-masing 2 detik) yang digabung di akhir video |
+| Validation Rules | Folder produk harus ada dan berisi minimal 3 file `.webp`; gambar harus valid |
+| Permissions | Read assets/shopee/ |
+| Error Handling | Jika folder produk tidak ada → skip slide produk, render tanpa slide; jika salah satu gambar corrupt → skip gambar itu saja, lanjut ke gambar berikutnya |
+| Acceptance Criteria | AC-017 |
+| Dependencies | assets/shopee/ dengan minimal 3 produk × 3 gambar |
+
+Edge cases:
+- EC-021: assets/shopee/ tidak ada → log warning, skip slide produk
+- EC-022: Salah satu gambar produk corrupt (Pillow gagal load) → skip gambar itu, lanjut ke gambar berikutnya
+- EC-023: product_rotation.json corrupt → reset ke product1
+- EC-024: Produk ditambah/dihapus dari folder → otomatis terdeteksi di rotasi
+
 ---
 
 ## 9. Non-Functional Requirements
@@ -421,6 +473,19 @@ Edge cases:
 | tanggal | String | Yes | Tanggal post |
 
 Retention: Max 180 entries (~60 days at 3/day). Oldest entries auto-purged.
+
+### Entity: Product Rotation State
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| current_index | Integer | Yes | Index produk yang akan digunakan berikutnya (0-based) |
+| updated_at | String | Yes | ISO8601 timestamp rotasi terakhir |
+
+File: `data/product_rotation.json`
+```json
+{"current_index": 0, "updated_at": "2026-07-03T00:00:00"}
+```
+Index di-increment setiap kali bot selesai posting. Jika index >= jumlah produk, reset ke 0.
 
 ### Entity: Analytics Record (NEW)
 
@@ -492,6 +557,9 @@ No database server. Single JSON file (`data/history.json`) sebagai persistent st
 | BR-05 | Jika post gagal, jangan simpan history |
 | BR-06 | Jika Gemini gagal 3×, skip sesi, notifikasi admin |
 | BR-07 | File temporary dihapus setelah selesai (sukses/gagal) |
+| BR-08 | Produk dipilih rotasi bergantian (product1 → product2 → product3 → product1) |
+| BR-09 | Rotasi produk di-increment SETELAH video sukses terposting, bukan sebelum |
+| BR-10 | Jika slide produk gagal render, tetap post konten utama tanpa slide (graceful degradation) |
 
 ---
 
@@ -512,12 +580,18 @@ Start (GitHub Actions trigger)
 4. Validasi narasi (field lengkap, no duplicate)
   ↓
 5. Render video 1080×1920:
+   ├─ Frame Hook (2 dtk): Teks hook besar di tengah dengan background tematik
    ├─ Frame 1 (5-8 dtk): Header "SOAL MATEMATIKA" + teks soal
    ├─ Frame 2 (5-8 dtk): 4 pilihan jawaban
-   └─ Frame 3 (5-10 dtk): Jawaban benar + pembahasan
+   ├─ Frame 3 (5-10 dtk): Jawaban benar + pembahasan
+   ├─ Slide Produk 1 (2 dtk): Gambar produk dari assets/shopee/product{N}/
+   ├─ Slide Produk 2 (2 dtk): Gambar produk 
+   └─ Slide Produk 3 (2 dtk): Gambar produk
    └─ Tambah BGM sepanjang video
   ↓
 6. Post video ke Facebook Reels via Graph API
+  ↓
+6b. Increment product rotation index
   ↓
 7. Simpan {soal, jawaban, topik, tanggal} ke history.json
   ↓
@@ -531,14 +605,26 @@ End (GitHub Actions commit + push history.json)
 ```
 Step 3 gagal 3× → Telegram notif → exit → history unchanged
 Step 6 gagal → Telegram notif → exit → history unchanged (jangan record)
+Product slides gagal (FR-017) → skip slides, render tanpa slides, lanjut ke step 6
 ```
 
 ### Failure Flow: Total Failure
 
 ```
 Gemini fail + retry habis → Telegram notif → exit code 1
-Video render fail → cleanup → Telegram notif → exit code 1
+Video render fail (termasuk hook gagal) → cleanup → Telegram notif → exit code 1
 Upload fail → cleanup → Telegram notif → exit code 1
+```
+
+### Alternate Flow: Graceful Product Slide Degradation
+
+```
+Step 5 selesai render konten utama
+  ↓
+Cek assets/shopee/product{N}/
+  ├── Tidak ada folder → log warning, skip slides
+  ├── Folder ada tapi gambar < 3 → skip slides, log warning
+  └── Folder ada + gambar ≥ 3 → render 3 slides, gabung di akhir video
 ```
 
 ---
@@ -701,6 +787,12 @@ N/A — Single Facebook Page, single user.
 | EC-006 | History file corrupt | FR-005 | Backup .corrupt, start fresh |
 | EC-007 | BGM file missing | FR-009 | Render tanpa audio |
 | EC-008 | Font file missing | FR-002 | Fallback ke Pillow default |
+| EC-009 | assets/shopee/ folder tidak ada | FR-017 | Skip slides, log warning, render tanpa slide |
+| EC-010 | assets/shopee/product{N}/ gambar kurang dari 3 | FR-017 | Skip slides, log "insufficient product images" |
+| EC-011 | Salah satu gambar produk corrupt (.webp tidak bisa di-load) | FR-017 | Skip gambar itu saja, lanjut gambar berikutnya |
+| EC-012 | product_rotation.json corrupt atau tidak ada | FR-017 | Reset ke product1, buat file baru |
+| EC-013 | product_rotation.json value tidak valid (index >= jumlah produk) | FR-017 | Reset ke index 0 |
+| EC-014 | Tidak ada produk sama sekali di folder | FR-017 | Skip slides, rutin log "product assets empty" |
 
 ---
 
@@ -718,6 +810,9 @@ N/A — Single Facebook Page, single user.
 | RISK-008 | Facebook flag sebagai spam karena volume posting tinggi | Medium | High | Gradual ramp-up: mulai 3×/hari, naik 5× setelah minggu 2; compliance check ketat | |
 | RISK-009 | Engagement bait detection menyebabkan shadow ban | Medium | Critical | Compliance check WAJIB block posting, bukan log; run ulang saat posting time | |
 | RISK-010 | Insights API rate limit untuk analytics | Low | Medium | 1 call per post per hari; well within limit | |
+| RISK-011 | Product assets tidak tersedia di repo (assets/shopee/ kosong/hilang) | Medium | Medium | Graceful degradation: skip slides + log; Telegram notif jika kosong 3× berturut-turut | ASM-007 |
+| RISK-012 | Hook visual 2 detik tidak efektif menahan penonton | Medium | Low | Evaluasi engagement stats setelah 7 hari; jika hook tidak improve retention → adjust durasi/jenis hook | ASM-009 |
+| RISK-013 | Product rotation index conflict jika 2 GitHub Actions run bersamaan | Low | Low | Hanya 1 run per cron (sequential), rotation file di-update setelah post sukses | |
 
 ---
 
@@ -740,6 +835,8 @@ N/A — Single Facebook Page, single user.
 | AC-013 | FR-013 | Setiap hari | Bot fetch followers count | growth.json memiliki entry per hari dengan follower_count |
 | AC-014 | FR-014 | 7 hari berlalu | Bot running self-learning | Recommendations dihasilkan berdasarkan data analytics |
 | AC-015 | FR-015 | Caption dengan engagement bait | Compliance check | Posting BLOCKED, notifikasi admin, history tidak tersimpan |
+| AC-016 | FR-016 | Hook text valid | Bot render opening slide | Frame hook 2 detik dengan teks hook + background tematik muncul sebelum frame soal |
+| AC-017 | FR-017 | assets/shopee/ tersedia dengan 3 produk × 3 gambar | Bot render product slides | 3 slide produk (masing-masing 2 detik) muncul setelah frame pembahasan; product bergantian per sesi |
 
 ---
 
@@ -747,7 +844,7 @@ N/A — Single Facebook Page, single user.
 
 | BO | FR/NFR | AC | Risk |
 |---|---|---|---|---|
-| BO-001 | FR-001, FR-002, FR-003, FR-007, FR-009, FR-010, FR-011 | AC-001, AC-002, AC-003, AC-007, AC-009, AC-010, AC-011 | RISK-001, RISK-002 |
+| BO-001 | FR-001, FR-002, FR-003, FR-007, FR-009, FR-010, FR-011, FR-016, FR-017 | AC-001, AC-002, AC-003, AC-007, AC-009, AC-010, AC-011, AC-016, AC-017 | RISK-001, RISK-002, RISK-011, RISK-013 |
 | BO-002 | FR-004, FR-008 | AC-004, AC-008 | |
 | BO-003 | FR-005 | AC-005 | |
 | BO-004 | NFR-005 | — | |
@@ -776,6 +873,8 @@ N/A — Single Facebook Page, single user.
 | Phase 5 | Self-learning loop (FR-014) | Day 4-5 |
 | Phase 6 | Growth ramp: scale 3→5 post/hari + monitoring | Day 5-7 |
 | Growth Month | Full operation: 5 post/hari, daily analytics, weekly self-learning | Day 7-30 |
+| Phase 7 | Opening hook visual (2s) + product slide insertion (3 images) — auto-post-reels-matematika | Day 30+ |
+| Phase 8 | Port Phase 7 changes to auto-post-reels-manim | After Phase 7 stable |
 | Future | Cross-platform (Instagram, TikTok), dashboard monitoring | TBD |
 
 ---
@@ -835,6 +934,8 @@ Estimates are indicative based on project complexity, not committed.
 | BGM | Background Music |
 | FFmpeg | Multimedia framework (backend MoviePy) |
 | GitHub Actions | CI/CD platform untuk automation |
+| Product Rotation | Mekanisme pemilihan produk secara bergantian (product1 → product2 → product3) |
+| Opening Hook | Slide visual 2 detik di awal video untuk menarik perhatian penonton |
 
 ---
 
@@ -860,3 +961,16 @@ Estimates are indicative based on project complexity, not committed.
 | Traceability matrix complete | ✓ |
 
 **Outstanding Gaps:** None
+
+### v0.3 Change Request — Additional Validation
+
+| Checklist Item (v0.3) | Status |
+|---|---|
+| FR-016 Opening Hook Visual defined | ✓ |
+| FR-017 Product Slide Insertion defined | ✓ |
+| Product rotation data entity defined | ✓ |
+| Graceful degradation for missing product assets | ✓ |
+| Product edge cases (EC-019 through EC-024) documented | ✓ |
+| Product integration risks (RISK-011 through RISK-013) documented | ✓ |
+| New assumptions (ASM-007 — ASM-009) documented | ✓ |
+| New acceptance criteria (AC-016, AC-017) defined | ✓ |

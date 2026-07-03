@@ -6,7 +6,7 @@
 
 **Justification:** Proyek ini hanya menyimpan riwayat posting (~180 records max). Single writer (GitHub Actions sequential cron). Tidak perlu query engine, report, atau concurency. JSON file + git tracking adalah solusi paling sederhana.
 
-**File path:** `data/history.json` (history), `data/analytics.json` (analytics), `data/growth.json` (follower growth)
+**File path:** `data/history.json` (history), `data/analytics.json` (analytics), `data/growth.json` (follower growth), `data/product_rotation.json` (product rotation state)
 
 ## 2. Entity List
 
@@ -15,6 +15,7 @@
 | history_entry | Riwayat setiap soal yang pernah dipost | 180 | JSON array |
 | analytics_record | Data performa per post (views, likes, comments, shares) | 180 | JSON array |
 | growth_record | Daily follower count tracking | 90 | JSON array |
+| product_rotation | State rotasi produk saat ini | 1 | JSON object |
 
 ## 3. Entity Definitions
 
@@ -141,6 +142,27 @@ N/A — Tidak ada multi-user access. Single admin, single writer.
 | History posting | Read history.json langsung |
 | Error logs | GitHub Actions UI |
 | Token status | GitHub Actions log (manual check) |
+
+## 12a. Product Rotation Entity (NEW)
+
+### product_rotation
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| current_index | integer | Yes | Index produk untuk posting berikutnya (0-based) |
+| updated_at | string | Yes | ISO8601 timestamp kapan terakhir di-update |
+
+**Example:**
+```json
+{"current_index": 0, "updated_at": "2026-07-03T00:00:00"}
+```
+
+**Rules:**
+- Index 0 → product1, Index 1 → product2, Index 2 → product3
+- Index di-increment SETELAH posting sukses (bukan sebelum)
+- Jika index ≥ jumlah produk (3), reset ke 0
+
+---
 
 ## 13. Migration Strategy
 
