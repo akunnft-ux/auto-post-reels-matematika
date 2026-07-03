@@ -19,5 +19,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-07-03",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika 3^(x+2) + 3ˣ = 90, berapakah nilai dari 2^(x-1)?",
+    "jawaban": "B. 2",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-03",
+    "content_type": "quiz"
   }
 ]
