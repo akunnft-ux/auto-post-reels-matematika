@@ -303,6 +303,11 @@ def fix_exponents(text):
         text,
     )
     text = re.sub(
+        r"\^\(([^)]*)\)",
+        lambda m: "".join(SUPERSCRIPT_MAP.get(c, c) for c in m.group(1)),
+        text,
+    )
+    text = re.sub(
         r"\^([a-z])",
         lambda m: SUPERSCRIPT_MAP.get(m.group(1), m.group(1)),
         text,
@@ -411,13 +416,13 @@ Aturan:
             if len(narasi["pilihan"]) != 4:
                 print(f"[WARN] Not 4 options, retry {attempt}")
                 continue
-            if is_duplicate(narasi["soal"], history):
-                print(f"[WARN] Duplicate soalan, retry {attempt}")
-                continue
             narasi["soal"] = fix_exponents(fix_fractions(narasi["soal"]))
             narasi["pilihan"] = [fix_exponents(fix_fractions(p)) for p in narasi["pilihan"]]
             narasi["jawaban"] = fix_exponents(fix_fractions(narasi["jawaban"]))
             narasi["penjelasan"] = fix_exponents(fix_fractions(narasi["penjelasan"]))
+            if is_duplicate(narasi["soal"], history):
+                print(f"[WARN] Duplicate soalan, retry {attempt}")
+                continue
             if narasi["jawaban"] not in narasi["pilihan"]:
                 print(f"[WARN] Jawaban not in pilihan after formatting, retry {attempt}")
                 continue
