@@ -12,5 +12,12 @@
     "topik": "fungsi_grafik",
     "tanggal": "2026-07-03",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 5 bola merah dan 3 bola biru. Jika diambil dua bola sekaligus secara acak, berapakah peluang terambilnya dua bola dengan warna yang berbeda?",
+    "jawaban": "A. ¹⁵⁄₂₈",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-03",
+    "content_type": "quiz"
   }
 ]
