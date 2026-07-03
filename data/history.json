@@ -33,5 +33,12 @@
     "topik": "deret_angka",
     "tanggal": "2026-07-03",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika 3x + 1/x = 4, berapakah nilai dari 9x² + 1/x²?",
+    "jawaban": "A. 14",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-03",
+    "content_type": "quiz"
   }
 ]
