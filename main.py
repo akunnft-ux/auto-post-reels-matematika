@@ -16,6 +16,8 @@ HISTORY_FILE = "data/history.json"
 ANALYTICS_FILE = "data/analytics.json"
 GROWTH_FILE = "data/growth.json"
 MODE_FILE = "data/mode.json"
+PRODUCT_ROTATION_FILE = "data/product_rotation.json"
+PRODUCT_ASSETS_DIR = "assets/shopee"
 PROCESSED_CSV_FILE = "data/processed_msg.json"
 LEARNING_CONFIG_FILE = "self_learning/learning_config.json"
 MAX_HISTORY_ITEMS = 180
@@ -626,14 +628,129 @@ def render_frame_pembahasan(narasi, topic, output_path):
     img.save(output_path)
     return output_path
 
-def render_video(narasi, topic, filename, content_type="quiz"):
+def render_frame_hook(hook_text, topic, output_path):
+    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(HEADER_BG))
+    draw = ImageDraw.Draw(img)
+
+    font_big = ImageFont.truetype(FONT_BOLD, 72)
+    font_sub = ImageFont.truetype(FONT_REGULAR, 32)
+    font_badge = ImageFont.truetype(FONT_BOLD, 28)
+
+    accent = TOPIC_BG.get(topic, "#FF8C42")
+    accent_rgb = hex_to_rgb(accent)
+
+    overlay = Image.new("RGBA", (IMG_WIDTH, IMG_HEIGHT), (*accent_rgb, 30))
+    img.paste(overlay, (0, 0), overlay)
+
+    topic_label = TOPICS.get(topic, topic)
+    bbox = draw.textbbox((0, 0), f"\u2728 {topic_label}", font=font_badge)
+    badge_w = bbox[2] - bbox[0] + 30
+    badge_h = bbox[3] - bbox[1] + 14
+    badge_y = 60
+    badge_x = (IMG_WIDTH - badge_w) // 2
+    draw_rounded_rect(draw, [badge_x, badge_y, badge_x + badge_w, badge_y + badge_h], 20, accent_rgb)
+    draw.text((badge_x + 15, badge_y + 7), f"\u2728 {topic_label}", fill="#FFFFFF", font=font_badge)
+
+    hook_lines = wrap_text(hook_text, font_big, draw, IMG_WIDTH - 120)
+    total_h = len(hook_lines) * 90
+    start_y = (IMG_HEIGHT - total_h) // 2
+    for line in hook_lines:
+        draw.text((IMG_WIDTH // 2, start_y), line, fill="#FFFFFF", font=font_big, anchor="mt")
+        start_y += 90
+
+    draw.text((IMG_WIDTH // 2, IMG_HEIGHT - 80), "Geser untuk jawaban \u25BC", fill="#94A3B8", font=font_sub, anchor="mt")
+
+    img.save(output_path)
+    return output_path
+
+
+def load_product_rotation():
+    default = {"current_index": 0, "updated_at": datetime.now().isoformat()}
+    try:
+        if os.path.exists(PRODUCT_ROTATION_FILE):
+            with open(PRODUCT_ROTATION_FILE) as f:
+                data = json.load(f)
+            if "current_index" in data and isinstance(data["current_index"], int):
+                return data
+        return default
+    except (json.JSONDecodeError, ValueError):
+        return default
+
+
+def save_product_rotation(index):
+    data = {"current_index": index, "updated_at": datetime.now().isoformat()}
+    os.makedirs("data", exist_ok=True)
+    with open(PRODUCT_ROTATION_FILE, "w") as f:
+        json.dump(data, f, indent=2)
+
+
+def pick_product():
+    rotation = load_product_rotation()
+    idx = rotation["current_index"]
+
+    product_dirs = sorted([
+        d for d in os.listdir(PRODUCT_ASSETS_DIR)
+        if os.path.isdir(os.path.join(PRODUCT_ASSETS_DIR, d))
+    ]) if os.path.isdir(PRODUCT_ASSETS_DIR) else []
+
+    if not product_dirs:
+        print("[WARN] No product directories found in assets/shopee/")
+        return None
+
+    if idx >= len(product_dirs):
+        idx = 0
+
+    product_name = product_dirs[idx]
+    product_path = os.path.join(PRODUCT_ASSETS_DIR, product_name)
+    images = sorted([
+        os.path.join(product_path, f)
+        for f in os.listdir(product_path)
+        if f.lower().endswith((".webp", ".png", ".jpg", ".jpeg"))
+    ])
+
+    if len(images) < 3:
+        print(f"[WARN] Product '{product_name}' has only {len(images)} images (need 3)")
+        return None
+
+    print(f"[INFO] Selected product: {product_name} (index {idx})")
+    return {"index": idx, "name": product_name, "images": images[:3], "next_index": (idx + 1) % max(len(product_dirs), 1)}
+
+
+def render_product_slides(product, tmpdir):
+    from moviepy import ImageClip
+
+    slides = []
+    for i, img_path in enumerate(product["images"]):
+        try:
+            slide = ImageClip(img_path, duration=2)
+            slide = slide.resized((IMG_WIDTH, IMG_HEIGHT))
+            slides.append(slide)
+        except Exception as e:
+            print(f"[WARN] Failed to load product image {img_path}: {e}")
+            continue
+    return slides
+
+
+def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, product=None):
     from moviepy import ImageClip, AudioFileClip, concatenate_videoclips, concatenate_audioclips
 
     tmpdir = tempfile.mkdtemp()
     try:
+        clips = []
+
+        hook_frame = os.path.join(tmpdir, "hook.png")
         frame1 = os.path.join(tmpdir, "frame1.png")
         frame2 = os.path.join(tmpdir, "frame2.png")
         frame3 = os.path.join(tmpdir, "frame3.png")
+
+        if hook_text:
+            try:
+                render_frame_hook(hook_text, topic, hook_frame)
+                hook_clip = ImageClip(hook_frame, duration=2)
+                clips.append(hook_clip)
+                print("[INFO] Hook frame rendered (2s)")
+            except Exception as e:
+                print(f"[WARN] Hook render failed, skipping: {e}")
 
         render_frame_soal(narasi, topic, frame1, content_type)
         render_frame_pilihan(narasi, topic, frame2)
@@ -642,8 +759,20 @@ def render_video(narasi, topic, filename, content_type="quiz"):
         clip1 = ImageClip(frame1, duration=8)
         clip2 = ImageClip(frame2, duration=8)
         clip3 = ImageClip(frame3, duration=10)
+        clips.extend([clip1, clip2, clip3])
 
-        video = concatenate_videoclips([clip1, clip2, clip3], method="compose")
+        if product is not None:
+            try:
+                product_slides = render_product_slides(product, tmpdir)
+                if product_slides:
+                    clips.extend(product_slides)
+                    print(f"[INFO] Added {len(product_slides)} product slides from {product['name']}")
+            except Exception as e:
+                print(f"[WARN] Product slide render failed, skipping: {e}")
+        else:
+            print("[INFO] No product slides added (assets not available or insufficient)")
+
+        video = concatenate_videoclips(clips, method="compose")
 
         bgm_files = glob.glob("audio/*.mp3")
         if bgm_files:
@@ -1240,7 +1369,8 @@ def main():
 
     video_filename = f"reels_{topic}_{today_str}_{datetime.now().strftime('%H%M%S')}.mp4"
     print(f"[INFO] Rendering video...")
-    render_video(narasi, topic, video_filename, content_type)
+    product = pick_product()
+    render_video(narasi, topic, video_filename, content_type, hook_text=hook, product=product)
     print(f"[OK] Video rendered: {video_filename}")
 
     caption = build_caption(narasi, topic, content_type, hook)
@@ -1257,6 +1387,10 @@ def main():
         post_id = result.get("id") if result else None
 
     print(f"[OK] Posted successfully")
+
+    if product is not None:
+        save_product_rotation(product["next_index"])
+        print(f"[INFO] Product rotation saved: index {product['next_index']}")
 
     entry = {
         "soal": narasi["soal"],
