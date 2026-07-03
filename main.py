@@ -727,7 +727,7 @@ def render_product_slides(product, tmpdir):
             img_w, img_h = img.size
             scale = IMG_WIDTH / img_w
             new_h = int(img_h * scale)
-            img = img.resized((IMG_WIDTH, new_h))
+            img = img.resize((IMG_WIDTH, new_h), Image.LANCZOS)
 
             canvas = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), (0, 0, 0))
             y_offset = (IMG_HEIGHT - new_h) // 2
