@@ -412,5 +412,12 @@
     "topik": "peluang_statistika",
     "tanggal": "2026-07-03",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika f(x) = |x - 2| + |x + 3|, berapakah nilai minimum dari fungsi tersebut?",
+    "jawaban": "B. 5",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-03",
+    "content_type": "quiz"
   }
 ]
