@@ -17,6 +17,7 @@ ANALYTICS_FILE = "data/analytics.json"
 GROWTH_FILE = "data/growth.json"
 MODE_FILE = "data/mode.json"
 PRODUCT_ROTATION_FILE = "data/product_rotation.json"
+PRODUCT_LINKS_FILE = "data/product_links.json"
 PRODUCT_ASSETS_DIR = "assets/shopee"
 PROCESSED_CSV_FILE = "data/processed_msg.json"
 LEARNING_CONFIG_FILE = "self_learning/learning_config.json"
@@ -716,6 +717,28 @@ def pick_product():
     return {"index": idx, "name": product_name, "images": images[:3], "next_index": (idx + 1) % max(len(product_dirs), 1)}
 
 
+def load_product_links():
+    if not os.path.exists(PRODUCT_LINKS_FILE):
+        print(f"[WARN] Product links file not found: {PRODUCT_LINKS_FILE}")
+        return {}
+    with open(PRODUCT_LINKS_FILE, "r") as f:
+        links = json.load(f)
+    return {entry["id_produk"]: entry for entry in links}
+
+
+def get_link_for_product(product):
+    links = load_product_links()
+    if product is None:
+        return None
+    name = product.get("name")
+    if not name or name not in links:
+        print(f"[WARN] No link found for product: {name}")
+        return None
+    entry = links[name]
+    msg = f"{entry['nama_produk']}\nHarga: {entry['harga']}\nToko: {entry['nama_toko']}\nLink: {entry.get('link_komisi_ekstra', entry['link_produk'])}"
+    return msg
+
+
 def render_product_slides(product, tmpdir):
     from moviepy import ImageClip
 
@@ -1387,11 +1410,19 @@ def main():
     caption = build_caption(narasi, topic, content_type, hook)
     compliance_check(caption)
 
+    product_link_msg = get_link_for_product(product)
+    if product_link_msg:
+        print(f"[INFO] Product link found: {product_link_msg[:60]}...")
+    else:
+        print("[INFO] No product link available")
+
     post_mode = check_telegram_mode()
     print(f"[INFO] Post mode: {post_mode.upper()}")
 
     post_id = None
     if post_mode == "telegram":
+        if product_link_msg:
+            caption = caption + f"\n\n🔗 Produk rekomendasi:\n{product_link_msg}"
         post_to_telegram(video_filename, caption)
     else:
         result = post_to_facebook(video_filename, caption)

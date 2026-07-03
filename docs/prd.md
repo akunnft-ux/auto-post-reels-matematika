@@ -8,6 +8,7 @@
 | 0.1 | 2026-06-21 | Tech Lead | Initial draft |
 | 0.2 | 2026-06-23 | Tech Lead | Added 5K-follower growth target: analytics engine, content hooks/CTAs, self-learning loop, engagement tracking |
 | 0.3 | 2026-07-03 | Tech Lead | Added visual opening hook (2s) at start of video + product slide insertion (3 images from assets/shopee/) at end of video with rotation |
+| 0.4 | 2026-07-03 | Tech Lead | Added product link integration for Telegram posts (FR-018) |
 
 ### Approval / Sign-off
 | Role | Name | Status | Date |
@@ -430,6 +431,34 @@ Edge cases:
 - EC-022: Salah satu gambar produk corrupt (Pillow gagal load) → skip gambar itu, lanjut ke gambar berikutnya
 - EC-023: product_rotation.json corrupt → reset ke product1
 - EC-024: Produk ditambah/dihapus dari folder → otomatis terdeteksi di rotasi
+
+### FR-018: Product Link Integration (Supporting)
+
+| Field | Value |
+|---|---|
+| Description | Bot membaca file `data/product_links.json` yang berisi mapping ID produk → link Shopee, lalu menyisipkan link produk yang sesuai ke caption Telegram saat posting |
+| Business Purpose | Memberikan tautan pembelian produk kepada audiens yang melihat postingan Telegram |
+| Traces to | BO-001 |
+| Inputs | `data/product_links.json` (array produk), `product_name` dari hasil `pick_product()` |
+| Outputs | Caption Telegram yang diperkaya dengan link produk |
+| Validation Rules | JSON harus valid; field `id_produk` harus match dengan `product_name` |
+| Permissions | Read `data/product_links.json` |
+| Error Handling | Jika file tidak ditemukan → graceful degradation, posting tetap jalan tanpa link; jika ID tidak cocok → skip link, posting tetap jalan |
+| Acceptance Criteria | FR-018-AC-1, FR-018-AC-2, FR-018-AC-3, FR-018-AC-4, FR-018-AC-5 |
+| Dependencies | `data/product_links.json`, FR-017 |
+
+Acceptance Criteria:
+- **FR-018-AC-1**: Bot membaca file `product_links.json` berisi array produk dengan field: `id_produk`, `nama_produk`, `harga`, `penjualan`, `nama_toko`, `komisi_higga`, `komisi`, `link_produk`, `link_komisi_ekstra`
+- **FR-018-AC-2**: Bot mencocokkan `id_produk` dari file JSON dengan `product_name` dari hasil `pick_product()`
+- **FR-018-AC-3**: Jika `product_link` ditemukan, link ditambahkan ke caption Telegram sebagai baris tambahan `🔗 Produk rekomendasi:\n{nama_produk}\nHarga: {harga}\nToko: {nama_toko}\nLink: {link_komisi_ekstra}`
+- **FR-018-AC-4**: Jika file tidak ditemukan atau ID tidak cocok, bot tetap posting video tanpa link (graceful degradation)
+- **FR-018-AC-5**: Hanya Telegram mode yang mendapat link produk; Facebook posting tidak terpengaruh
+
+Edge cases:
+- EC-025: File `product_links.json` tidak ada → log warning, skip link, caption normal
+- EC-026: `product_links.json` corrupt (invalid JSON) → log error, skip link
+- EC-027: `id_produk` tidak ditemukan di array → skip link, log warning
+- EC-028: `product_name` dari `pick_product()` adalah None → skip link
 
 ---
 
