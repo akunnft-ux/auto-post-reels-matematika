@@ -26,5 +26,12 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-07-03",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari barisan berikut: 2, 6, 12, 20, 30, ...",
+    "jawaban": "B. 42",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-03",
+    "content_type": "quiz"
   }
 ]
