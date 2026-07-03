@@ -735,8 +735,7 @@ def get_link_for_product(product):
         print(f"[WARN] No link found for product: {name}")
         return None
     entry = links[name]
-    msg = f"{entry['nama_produk']}\nHarga: {entry['harga']}\nToko: {entry['nama_toko']}\nLink: {entry.get('link_komisi_ekstra', entry['link_produk'])}"
-    return msg
+    return entry.get("link_komisi_ekstra", entry["link_produk"])
 
 
 def render_product_slides(product, tmpdir):
@@ -1422,7 +1421,7 @@ def main():
     post_id = None
     if post_mode == "telegram":
         if product_link_msg:
-            caption = caption + f"\n\n🔗 Produk rekomendasi:\n{product_link_msg}"
+            caption = caption + f"\n\n🔗 {product_link_msg}"
         post_to_telegram(video_filename, caption)
     else:
         result = post_to_facebook(video_filename, caption)
