@@ -618,11 +618,15 @@ def render_frame_soal(narasi, topic, output_path, content_type="quiz", category=
     img.save(output_path)
     return output_path
 
+def is_fraction(text):
+    return bool(re.search(r'\d+/\d+', text))
+
 def render_frame_pilihan(narasi, topic, output_path):
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(BG_COLOR))
     draw = ImageDraw.Draw(img)
     font_bold = ImageFont.truetype(FONT_BOLD, 44)
     font_pil = ImageFont.truetype(FONT_REGULAR, 38)
+    font_pil_large = ImageFont.truetype(FONT_REGULAR, 49)
     font_footer = ImageFont.truetype(FONT_REGULAR, 24)
     font_icon = ImageFont.truetype(FONT_BOLD, 32)
 
@@ -649,14 +653,15 @@ def render_frame_pilihan(narasi, topic, output_path):
         box_y = start_y + i * spacing
         text_x = margin_x + 40
         max_text_w = box_w - 80
-        lines = wrap_text(pil, font_pil, draw, max_text_w)
+        current_font = font_pil_large if is_fraction(pil) else font_pil
+        lines = wrap_text(pil, current_font, draw, max_text_w)
         box_h = max(120, len(lines) * line_h + 40)
         draw_rounded_rect(draw, [margin_x, box_y, margin_x + box_w, box_y + box_h], 16, PILIHAN_BG)
         draw.rounded_rectangle([margin_x + 2, box_y + 2, margin_x + box_w - 2, box_y + box_h - 2], radius=14, fill=None, outline=topic_bg, width=2)
         draw.rounded_rectangle([margin_x, box_y, margin_x + 14, box_y + box_h], radius=16, fill=topic_bg)
         text_y_start = box_y + (box_h - len(lines) * line_h) // 2
         for j, line in enumerate(lines):
-            draw.text((text_x, text_y_start + j * line_h), line, fill=PILIHAN_TEXT, font=font_pil, anchor="lt")
+            draw.text((text_x, text_y_start + j * line_h), line, fill=PILIHAN_TEXT, font=current_font, anchor="lt")
 
     footer_y = IMG_HEIGHT - 80
     draw.line([(80, footer_y), (IMG_WIDTH - 80, footer_y)], fill=topic_bg, width=3)
