@@ -48,5 +48,13 @@
     "tanggal": "2026-07-04",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Tiga buah dadu sisi enam yang adil dilempar secara bersamaan. Berapakah peluang bahwa jumlah mata dadu yang muncul adalah bilangan prima, dengan syarat hasil kali mata dadu tersebut adalah bilangan genap?",
+    "jawaban": "C. ⁷³⁄₁₆₂",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-04",
+    "content_type": "quiz",
+    "category": "olimpiade_sma"
   }
 ]
