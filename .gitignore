@@ -2,3 +2,9 @@
 __pycache__/
 *.mp4
 soal/
+
+.venv/
+test_frame*.png
+
+.venv/
+test_frame*.png

@@ -146,10 +146,90 @@ HOOK_TEMPLATES = {
 CTA_POOL = [
     "Follow @matematikacpns untuk soal baru setiap hari! \U0001F525",
     "Follow akun ini biar makin jago matematika! \U0001F4DA",
-    "Jangan lupa follow buat latihan CPNS tiap hari! \u2705",
-    "Follow for more daily soal + tips CPNS! \U0001F680",
+    "Jangan lupa follow buat latihan tiap hari! \u2705",
+    "Follow for more daily soal + tips! \U0001F680",
     "Klik follow biar gak ketinggalan soal baru! \U0001F4DD",
 ]
+
+CATEGORY_KEYS = [
+    "cpns",
+    "olimpiade_sd", "olimpiade_smp", "olimpiade_sma",
+    "ujian_sd", "ujian_smp", "ujian_sma",
+]
+CATEGORY_WEIGHTS = {k: 1.0 / len(CATEGORY_KEYS) for k in CATEGORY_KEYS}
+
+CATEGORIES = {
+    "cpns": {
+        "label": "CPNS",
+        "sub_label": "CPNS \u2022 TKA \u2022 SNBT",
+        "prompt_context": "persiapan CPNS/TKA/SNBT, tingkat kesulitan sedang-cukup sulit",
+        "hashtag_pool": [
+            "#SoalMatematika", "#CPNS2026", "#BelajarMatematika",
+            "#MatematikaDasar", "#CPNS", "#TIUCPNS", "#SKDCPNS",
+            "#TryoutCPNS", "#LatihanCPNS", "#StudiCPNS",
+        ],
+    },
+    "olimpiade_sd": {
+        "label": "Olimpiade SD",
+        "sub_label": "Olimpiade Matematika SD",
+        "prompt_context": "olimpiade matematika tingkat SD, soal berpola dan logis untuk siswa SD kelas 4-6",
+        "hashtag_pool": [
+            "#OlimpiadeSD", "#OlimpiadeMatematika", "#MatematikaSD",
+            "#SoalOlimpiade", "#BelajarMatematika", "#MatematikaAsik",
+            "#Olimpiade", "#LatihanOlimpiade",
+        ],
+    },
+    "olimpiade_smp": {
+        "label": "Olimpiade SMP",
+        "sub_label": "Olimpiade Matematika SMP",
+        "prompt_context": "olimpiade matematika tingkat SMP, soal berpola dan logis dengan tingkat kesulitan menantang",
+        "hashtag_pool": [
+            "#OlimpiadeSMP", "#OlimpiadeMatematika", "#MatematikaSMP",
+            "#SoalOlimpiade", "#BelajarMatematika", "#MatematikaAsik",
+            "#Olimpiade", "#LatihanOlimpiade",
+        ],
+    },
+    "olimpiade_sma": {
+        "label": "Olimpiade SMA",
+        "sub_label": "Olimpiade Matematika SMA",
+        "prompt_context": "olimpiade matematika tingkat SMA, soal berpola kompleks dan menantang",
+        "hashtag_pool": [
+            "#OlimpiadeSMA", "#OlimpiadeMatematika", "#MatematikaSMA",
+            "#SoalOlimpiade", "#BelajarMatematika", "#MatematikaAsik",
+            "#Olimpiade", "#LatihanOlimpiade",
+        ],
+    },
+    "ujian_sd": {
+        "label": "Ujian SD",
+        "sub_label": "Ujian Sekolah SD",
+        "prompt_context": "ujian sekolah (US/USBN) matematika tingkat SD, sesuai kurikulum SD",
+        "hashtag_pool": [
+            "#UjianSD", "#USSD", "#USBNSD", "#MatematikaSD",
+            "#BelajarMatematika", "#UjianNasional", "#LatihanUjian",
+            "#MatematikaDasar",
+        ],
+    },
+    "ujian_smp": {
+        "label": "Ujian SMP",
+        "sub_label": "Ujian Sekolah SMP",
+        "prompt_context": "ujian sekolah (US/USBN) matematika tingkat SMP, sesuai kurikulum SMP",
+        "hashtag_pool": [
+            "#UjianSMP", "#USSMP", "#USBNSMP", "#MatematikaSMP",
+            "#BelajarMatematika", "#UjianNasional", "#LatihanUjian",
+            "#MatematikaDasar",
+        ],
+    },
+    "ujian_sma": {
+        "label": "Ujian SMA",
+        "sub_label": "Ujian Sekolah SMA",
+        "prompt_context": "ujian sekolah (US/USBN) matematika tingkat SMA, sesuai kurikulum SMA",
+        "hashtag_pool": [
+            "#UjianSMA", "#USSMA", "#USBNSMA", "#MatematikaSMA",
+            "#BelajarMatematika", "#UjianNasional", "#LatihanUjian",
+            "#MatematikaDasar",
+        ],
+    },
+}
 
 _topic_image_cache = {}
 
@@ -283,6 +363,11 @@ def pick_content_type():
     weights = [CONTENT_TYPE_WEIGHTS[t] for t in types]
     return random.choices(types, weights=weights, k=1)[0]
 
+def pick_category():
+    keys = list(CATEGORY_WEIGHTS.keys())
+    weights = [CATEGORY_WEIGHTS[k] for k in keys]
+    return random.choices(keys, weights=weights, k=1)[0]
+
 def get_hook(content_type):
     return random.choice(HOOK_TEMPLATES[content_type])
 
@@ -328,7 +413,7 @@ def fix_fractions(text):
     text = re.sub(r"(?<!\d)(\d+)/(\d+)(?!\d)", _replace_frac, text)
     return text
 
-def generate_narasi(topic, history, content_type, max_retry=3):
+def generate_narasi(topic, history, content_type, category=None, max_retry=3):
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY not set")
@@ -337,8 +422,12 @@ def generate_narasi(topic, history, content_type, max_retry=3):
     topic_label = TOPICS[topic]
     recent = history[-20:] if history else []
 
+    if category is None:
+        category = "cpns"
+    cat = CATEGORIES.get(category, CATEGORIES["cpns"])
+
     if content_type == "quiz":
-        prompt = f"""Buat 1 soal matematika untuk persiapan CPNS/TKA/SNBT dengan topik {topic_label}.
+        prompt = f"""Buat 1 soal matematika untuk {cat['prompt_context']} dengan topik {topic_label}.
 
 Soal harus berbentuk pilihan ganda dengan 4 opsi (A, B, C, D). Buat soal yang agak menjebak dan banyak orang salah menjawabnya — ini penting untuk engagement.
 
@@ -352,7 +441,7 @@ Format output JSON:
 
 Aturan:
 - Soal dalam Bahasa Indonesia
-- Tingkat kesulitan sedang-cukup sulit (CPNS/TKA/SNBT)
+- {cat['prompt_context']}
 - Jawaban harus sesuai dengan salah satu pilihan (teks lengkap)
 - Setiap pilihan jawaban harus berupa nilai EKSAK, bukan pembulatan atau pendekatan — jawaban yang benar harus persis sama dengan salah satu pilihan
 - JANGAN membuat pilihan jawaban yang hanya mendekati nilai sebenarnya; semua pilihan harus nilai eksak
@@ -361,7 +450,7 @@ Aturan:
 - Maksimal 3 kalimat untuk soal
 - Penjelasan maksimal 4 kalimat, fokus pada trik mengerjakannya"""
     elif content_type == "fakta":
-        prompt = f"""Buat 1 konten fakta matematika yang mengejutkan dan jarang diketahui orang, terkait topik {topic_label}.
+        prompt = f"""Buat 1 konten fakta matematika yang mengejutkan dan jarang diketahui orang, terkait topik {topic_label}. Konten ini ditujukan untuk {cat['prompt_context']}.
 
 Konten harus informatif dan bikin orang berkata "wow, baru tahu!".
 
@@ -381,7 +470,7 @@ Aturan:
 - Contoh: "Ternyata 0.999... = 1", atau "Ada bilangan yang lebih besar dari tak terhingga"
 - Pastikan faktanya bisa diverifikasi"""
     else:
-        prompt = f"""Buat 1 tips/trik cepat matematika untuk persiapan CPNS/TKA/SNBT dengan topik {topic_label}.
+        prompt = f"""Buat 1 tips/trik cepat matematika untuk {cat['prompt_context']} dengan topik {topic_label}.
 
 Tips harus praktis, mudah diingat, dan langsung bisa dipakai.
 
@@ -398,7 +487,7 @@ Aturan:
 - Bahasa Indonesia
 - Maksimal 2 kalimat untuk soal
 - Penjelasan 3-4 kalimat
-- Fokus pada trik yang bisa dipakai di ujian CPNS/TKA/SNBT
+- Fokus pada trik yang bisa dipakai di {cat['prompt_context']}
 - Contoh: "Trik hitung persen dalam 3 detik" atau "Cara cepat deret aritmatika"""
 
     for attempt in range(1, max_retry + 1):
@@ -458,7 +547,7 @@ def wrap_text(text, font, draw, max_width):
 def draw_rounded_rect(draw, xy, radius, fill):
     draw.rounded_rectangle(xy, radius=radius, fill=fill)
 
-def render_frame_soal(narasi, topic, output_path, content_type="quiz"):
+def render_frame_soal(narasi, topic, output_path, content_type="quiz", category=None):
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(BG_COLOR))
     draw = ImageDraw.Draw(img)
 
@@ -480,7 +569,10 @@ def render_frame_soal(narasi, topic, output_path, content_type="quiz"):
     content_labels = {"quiz": "QUIZ CHALLENGE", "fakta": "FAKTA MATEMATIKA", "tips": "TIPS CEPAT"}
     content_label = content_labels.get(content_type, "SOAL MATEMATIKA")
     sub_labels = {"quiz": "Coba tebak! \U0001F9D0", "fakta": "Mind blowing! \U0001F92F", "tips": "Catat baik-baik! \U0001F4DD"}
-    sub_label = sub_labels.get(content_type, "CPNS \u2022 TKA \u2022 SNBT")
+    if category is None:
+        category = "cpns"
+    cat_sub = CATEGORIES.get(category, CATEGORIES["cpns"])["sub_label"]
+    sub_label = sub_labels.get(content_type, cat_sub)
 
     header_h = 180
     draw.rounded_rectangle([0, 0, IMG_WIDTH, header_h], radius=0, fill=HEADER_BG)
@@ -769,7 +861,7 @@ def render_product_slides(product, tmpdir):
     return slides
 
 
-def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, product=None):
+def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, product=None, category=None):
     from moviepy import ImageClip, AudioFileClip, concatenate_videoclips, concatenate_audioclips
 
     tmpdir = tempfile.mkdtemp()
@@ -790,7 +882,7 @@ def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, p
             except Exception as e:
                 print(f"[WARN] Hook render failed, skipping: {e}")
 
-        render_frame_soal(narasi, topic, frame1, content_type)
+        render_frame_soal(narasi, topic, frame1, content_type, category)
         render_frame_pilihan(narasi, topic, frame2)
         render_frame_pembahasan(narasi, topic, frame3)
 
@@ -869,10 +961,13 @@ def compliance_check(caption):
             raise ValueError(f"Compliance: engagement bait pattern '{pattern}' detected in caption")
     return True
 
-def build_caption(narasi, topic, content_type, hook):
+def build_caption(narasi, topic, content_type, hook, category=None):
     topic_label = TOPICS.get(topic, topic)
     cta = get_cta()
-    tags = " ".join(random.sample(HASHTAG_POOL, k=min(6, len(HASHTAG_POOL))))
+    if category is None:
+        category = "cpns"
+    cat_pool = CATEGORIES.get(category, CATEGORIES["cpns"])["hashtag_pool"]
+    tags = " ".join(random.sample(cat_pool, k=min(6, len(cat_pool))))
 
     content_labels = {"quiz": "Soal", "fakta": "Fakta", "tips": "Tips"}
     label = content_labels.get(content_type, "Soal")
@@ -932,7 +1027,7 @@ def load_and_apply_learning_config():
         print(f"[WARN] Failed to load learning config: {e}")
         return None
 
-    global CONTENT_TYPE_WEIGHTS, HOOK_TEMPLATES, CTA_POOL, HASHTAG_POOL
+    global CONTENT_TYPE_WEIGHTS, HOOK_TEMPLATES, CTA_POOL, HASHTAG_POOL, CATEGORY_WEIGHTS
     changed = []
     if "content_type_weights" in cfg and cfg["content_type_weights"]:
         CONTENT_TYPE_WEIGHTS = cfg["content_type_weights"]
@@ -946,6 +1041,9 @@ def load_and_apply_learning_config():
     if "hashtag_pool" in cfg and cfg["hashtag_pool"]:
         HASHTAG_POOL = cfg["hashtag_pool"]
         changed.append("hashtags")
+    if "category_weights" in cfg and cfg["category_weights"]:
+        CATEGORY_WEIGHTS = cfg["category_weights"]
+        changed.append("category weights")
     if changed:
         print(f"[SL] Applied learning config: {', '.join(changed)}")
     return cfg
@@ -1393,6 +1491,10 @@ def main():
     history = load_history()
     print(f"[INFO] History loaded: {len(history)} entries")
 
+    category = pick_category()
+    cat_label = CATEGORIES.get(category, CATEGORIES["cpns"])["label"]
+    print(f"[INFO] Selected category: {category} ({cat_label})")
+
     topic = pick_topic(history)
     print(f"[INFO] Selected topic: {topic} ({TOPICS.get(topic)})")
 
@@ -1402,16 +1504,16 @@ def main():
     hook = get_hook(content_type)
     print(f"[INFO] Hook: {hook}")
 
-    narasi = generate_narasi(topic, history, content_type)
+    narasi = generate_narasi(topic, history, content_type, category)
     print(f"[INFO] Content generated: {narasi['soal'][:60]}...")
 
-    video_filename = f"reels_{topic}_{today_str}_{datetime.now().strftime('%H%M%S')}.mp4"
+    video_filename = f"reels_{category}_{topic}_{today_str}_{datetime.now().strftime('%H%M%S')}.mp4"
     print(f"[INFO] Rendering video...")
     product = pick_product()
-    render_video(narasi, topic, video_filename, content_type, hook_text=hook, product=product)
+    render_video(narasi, topic, video_filename, content_type, hook_text=hook, product=product, category=category)
     print(f"[OK] Video rendered: {video_filename}")
 
-    caption = build_caption(narasi, topic, content_type, hook)
+    caption = build_caption(narasi, topic, content_type, hook, category)
     compliance_check(caption)
 
     product_link_msg = get_link_for_product(product)
@@ -1444,6 +1546,7 @@ def main():
         "topik": topic,
         "tanggal": today_str,
         "content_type": content_type,
+        "category": category,
     }
     if post_id:
         entry["post_id"] = post_id
