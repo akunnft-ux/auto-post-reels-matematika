@@ -64,5 +64,13 @@
     "tanggal": "2026-07-04",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Sebuah persegi memiliki sisi 4 cm. Jika sisi persegi tersebut diperpanjang masing-masing sebesar 50%, berapakah pertambahan luas persegi tersebut dalam satuan cm²?",
+    "jawaban": "C. 5 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-07-04",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
