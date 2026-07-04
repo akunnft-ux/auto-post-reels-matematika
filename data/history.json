@@ -72,5 +72,13 @@
     "tanggal": "2026-07-04",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Tentukan dua angka selanjutnya dari barisan 1, 2, 6, 15, 31, 56, ... dengan memperhatikan selisih antarsuku yang membentuk deret kuadrat sempurna.",
+    "jawaban": "A. 92 dan 141",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-04",
+    "content_type": "quiz",
+    "category": "olimpiade_sma"
   }
 ]
