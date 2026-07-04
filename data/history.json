@@ -40,5 +40,13 @@
     "topik": "aritmatika_aljabar",
     "tanggal": "2026-07-03",
     "content_type": "quiz"
+  },
+  {
+    "soal": "Jika -3² + (-3)² - (-2²) = n, berapakah nilai n?",
+    "jawaban": "B. 4",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-04",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
