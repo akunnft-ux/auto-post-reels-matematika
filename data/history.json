@@ -56,5 +56,13 @@
     "tanggal": "2026-07-04",
     "content_type": "quiz",
     "category": "olimpiade_sma"
+  },
+  {
+    "soal": "Sebuah fungsi f didefinisikan sebagai f(x) = x - (x - (x - (x - ...))) sebanyak 2026 kali tanda kurung yang bersarang. Berapakah nilai dari f(100)?",
+    "jawaban": "C. 100",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-04",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
