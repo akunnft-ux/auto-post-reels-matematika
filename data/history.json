@@ -80,5 +80,13 @@
     "tanggal": "2026-07-04",
     "content_type": "quiz",
     "category": "olimpiade_sma"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan berikut: 1, 11, 21, 1211, 111221, ...",
+    "jawaban": "B. 312211",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-05",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
