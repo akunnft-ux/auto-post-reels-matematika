@@ -19,6 +19,7 @@ MODE_FILE = "data/mode.json"
 PRODUCT_ROTATION_FILE = "data/product_rotation.json"
 PRODUCT_LINKS_FILE = "data/product_links.json"
 PRODUCT_ASSETS_DIR = "assets/shopee"
+HOOK_ASSETS_DIR = "assets/hooks"
 PROCESSED_CSV_FILE = "data/processed_msg.json"
 LEARNING_CONFIG_FILE = "self_learning/learning_config.json"
 MAX_HISTORY_ITEMS = 180
@@ -731,7 +732,7 @@ def render_frame_pembahasan(narasi, topic, output_path):
     img.save(output_path)
     return output_path
 
-def render_frame_hook(hook_text, topic, output_path):
+def render_frame_hook(hook_text, topic, output_path, hook_image_path=None):
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(HEADER_BG))
     draw = ImageDraw.Draw(img)
 
@@ -745,6 +746,21 @@ def render_frame_hook(hook_text, topic, output_path):
     overlay = Image.new("RGBA", (IMG_WIDTH, IMG_HEIGHT), (*accent_rgb, 30))
     img.paste(overlay, (0, 0), overlay)
 
+    # Render Hook Image at the bottom
+    y_offset = 0
+    if hook_image_path:
+        try:
+            h_img = Image.open(hook_image_path).convert("RGBA")
+            hw, hh = h_img.size
+            scale = IMG_WIDTH / hw
+            new_hh = int(hh * scale)
+            h_img = h_img.resize((IMG_WIDTH, new_hh), getattr(Image, 'Resampling', Image).LANCZOS)
+            img.paste(h_img, (0, IMG_HEIGHT - new_hh), h_img if h_img.mode == "RGBA" else None)
+            # Shift text up based on image height or a fixed amount
+            y_offset = 200
+        except Exception as e:
+            print(f"[WARN] Hook image render failed: {e}")
+
     topic_label = TOPICS.get(topic, topic)
     bbox = draw.textbbox((0, 0), f"\u2728 {topic_label}", font=font_badge)
     badge_w = bbox[2] - bbox[0] + 30
@@ -756,7 +772,7 @@ def render_frame_hook(hook_text, topic, output_path):
 
     hook_lines = wrap_text(hook_text, font_big, draw, IMG_WIDTH - 120)
     total_h = len(hook_lines) * 90
-    start_y = (IMG_HEIGHT - total_h) // 2
+    start_y = ((IMG_HEIGHT - total_h) // 2) - y_offset
     for line in hook_lines:
         draw.text((IMG_WIDTH // 2, start_y), line, fill="#FFFFFF", font=font_big, anchor="mt")
         start_y += 90
@@ -819,6 +835,22 @@ def pick_product():
     return {"index": idx, "name": product_name, "images": images[:3], "next_index": (idx + 1) % max(len(product_dirs), 1)}
 
 
+def pick_hook_image():
+    hook_images = sorted([
+        os.path.join(HOOK_ASSETS_DIR, f)
+        for f in os.listdir(HOOK_ASSETS_DIR)
+        if f.lower().endswith((".webp", ".png", ".jpg", ".jpeg"))
+    ]) if os.path.isdir(HOOK_ASSETS_DIR) else []
+
+    if not hook_images:
+        print("[WARN] No hook images found in assets/hooks/")
+        return None
+
+    chosen = random.choice(hook_images)
+    print(f"[INFO] Selected hook image: {chosen}")
+    return chosen
+
+
 def load_product_links():
     if not os.path.exists(PRODUCT_LINKS_FILE):
         print(f"[WARN] Product links file not found: {PRODUCT_LINKS_FILE}")
@@ -851,7 +883,7 @@ def render_product_slides(product, tmpdir):
             img_w, img_h = img.size
             scale = IMG_WIDTH / img_w
             new_h = int(img_h * scale)
-            img = img.resize((IMG_WIDTH, new_h), Image.LANCZOS)
+            img = img.resize((IMG_WIDTH, new_h), getattr(Image, 'Resampling', Image).LANCZOS)
 
             canvas = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), (0, 0, 0))
             y_offset = (IMG_HEIGHT - new_h) // 2
@@ -866,7 +898,7 @@ def render_product_slides(product, tmpdir):
     return slides
 
 
-def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, product=None, category=None):
+def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, product=None, category=None, hook_image_path=None):
     from moviepy import ImageClip, AudioFileClip, concatenate_videoclips, concatenate_audioclips
 
     tmpdir = tempfile.mkdtemp()
@@ -880,7 +912,7 @@ def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, p
 
         if hook_text:
             try:
-                render_frame_hook(hook_text, topic, hook_frame)
+                render_frame_hook(hook_text, topic, hook_frame, hook_image_path)
                 hook_clip = ImageClip(hook_frame, duration=2)
                 clips.append(hook_clip)
                 print("[INFO] Hook frame rendered (2s)")
@@ -1507,7 +1539,10 @@ def main():
     print(f"[INFO] Content type: {content_type}")
 
     hook = get_hook(content_type)
+    hook_image = pick_hook_image()
     print(f"[INFO] Hook: {hook}")
+    if hook_image:
+        print(f"[INFO] Hook Image: {hook_image}")
 
     narasi = generate_narasi(topic, history, content_type, category)
     print(f"[INFO] Content generated: {narasi['soal'][:60]}...")
@@ -1515,7 +1550,7 @@ def main():
     video_filename = f"reels_{category}_{topic}_{today_str}_{datetime.now().strftime('%H%M%S')}.mp4"
     print(f"[INFO] Rendering video...")
     product = pick_product()
-    render_video(narasi, topic, video_filename, content_type, hook_text=hook, product=product, category=category)
+    render_video(narasi, topic, video_filename, content_type, hook_text=hook, product=product, category=category, hook_image_path=hook_image)
     print(f"[OK] Video rendered: {video_filename}")
 
     caption = build_caption(narasi, topic, content_type, hook, category)
