@@ -104,5 +104,13 @@
     "tanggal": "2026-07-05",
     "content_type": "quiz",
     "category": "olimpiade_smp"
+  },
+  {
+    "soal": "Dua buah dadu bersisi enam dilempar bersamaan. Berapakah peluang munculnya jumlah mata dadu 7, dengan syarat bahwa setidaknya satu dari dadu tersebut menunjukkan angka 3?",
+    "jawaban": "B. ²⁄₁₁",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-05",
+    "content_type": "quiz",
+    "category": "olimpiade_smp"
   }
 ]
