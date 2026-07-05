@@ -96,5 +96,13 @@
     "tanggal": "2026-07-05",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Diketahui fungsi f(x) = (x - 1)(x - 2)(x - 3)...(x - 2026). Berapakah nilai dari f(f(1))?",
+    "jawaban": "A. 0",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-05",
+    "content_type": "quiz",
+    "category": "olimpiade_smp"
   }
 ]
