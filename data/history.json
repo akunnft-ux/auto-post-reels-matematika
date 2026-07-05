@@ -88,5 +88,13 @@
     "tanggal": "2026-07-05",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Dalam sebuah perlombaan lari, posisi Andi berada di urutan ke-5 dari depan dan sekaligus urutan ke-5 dari belakang dalam barisan pelari tersebut. Berapakah jumlah total pelari dalam barisan tersebut?",
+    "jawaban": "B. 9",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-05",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
