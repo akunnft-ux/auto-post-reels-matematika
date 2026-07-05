@@ -112,5 +112,13 @@
     "tanggal": "2026-07-05",
     "content_type": "quiz",
     "category": "olimpiade_smp"
+  },
+  {
+    "soal": "Sebuah persegi panjang memiliki keliling 20 cm. Jika panjang dan lebar persegi panjang tersebut harus berupa bilangan bulat, berapakah jumlah semua kemungkinan luas yang berbeda dari persegi panjang tersebut?",
+    "jawaban": "B. 39 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-07-05",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
