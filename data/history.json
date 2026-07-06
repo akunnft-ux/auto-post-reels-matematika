@@ -152,5 +152,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "ujian_sd"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan berikut: 3, 6, 18, 72, 360, ...",
+    "jawaban": "B. 2160",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
