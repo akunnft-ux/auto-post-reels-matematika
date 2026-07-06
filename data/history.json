@@ -160,5 +160,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Dua orang, A dan B, secara bergantian melempar sebuah dadu standar bersisi enam. Pemenang adalah orang pertama yang berhasil mendapatkan mata dadu 6. Jika A yang memulai lemparan pertama, berapakah peluang B untuk memenangkan permainan tersebut?",
+    "jawaban": "A. ⁵⁄₁₁",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "olimpiade_sma"
   }
 ]
