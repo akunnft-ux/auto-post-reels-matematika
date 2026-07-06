@@ -136,5 +136,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "olimpiade_smp"
+  },
+  {
+    "soal": "Sebuah lingkaran dengan jari-jari 7 cm berada di dalam sebuah persegi. Jika luas daerah di dalam persegi namun di luar lingkaran adalah 42 cm², berapakah keliling persegi tersebut?",
+    "jawaban": "C. 48 cm",
+    "topik": "geometri",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
