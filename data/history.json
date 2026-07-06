@@ -176,5 +176,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "ujian_sma"
+  },
+  {
+    "soal": "Sebuah segitiga siku-siku memiliki panjang sisi-sisi yang merupakan bilangan bulat berurutan. Berapakah luas segitiga tersebut dalam satuan cm²?",
+    "jawaban": "B. 6 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "olimpiade_smp"
   }
 ]
