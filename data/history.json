@@ -144,5 +144,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Ibu memiliki 10 buah jeruk. Jika Ibu memberikan setengah dari jumlah jeruknya ditambah setengah buah jeruk kepada adik, berapakah sisa jeruk yang dimiliki Ibu?",
+    "jawaban": "B. 4,5 buah",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "ujian_sd"
   }
 ]
