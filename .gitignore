@@ -4,7 +4,5 @@ __pycache__/
 soal/
 
 .venv/
-test_frame*.png
-
-.venv/
+venv/
 test_frame*.png

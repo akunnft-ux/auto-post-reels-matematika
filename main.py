@@ -1,3 +1,4 @@
+import asyncio
 import glob
 import json
 import os
@@ -8,6 +9,7 @@ import sys
 import tempfile
 from datetime import date, datetime, timedelta
 
+import edge_tts
 from google import genai
 from PIL import Image, ImageDraw, ImageFont
 import requests
@@ -26,6 +28,14 @@ MAX_HISTORY_ITEMS = 180
 IMG_WIDTH = 1080
 IMG_HEIGHT = 1920
 FPS = 24
+
+TTS_VOICE = "id-ID-ArdiNeural"
+TTS_RATE = "+0%"
+TTS_TIMEOUT = 30
+TTS_MAX_CHARS = 2000
+MIN_SOAL_SECONDS = 6
+MIN_PILIHAN_SECONDS = 6
+MIN_PEMBAHASAN_SECONDS = 5
 
 CONTENT_TYPES = ["quiz", "fakta", "tips"]
 CONTENT_TYPE_WEIGHTS = {"quiz": 0.4, "fakta": 0.3, "tips": 0.3}
@@ -898,24 +908,97 @@ def render_product_slides(product, tmpdir):
     return slides
 
 
+def _generate_tts_sync(text, output_path, voice=TTS_VOICE, rate=TTS_RATE):
+    """Synchronous helper for edge-tts generation."""
+    try:
+        if len(text) > TTS_MAX_CHARS:
+            print(f"[WARN] TTS input truncated from {len(text)} to {TTS_MAX_CHARS} chars")
+            text = text[:TTS_MAX_CHARS]
+        async def _generate():
+            communicate = edge_tts.Communicate(text, voice, rate=rate)
+            await asyncio.wait_for(communicate.save(output_path), timeout=TTS_TIMEOUT)
+        asyncio.run(_generate())
+        return output_path
+    except asyncio.TimeoutError:
+        print(f"[WARN] TTS generation timed out after {TTS_TIMEOUT}s for '{text[:50]}...'")
+        return None
+    except Exception as e:
+        print(f"[WARN] TTS generation failed for '{text[:50]}...': {e}")
+        return None
+
+
+def _generate_voiceover_segments(narasi, hook_text, tmpdir):
+    """Generate TTS audio for each video segment. Returns dict of {segment: AudioFileClip}."""
+    from moviepy import AudioFileClip
+
+    segments = {}
+    audio_items = []
+
+    if hook_text and hook_text.strip():
+        path = os.path.join(tmpdir, "voice_hook.mp3")
+        result = _generate_tts_sync(hook_text.strip(), path)
+        if result:
+            audio_items.append(("hook", path))
+
+    soal_text = narasi.get("soal", "").strip()
+    if soal_text:
+        path = os.path.join(tmpdir, "voice_soal.mp3")
+        result = _generate_tts_sync(soal_text, path)
+        if result:
+            audio_items.append(("soal", path))
+
+    jawaban = narasi.get("jawaban", "").strip()
+    penjelasan = narasi.get("penjelasan", "").strip()
+    if jawaban:
+        pembahasan_text = f"Jawaban yang benar adalah {jawaban}. {penjelasan}"
+    else:
+        pembahasan_text = penjelasan
+    if pembahasan_text.strip():
+        path = os.path.join(tmpdir, "voice_pembahasan.mp3")
+        result = _generate_tts_sync(pembahasan_text.strip(), path)
+        if result:
+            audio_items.append(("pembahasan", path))
+
+    for key, path in audio_items:
+        try:
+            clip = AudioFileClip(path)
+            segments[key] = clip
+        except Exception as e:
+            print(f"[WARN] Failed to load voiceover audio for '{key}': {e}")
+
+    return segments
+
+
 def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, product=None, category=None, hook_image_path=None):
-    from moviepy import ImageClip, AudioFileClip, concatenate_videoclips, concatenate_audioclips
+    from moviepy import (
+        ImageClip, AudioFileClip, CompositeAudioClip,
+        concatenate_videoclips, concatenate_audioclips,
+    )
 
     tmpdir = tempfile.mkdtemp()
     try:
-        clips = []
+        print("[TTS] Generating voiceover segments...")
+        voice_segments = _generate_voiceover_segments(narasi, hook_text, tmpdir)
 
         hook_frame = os.path.join(tmpdir, "hook.png")
         frame1 = os.path.join(tmpdir, "frame1.png")
         frame2 = os.path.join(tmpdir, "frame2.png")
         frame3 = os.path.join(tmpdir, "frame3.png")
 
+        clips = []
+        audio_parts = []
+        current_time = 0.0
+
         if hook_text:
             try:
                 render_frame_hook(hook_text, topic, hook_frame, hook_image_path)
-                hook_clip = ImageClip(hook_frame, duration=2)
+                hook_dur = voice_segments["hook"].duration if "hook" in voice_segments else 2
+                hook_clip = ImageClip(hook_frame, duration=hook_dur)
                 clips.append(hook_clip)
-                print("[INFO] Hook frame rendered (2s)")
+                if "hook" in voice_segments:
+                    audio_parts.append(voice_segments["hook"].with_start(current_time))
+                current_time += hook_dur
+                print(f"[INFO] Hook frame rendered ({hook_dur:.1f}s)")
             except Exception as e:
                 print(f"[WARN] Hook render failed, skipping: {e}")
 
@@ -923,9 +1006,20 @@ def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, p
         render_frame_pilihan(narasi, topic, frame2)
         render_frame_pembahasan(narasi, topic, frame3)
 
-        clip1 = ImageClip(frame1, duration=8)
-        clip2 = ImageClip(frame2, duration=8)
-        clip3 = ImageClip(frame3, duration=10)
+        soal_dur = voice_segments["soal"].duration if "soal" in voice_segments else MIN_SOAL_SECONDS
+        clip1 = ImageClip(frame1, duration=max(soal_dur, MIN_SOAL_SECONDS))
+
+        clip2 = ImageClip(frame2, duration=MIN_PILIHAN_SECONDS)
+
+        pembahasan_dur = voice_segments["pembahasan"].duration if "pembahasan" in voice_segments else MIN_PEMBAHASAN_SECONDS
+        clip3 = ImageClip(frame3, duration=max(pembahasan_dur, MIN_PEMBAHASAN_SECONDS))
+
+        if "soal" in voice_segments:
+            audio_parts.append(voice_segments["soal"].with_start(current_time))
+        current_time += clip1.duration + clip2.duration
+        if "pembahasan" in voice_segments:
+            audio_parts.append(voice_segments["pembahasan"].with_start(current_time))
+
         clips.extend([clip1, clip2, clip3])
 
         if product is not None:
@@ -942,18 +1036,34 @@ def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, p
         video = concatenate_videoclips(clips, method="compose")
 
         bgm_files = glob.glob("audio/*.mp3")
-        if bgm_files:
-            bgm_path = random.choice(bgm_files)
-            print(f"[INFO] Using BGM: {bgm_path}")
-            audio = AudioFileClip(bgm_path)
-            if audio.duration > video.duration:
-                audio = audio.subclipped(0, video.duration)
+        if bgm_files or audio_parts:
+            audio_sources = []
+            total_duration = video.duration
+
+            if bgm_files:
+                bgm_path = random.choice(bgm_files)
+                print(f"[INFO] Using BGM: {bgm_path}")
+                bgm = AudioFileClip(bgm_path)
+                if bgm.duration > total_duration:
+                    bgm = bgm.subclipped(0, total_duration)
+                else:
+                    repeats = int(total_duration / bgm.duration) + 1
+                    bgm = concatenate_audioclips([bgm] * repeats).subclipped(0, total_duration)
+                bgm = bgm.with_volume_scaled(0.15)
+                audio_sources.append(bgm)
+
+            if audio_parts:
+                audio_sources.extend(audio_parts)
+
+            if len(audio_sources) == 1:
+                final_audio = audio_sources[0]
             else:
-                repeats = int(video.duration / audio.duration) + 1
-                audio = concatenate_audioclips([audio] * repeats).subclipped(0, video.duration)
-            video = video.with_audio(audio)
+                final_audio = CompositeAudioClip(audio_sources)
+                final_audio = final_audio.with_duration(total_duration)
+
+            video = video.with_audio(final_audio)
         else:
-            print("[INFO] No BGM files found in audio/, rendering without audio")
+            print("[INFO] No audio sources, rendering without audio")
 
         video.write_videofile(
             filename,
