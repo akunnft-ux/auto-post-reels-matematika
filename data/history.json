@@ -168,5 +168,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "olimpiade_sma"
+  },
+  {
+    "soal": "Dalam sebuah tas terdapat 3 koin yang kedua sisinya gambar, 2 koin yang kedua sisinya angka, dan 1 koin normal. Jika sebuah koin diambil secara acak dan dilempar, berapakah peluang munculnya sisi gambar?",
+    "jawaban": "B. ⅔",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "ujian_sma"
   }
 ]
