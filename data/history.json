@@ -128,5 +128,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Sebuah kotak berisi 3 kelereng merah dan 3 kelereng putih. Jika kita mengambil kelereng satu per satu tanpa pengembalian sampai kelereng dengan warna yang sama habis terambil, berapakah peluang bahwa pengambilan tersebut berhenti tepat pada pengambilan ke-5?",
+    "jawaban": "A. ⅜",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "olimpiade_smp"
   }
 ]
