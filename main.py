@@ -33,6 +33,21 @@ TTS_VOICE = "id-ID-ArdiNeural"
 TTS_RATE = "+25%"
 TTS_TIMEOUT = 30
 TTS_MAX_CHARS = 2000
+_EMOJI_RE = re.compile(
+    "[\U0001F600-\U0001F64F"   # emoticons
+    "\U0001F300-\U0001F5FF"    # symbols & pictographs
+    "\U0001F680-\U0001F6FF"    # transport & map
+    "\U0001F1E0-\U0001F1FF"    # flags
+    "\U00002702-\U000027B0"    # dingbats
+    "\U000024C2-\U0001F251"    # enclosed
+    "\U0001F900-\U0001F9FF"    # supplemental symbols
+    "\U0001FA00-\U0001FA6F"    # chess symbols
+    "\U0001FA70-\U0001FAFF"    # symbols extended-A
+    "\U00002600-\U000026FF"    # misc symbols
+    "\U0000FE00-\U0000FE0F"    # variation selectors
+    "\U0000200D"               # zero width joiner
+    "]+", re.UNICODE
+)
 MIN_SOAL_SECONDS = 6
 MIN_PILIHAN_SECONDS = 6
 MIN_PEMBAHASAN_SECONDS = 5
@@ -936,9 +951,11 @@ def _generate_voiceover_segments(narasi, hook_text, tmpdir):
 
     if hook_text and hook_text.strip():
         path = os.path.join(tmpdir, "voice_hook.mp3")
-        result = _generate_tts_sync(hook_text.strip(), path)
-        if result:
-            audio_items.append(("hook", path))
+        tts_hook = _EMOJI_RE.sub('', hook_text.strip()).rstrip('.,!?;: ')
+        if tts_hook:
+            result = _generate_tts_sync(tts_hook, path)
+            if result:
+                audio_items.append(("hook", path))
 
     soal_text = narasi.get("soal", "").strip()
     if soal_text:
@@ -991,7 +1008,8 @@ def render_video(narasi, topic, filename, content_type="quiz", hook_text=None, p
 
         if hook_text:
             try:
-                render_frame_hook(hook_text, topic, hook_frame, hook_image_path)
+                display_hook = _EMOJI_RE.sub('', hook_text).strip()
+                render_frame_hook(display_hook, topic, hook_frame, hook_image_path)
                 hook_dur = voice_segments["hook"].duration if "hook" in voice_segments else 2
                 hook_clip = ImageClip(hook_frame, duration=hook_dur)
                 clips.append(hook_clip)
