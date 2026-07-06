@@ -120,5 +120,13 @@
     "tanggal": "2026-07-05",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Diketahui fungsi kuadrat f(x) = ax² + bx + c memiliki grafik yang melalui titik (0, 0), (1, 2), dan (2, 0). Berapakah nilai dari f(10)?",
+    "jawaban": "A. -80",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-06",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
