@@ -208,5 +208,13 @@
     "tanggal": "2026-07-07",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Sebuah lingkaran dengan jari-jari 10 cm dipotong menjadi dua bagian yang sama besar oleh sebuah garis lurus yang melalui pusat lingkaran. Jika kedua potongan tersebut disusun kembali sedemikian rupa sehingga membentuk bangun baru, berapakah keliling bangun baru tersebut?",
+    "jawaban": "A. 20π + 40 cm",
+    "topik": "geometri",
+    "tanggal": "2026-07-07",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
