@@ -200,5 +200,13 @@
     "tanggal": "2026-07-07",
     "content_type": "quiz",
     "category": "ujian_sd"
+  },
+  {
+    "soal": "Nilai dari x yang memenuhi persamaan 2²ˣ - 6 * 2ˣ + 8 = 0 adalah...",
+    "jawaban": "A. x = 1 atau x = 2",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-07",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
