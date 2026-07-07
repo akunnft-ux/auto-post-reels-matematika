@@ -184,5 +184,13 @@
     "tanggal": "2026-07-06",
     "content_type": "quiz",
     "category": "olimpiade_smp"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan berikut: 1, 2, 4, 7, 13, 24, 44, ...",
+    "jawaban": "C. 81",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-07",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
