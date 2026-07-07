@@ -192,5 +192,13 @@
     "tanggal": "2026-07-07",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 5 bola merah dan 5 bola putih. Jika 2 bola diambil secara acak sekaligus, berapakah peluang terambilnya 2 bola dengan warna yang sama?",
+    "jawaban": "A. ⁴⁄₉",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-07",
+    "content_type": "quiz",
+    "category": "ujian_sd"
   }
 ]
