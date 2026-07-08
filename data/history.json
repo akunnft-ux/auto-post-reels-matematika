@@ -304,5 +304,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan bilangan: 2, 6, 12, 20, 30, 42, 56, ...",
+    "jawaban": "C. 72",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
