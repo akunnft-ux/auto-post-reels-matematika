@@ -280,5 +280,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "cpns"
+  },
+  {
+    "soal": "Sebuah jam dinding menunjukkan pukul 12.00 tepat. Jika jarum menit bergerak 360 derajat dalam 60 menit, berapakah besar sudut terkecil yang terbentuk antara jarum jam dan jarum menit tepat pada pukul 03.20?",
+    "jawaban": "A. 20 derajat",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "ujian_sd"
   }
 ]
