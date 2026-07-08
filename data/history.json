@@ -328,5 +328,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_smp"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 4 bola merah dan 2 bola putih. Jika 3 bola diambil satu per satu tanpa pengembalian, berapakah peluang bola ketiga yang terambil adalah berwarna merah?",
+    "jawaban": "C. ⅔",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "ujian_sma"
   }
 ]
