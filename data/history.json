@@ -224,5 +224,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Sebuah fungsi f didefinisikan dengan pola: f(1) = 2, f(2) = 4, f(3) = 8, dan seterusnya, di mana setiap kenaikan 1 pada x akan melipatgandakan nilai y. Berapakah nilai dari f(6) - f(5)?",
+    "jawaban": "B. 32",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
