@@ -352,5 +352,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_smp"
+  },
+  {
+    "soal": "Jika 3 kucing dapat menangkap 3 ekor tikus dalam waktu 3 menit, berapa lama waktu yang dibutuhkan oleh 100 kucing untuk menangkap 100 ekor tikus?",
+    "jawaban": "A. 3 menit",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
