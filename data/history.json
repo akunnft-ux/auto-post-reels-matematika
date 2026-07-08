@@ -216,5 +216,13 @@
     "tanggal": "2026-07-07",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Sebuah persegi panjang memiliki keliling 40 cm. Jika panjang dan lebarnya adalah bilangan bulat, berapakah selisih maksimum antara luas persegi panjang terbesar dan luas persegi panjang terkecil yang dapat dibentuk?",
+    "jawaban": "A. 99 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
