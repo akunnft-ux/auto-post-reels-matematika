@@ -368,5 +368,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "cpns"
+  },
+  {
+    "soal": "Perhatikan barisan angka berikut: 1, 2, 4, 8, 16, 31, ... . Berapakah angka selanjutnya dari barisan tersebut?",
+    "jawaban": "A. 57",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_smp"
   }
 ]
