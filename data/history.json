@@ -272,5 +272,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Diberikan fungsi f(x) = |x - 2| + |x + 3|. Berapakah nilai minimum dari fungsi tersebut untuk semua bilangan real x?",
+    "jawaban": "B. 5",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "cpns"
   }
 ]
