@@ -288,5 +288,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "ujian_sd"
+  },
+  {
+    "soal": "Diketahui fungsi f(x) = x² - 4x + 7. Jika g(x) adalah bayangan dari f(x) setelah direfleksikan terhadap sumbu X, berapakah nilai dari g(3)?",
+    "jawaban": "A. -4",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "cpns"
   }
 ]
