@@ -320,5 +320,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Diketahui x dan y adalah bilangan real yang memenuhi sistem persamaan x + y = 4 dan x² + y² = 10. Berapakah nilai dari x⁴ + y⁴?",
+    "jawaban": "B. 58",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_smp"
   }
 ]
