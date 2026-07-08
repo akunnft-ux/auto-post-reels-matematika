@@ -344,5 +344,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "ujian_sd"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan bilangan: 3, 4, 7, 11, 18, 29, 47, ...",
+    "jawaban": "A. 76",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_smp"
   }
 ]
