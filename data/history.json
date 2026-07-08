@@ -264,5 +264,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sma"
+  },
+  {
+    "soal": "Ada 5 jam dinding di sebuah ruangan. Jam pertama berdentang setiap 2 menit, jam kedua setiap 3 menit, jam ketiga setiap 4 menit, jam keempat setiap 5 menit, dan jam kelima setiap 6 menit. Jika kelima jam tersebut berdentang bersamaan tepat pada pukul 12.00, pada pukul berapakah mereka akan berdentang bersamaan untuk pertama kalinya lagi?",
+    "jawaban": "C. 01.00",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
