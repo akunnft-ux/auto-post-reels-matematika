@@ -312,5 +312,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Dalam sebuah perlombaan lari, Budi berada di posisi ke-2. Jika Budi menyalip orang yang berada di posisi ke-1, sekarang Budi berada di posisi ke berapakah?",
+    "jawaban": "B. Posisi ke-1",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
