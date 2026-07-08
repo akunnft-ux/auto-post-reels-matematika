@@ -30,7 +30,7 @@ IMG_HEIGHT = 1920
 FPS = 24
 
 TTS_VOICE = "id-ID-GadisNeural"
-TTS_RATE = "+49%"
+TTS_RATE = "+51%"
 TTS_TIMEOUT = 30
 TTS_MAX_CHARS = 2000
 _EMOJI_RE = re.compile(
@@ -929,8 +929,9 @@ def _generate_tts_sync(text, output_path, voice=TTS_VOICE, rate=TTS_RATE):
         if len(text) > TTS_MAX_CHARS:
             print(f"[WARN] TTS input truncated from {len(text)} to {TTS_MAX_CHARS} chars")
             text = text[:TTS_MAX_CHARS]
+        tts_text = text.replace("+", " plus ")
         async def _generate():
-            communicate = edge_tts.Communicate(text, voice, rate=rate)
+            communicate = edge_tts.Communicate(tts_text, voice, rate=rate)
             await asyncio.wait_for(communicate.save(output_path), timeout=TTS_TIMEOUT)
         asyncio.run(_generate())
         return output_path
