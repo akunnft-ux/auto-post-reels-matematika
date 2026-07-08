@@ -336,5 +336,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "ujian_sma"
+  },
+  {
+    "soal": "Sebuah taman berbentuk persegi memiliki panjang sisi 10 meter. Jika di sekeliling taman tersebut ditanami pohon dengan jarak antar pohon 2 meter, berapakah jumlah pohon yang diperlukan?",
+    "jawaban": "B. 20 pohon",
+    "topik": "geometri",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "ujian_sd"
   }
 ]
