@@ -256,5 +256,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sma"
+  },
+  {
+    "soal": "Diberikan fungsi f(x) yang memenuhi f(x) + 2f(2026/x) = 3x untuk semua x > 0. Berapakah nilai dari f(2)?",
+    "jawaban": "A. 2022",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sma"
   }
 ]
