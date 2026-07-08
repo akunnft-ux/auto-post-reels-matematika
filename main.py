@@ -30,7 +30,7 @@ IMG_HEIGHT = 1920
 FPS = 24
 
 TTS_VOICE = "id-ID-ArdiNeural"
-TTS_RATE = "+35%"
+TTS_RATE = "+15%"
 TTS_TIMEOUT = 30
 TTS_MAX_CHARS = 2000
 _EMOJI_RE = re.compile(
