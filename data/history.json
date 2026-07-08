@@ -296,5 +296,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "cpns"
+  },
+  {
+    "soal": "Sebuah fungsi f(x) didefinisikan sebagai jumlah dari semua angka penyusun x. Jika f(f(x)) = 1, berapakah nilai terkecil dari x yang lebih besar dari 10?",
+    "jawaban": "A. 10",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
