@@ -360,5 +360,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Dalam sebuah kantong terdapat 5 kelereng merah dan 5 kelereng biru. Jika dua kelereng diambil sekaligus secara acak, berapakah peluang terambilnya dua kelereng dengan warna yang berbeda?",
+    "jawaban": "B. ⁵⁄₉",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "cpns"
   }
 ]
