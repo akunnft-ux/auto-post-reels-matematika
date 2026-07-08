@@ -240,5 +240,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Perhatikan barisan bilangan berikut: 2, 3, 5, 8, 13, 21, ... . Berapakah angka selanjutnya jika pola tersebut adalah jumlah dari dua angka sebelumnya?",
+    "jawaban": "A. 34",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
