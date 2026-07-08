@@ -248,5 +248,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Sebuah kantong berisi 4 bola merah dan 2 bola biru. Jika dilakukan pengambilan bola satu per satu tanpa pengembalian hingga semua bola merah terambil, berapakah peluang pengambilan tersebut berakhir tepat pada pengambilan ke-5?",
+    "jawaban": "C. ⁴⁄₁₅",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sma"
   }
 ]
