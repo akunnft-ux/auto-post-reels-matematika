@@ -232,5 +232,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_sd"
+  },
+  {
+    "soal": "Seekor siput berada di dasar sumur sedalam 10 meter. Setiap siang hari, siput memanjat naik sejauh 3 meter, namun setiap malam hari ia merosot turun sejauh 2 meter. Pada hari ke berapakah siput tersebut berhasil keluar dari sumur?",
+    "jawaban": "A. Hari ke-8",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-08",
+    "content_type": "quiz",
+    "category": "olimpiade_sd"
   }
 ]
