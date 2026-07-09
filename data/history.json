@@ -376,5 +376,13 @@
     "tanggal": "2026-07-08",
     "content_type": "quiz",
     "category": "olimpiade_smp"
+  },
+  {
+    "soal": "Sebuah kolam berbentuk persegi panjang dengan ukuran 10 meter kali 8 meter dikelilingi oleh jalan setapak selebar 1 meter di bagian luarnya. Berapakah luas total area jalan setapak tersebut?",
+    "jawaban": "D. 44 meter persegi",
+    "topik": "geometri",
+    "tanggal": "2026-07-09",
+    "content_type": "quiz",
+    "category": "ujian_sd"
   }
 ]
