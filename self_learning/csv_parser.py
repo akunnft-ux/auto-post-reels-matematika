@@ -84,6 +84,12 @@ def _map_columns(lowered: list, original: list) -> dict:
             mapping["comments"] = original[i]
         elif any(t in hl for t in ["shares", "bagikan", "share"]):
             mapping["shares"] = original[i]
+        elif any(t in hl for t in ["hook_used", "hook used", "hook"]):
+            mapping["hook_used"] = original[i]
+        elif any(t in hl for t in ["cta_used", "cta used", "cta"]):
+            mapping["cta_used"] = original[i]
+        elif any(t in hl for t in ["hashtags_used", "hashtags used", "hashtags"]):
+            mapping["hashtags_used"] = original[i]
 
     has_views = "views" in mapping
     has_likes = "likes" in mapping
@@ -112,6 +118,10 @@ def _extract_record(row: dict, col_map: dict) -> dict:
         engagement = (likes or 0) + (comments or 0) + (shares or 0)
         engagement_rate = round(engagement / views, 4) if views and views > 0 else 0.0
 
+        hook_used = str(row.get(col_map.get("hook_used", ""), "")).strip()
+        cta_used = str(row.get(col_map.get("cta_used", ""), "")).strip()
+        hashtags_used = str(row.get(col_map.get("hashtags_used", ""), "")).strip()
+
         return {
             "post_id": post_id,
             "platform": "facebook",
@@ -120,6 +130,9 @@ def _extract_record(row: dict, col_map: dict) -> dict:
             "comments": comments or 0,
             "shares": shares or 0,
             "engagement_rate": engagement_rate,
+            "hook_used": hook_used if hook_used else None,
+            "cta_used": cta_used if cta_used else None,
+            "hashtags_used": hashtags_used if hashtags_used else None,
             "source": "manual",
             "fetched_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         }

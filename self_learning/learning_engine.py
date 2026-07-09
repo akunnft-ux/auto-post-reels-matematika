@@ -5,7 +5,7 @@ from copy import deepcopy
 
 LEARNING_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "learning_config.json")
 
-VARIABLE_ORDER = ["content_type_weights", "hook_ranking", "cta_ranking", "hashtag_ranking", "posting_schedule", "content_pillar"]
+VARIABLE_ORDER = ["content_type_weights", "hook_ranking", "cta_ranking", "hashtag_ranking"]
 
 DEFAULT_CONFIG = {
     "content_type_weights": {"quiz": 0.4, "fakta": 0.3, "tips": 0.3},
@@ -70,10 +70,6 @@ def compute_learning_config(current_config: dict, classifications: list, analyti
         iteration = _rank_templates(config, analytics_records, viral_ids, "cta_pool")
     elif variable == "hashtag_ranking":
         iteration = _rank_hashtags(config, analytics_records, viral_ids)
-    elif variable == "posting_schedule":
-        iteration = _update_posting_schedule(config)
-    elif variable == "content_pillar":
-        iteration = _update_content_pillar(config)
 
     if iteration:
         config["variable_rotation_index"] = (rotation_index + 1) % len(VARIABLE_ORDER)
@@ -175,7 +171,7 @@ def _rank_templates(config: dict, analytics_records: list, viral_ids: set, pool_
 
 
 def _rank_hashtags(config: dict, analytics_records: list, viral_ids: set) -> dict:
-    """Re-rank hashtag pool by frequency in viral posts."""
+    """Re-rank hashtag pool by frequency in viral posts' hashtags_used field."""
     pool_key = "hashtag_pool"
     if pool_key not in config or not config[pool_key]:
         return None
@@ -185,7 +181,12 @@ def _rank_hashtags(config: dict, analytics_records: list, viral_ids: set) -> dic
 
     scored = []
     for tag in pool:
-        count = sum(1 for pid in viral_ids for r in analytics_records if r.get("post_id") == pid and tag in str(r))
+        count = sum(
+            1 for r in analytics_records
+            if r.get("post_id") in viral_ids
+            and r.get("hashtags_used")
+            and tag.lower() in r["hashtags_used"].lower()
+        )
         scored.append((count, tag))
 
     scored.sort(key=lambda x: x[0], reverse=True)
@@ -201,9 +202,19 @@ def _rank_hashtags(config: dict, analytics_records: list, viral_ids: set) -> dic
 
 
 def _compute_template_score(template: str, analytics_records: list, viral_ids: set) -> float:
-    """Score a template by how often it appears in viral posts."""
-    viral_count = sum(1 for pid in viral_ids for r in analytics_records if r.get("post_id") == pid)
-    return viral_count
+    """Score a template by how often it appears in viral/good posts (by matching hook_used or cta_used)."""
+    relevant_ids = viral_ids
+    if not relevant_ids:
+        relevant_ids = {c.get("post_id") for c in analytics_records if c.get("engagement_rate", 0) > 0.02}
+    count = sum(
+        1 for r in analytics_records
+        if r.get("post_id") in relevant_ids
+        and any(
+            template == (r.get(key) or "")[:len(template)]
+            for key in ("hook_used", "cta_used")
+        )
+    )
+    return count
 
 
 def _update_posting_schedule(config: dict, posting_time_performance: list = None) -> dict:

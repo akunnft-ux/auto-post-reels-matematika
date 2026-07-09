@@ -1145,13 +1145,15 @@ def compliance_check(caption):
             raise ValueError(f"Compliance: engagement bait pattern '{pattern}' detected in caption")
     return True
 
-def build_caption(narasi, topic, content_type, hook, category=None):
+def build_caption(narasi, topic, content_type, hook, category=None, cta=None):
     topic_label = TOPICS.get(topic, topic)
-    cta = get_cta()
+    if cta is None:
+        cta = get_cta()
     if category is None:
         category = "cpns"
     cat_pool = CATEGORIES.get(category, CATEGORIES["cpns"])["hashtag_pool"]
-    tags = " ".join(random.sample(cat_pool, k=min(6, len(cat_pool))))
+    merged_pool = list(HASHTAG_POOL) + [h for h in cat_pool if h not in HASHTAG_POOL]
+    tags = " ".join(random.sample(merged_pool, k=min(6, len(merged_pool))))
 
     content_labels = {"quiz": "Soal", "fakta": "Fakta", "tips": "Tips"}
     label = content_labels.get(content_type, "Soal")
@@ -1634,29 +1636,41 @@ def classify_performance(analytics_records, growth_records):
 def run_self_learning_review():
     print(f"[INFO] Running weekly self-learning review...")
 
-    analytics = load_analytics()
     growth = load_growth()
-
-    if len(analytics) < 3:
-        print("[INFO] Not enough analytics data (<3 records), skipping self-learning")
-        notify_telegram("\u26A0 Self-learning: Data analytics belum cukup (min 3 records). Skip minggu ini.")
-        return
+    analytics = load_analytics()
 
     tracked = [a for a in analytics if a.get("source") in ("api", "csv_export")]
-    if not tracked:
-        print("[INFO] No analytics records (api/csv_export), skipping self-learning")
-        return
 
-    seven_days_ago = (datetime.now() - timedelta(days=7)).isoformat()
-    recent = [a for a in tracked if a.get("fetched_at", "") >= seven_days_ago]
-    if not recent:
-        recent = tracked[-10:]
+    if len(tracked) >= 3:
+        from self_learning.classifier import classify_records
+        from self_learning.learning_engine import compute_learning_config, load_learning_config, save_learning_config
 
-    classifications = classify_performance(recent, growth)
+        seven_days_ago = (datetime.now() - timedelta(days=7)).isoformat()
+        recent = [a for a in tracked if a.get("fetched_at", "") >= seven_days_ago]
+        if not recent:
+            recent = tracked[-10:]
 
-    viral = [c for c in classifications if c["classification"] == "viral"]
-    good = [c for c in classifications if c["classification"] == "good"]
-    bad = [c for c in classifications if c["classification"] == "bad"]
+        classifications = classify_records(recent)
+
+        viral_count = sum(1 for c in classifications if c["classification"] == "viral")
+        good_count = sum(1 for c in classifications if c["classification"] == "good")
+        bad_count = sum(1 for c in classifications if c["classification"] == "bad")
+
+        if len(classifications) >= 3:
+            current_config = load_learning_config("self_learning/learning_config.json")
+            new_config, iteration = compute_learning_config(current_config, classifications, recent)
+            if iteration:
+                save_learning_config("self_learning/learning_config.json", new_config)
+                from self_learning import _load_json, _save_json
+                all_iters = _load_json("data/learning_iteration.json", [])
+                all_iters.append(iteration)
+                _save_json("data/learning_iteration.json", all_iters)
+                print(f"[SL] Review updated config: {iteration['variable_changed']}")
+
+        classification_msg = f"Viral: {viral_count} | Good: {good_count} | Bad: {bad_count}"
+    else:
+        classification_msg = f"Data analytics <3 records ({len(tracked)}), skip learning"
+        print(f"[SL] {classification_msg}")
 
     follower_count = growth[-1]["follower_count"] if growth else 0
     week1_growth = sum(r["daily_growth"] for r in growth[:7]) if len(growth) >= 7 else 0
@@ -1665,20 +1679,9 @@ def run_self_learning_review():
         f"\U0001F4CA Weekly Review (7 hari)",
         f"Followers: {follower_count}",
         f"Week growth: +{week1_growth}",
-        f"",
-        f"Viral: {len(viral)} post",
-        f"Good: {len(good)} post",
-        f"Bad: {len(bad)} post",
+        f"Analytics: {len(tracked)} records",
+        f"{classification_msg}",
     ]
-
-    if viral:
-        msg_lines.append(f"")
-        msg_lines.append(f"\u2705 Best format: tiru format post viral ini")
-        msg_lines.append(f"  - {viral[0]['post_id']} ({viral[0]['metric_triggered']})")
-
-    if bad:
-        msg_lines.append(f"")
-        msg_lines.append(f"\u274C Worst: {bad[0]['post_id']} ({bad[0]['metric_triggered']})")
 
     remaining = 5000 - follower_count
     days_left = max(1, 30 - len(growth))
@@ -1698,6 +1701,12 @@ def main():
     load_and_apply_learning_config()
     process_telegram_csv()
 
+    current_hour = datetime.now().hour
+    if current_hour in POSTING_SCHEDULE["paused_hours"]:
+        print(f"[SKIP] Current hour ({current_hour}:00) is in paused range {POSTING_SCHEDULE['paused_hours']}. Skipping post.")
+        notify_telegram(f"\u23F0 Post skipped: jam {current_hour}:00 dalam paused_hours {POSTING_SCHEDULE['paused_hours']}")
+        return
+
     history = load_history()
     print(f"[INFO] History loaded: {len(history)} entries")
 
@@ -1712,6 +1721,7 @@ def main():
     print(f"[INFO] Content type: {content_type}")
 
     hook = get_hook(content_type)
+    cta = get_cta()
     hook_image = pick_hook_image()
     print(f"[INFO] Hook: {hook}")
     if hook_image:
@@ -1726,7 +1736,7 @@ def main():
     render_video(narasi, topic, video_filename, content_type, hook_text=hook, product=product, category=category, hook_image_path=hook_image)
     print(f"[OK] Video rendered: {video_filename}")
 
-    caption = build_caption(narasi, topic, content_type, hook, category)
+    caption = build_caption(narasi, topic, content_type, hook, category, cta=cta)
     compliance_check(caption)
 
     product_link_msg = get_link_for_product(product)
@@ -1760,6 +1770,9 @@ def main():
         "tanggal": today_str,
         "content_type": content_type,
         "category": category,
+        "hook_used": hook,
+        "cta_used": cta,
+        "hashtags_used": caption.split("\n\n")[-1] if "\n\n" in caption else "",
     }
     if post_id:
         entry["post_id"] = post_id

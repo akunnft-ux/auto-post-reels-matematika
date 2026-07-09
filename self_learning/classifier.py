@@ -1,5 +1,12 @@
+import json
+import os
 import statistics
 from datetime import datetime
+
+try:
+    import requests
+except ImportError:
+    requests = None
 
 
 def classify_records(records: list, follower_count: int = None) -> list:
@@ -12,7 +19,7 @@ def classify_records(records: list, follower_count: int = None) -> list:
         return []
 
     if follower_count is None:
-        follower_count = _estimate_follower_count(records)
+        follower_count = _estimate_follower_count()
 
     niche_baseline = _compute_niche_baseline(records)
 
@@ -70,8 +77,31 @@ def _classify_single(views: int, engagement_rate: float, follower_count: int, ni
     return ("good", f"engagement_rate={engagement_rate:.4f} >= niche_baseline={niche_baseline:.4f}")
 
 
-def _estimate_follower_count(records: list) -> int:
-    """Estimate follower count from records (or default to 100 if unknown)."""
+def _estimate_follower_count() -> int:
+    """Fetch real follower count from Facebook API, or fall back to last known value or 100."""
+    token = os.environ.get("FB_ACCESS_TOKEN")
+    page_id = os.environ.get("FB_PAGE_ID")
+    if requests and token and page_id:
+        try:
+            resp = requests.get(
+                f"https://graph.facebook.com/v25.0/{page_id}",
+                params={"access_token": token, "fields": "followers_count"},
+                timeout=10,
+            )
+            if resp.status_code == 200:
+                count = resp.json().get("followers_count", 100)
+                print(f"[SL][CLASSIFY] Fetched real follower count: {count}")
+                return count
+        except Exception as e:
+            print(f"[SL][CLASSIFY] Follower fetch failed: {e}")
+    growth_path = os.path.join("data", "growth.json")
+    try:
+        with open(growth_path) as f:
+            growth = json.load(f)
+        if growth:
+            return growth[-1].get("follower_count", 100)
+    except (FileNotFoundError, json.JSONDecodeError, IndexError):
+        pass
     return 100
 
 
