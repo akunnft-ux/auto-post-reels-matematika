@@ -392,5 +392,13 @@
     "tanggal": "2026-07-09",
     "content_type": "quiz",
     "category": "ujian_smp"
+  },
+  {
+    "soal": "Nilai dari (2025² - 2024²) / (2025 + 2024) adalah berapa?",
+    "jawaban": "A. 1",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-09",
+    "content_type": "quiz",
+    "category": "cpns"
   }
 ]
