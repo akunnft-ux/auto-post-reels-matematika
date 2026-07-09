@@ -147,11 +147,16 @@ EMOJI_POOL = ["\U0001F9EE", "\U0001F4D0", "\U0001F4DD", "\u270F\uFE0F", "\U0001F
 
 HOOK_TEMPLATES = {
     "quiz": [
-        "90% orang salah jawab soal ini. Coba kamu? \U0001F9D0",
-        "Kebanyakan orang terkecoh. Pasti kamu bisa! \u26A1",
-        "Hanya 1 dari 10 orang yang benar. Ayo coba! \U0001F3AF",
-        "Jangan terkecoh dengan soalnya! \U0001F4A1",
-        "Menurutmu jawabannya apa? Coba tebak dulu! \U0001F914",
+        "Menurutmu jawabannya apa? Coba pause dan tebak dulu! \U0001F914",
+        "Cuma 1 dari 20 orang yang bisa jawab soal ini dalam 10 detik. Kamu termasuk? \U0001F3AF",
+        "Temenmu pasti langsung jawab salah. Buktiin kamu beda \u2014 coba dulu! \U0001F447",
+        "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! \U0001F92F",
+        "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda \U0001F525 di komentar!",
+        "Kalau kamu anak matematika sejati, ini harusnya gampang. Buktiin di komentar! \U0001F4AA",
+        "Ada 1 trik yang bikin soal ini kejawab dalam 5 detik. Coba dulu cara manual, terus cek triknya! \u26A1",
+        "Ini soal yang bikin banyak orang salah karena buru-buru. Jangan sampai kamu juga! \U0001F9D0",
+        "Gampang katanya? Coba jawab dulu sebelum lihat pembahasannya. Komentar jawabanmu! \U0001F4DD",
+        "Di akhir video ada cara cepatnya \u2014 tapi coba jawab versi kamu dulu di komentar! \U0001F3AC",
     ],
     "fakta": [
         "Ternyata selama ini kamu salah! Cek videonya \u23EF\uFE0F",
@@ -170,11 +175,11 @@ HOOK_TEMPLATES = {
 }
 
 CTA_POOL = [
+    "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! \U0001F447",
     "Follow @matematikacpns untuk soal baru setiap hari! \U0001F525",
+    "Jawab dulu di komentar \u2014 reveal ada di akhir video! \U0001F4DD",
     "Follow akun ini biar makin jago matematika! \U0001F4DA",
-    "Jangan lupa follow buat latihan tiap hari! \u2705",
-    "Follow for more daily soal + tips! \U0001F680",
-    "Klik follow biar gak ketinggalan soal baru! \U0001F4DD",
+    "Komen jawabanmu, kasih \U0001F525 kalau bener!"
 ]
 
 CATEGORY_KEYS = [
@@ -394,8 +399,19 @@ def pick_category():
     weights = [CATEGORY_WEIGHTS[k] for k in keys]
     return random.choices(keys, weights=weights, k=1)[0]
 
+HOOK_HISTORY_FILE = "data/hook_history.json"
+
 def get_hook(content_type):
-    return random.choice(HOOK_TEMPLATES[content_type])
+    hooks = HOOK_TEMPLATES[content_type]
+    history = _load_json(HOOK_HISTORY_FILE, [])
+    recent_ids = {h["id"] for h in history[-5:]}
+    available = [(i, h) for i, h in enumerate(hooks) if i not in recent_ids]
+    if not available:
+        available = list(enumerate(hooks))
+    idx, chosen = random.choice(available)
+    history.append({"id": idx, "hook": chosen, "used_at": datetime.now().isoformat()})
+    _save_json(HOOK_HISTORY_FILE, history[-50:])
+    return chosen
 
 def get_cta():
     return random.choice(CTA_POOL)
@@ -1184,6 +1200,9 @@ def post_to_facebook(video_path, caption):
         notify_telegram(f"[ERROR] Facebook upload failed: {resp.status_code} {body}")
         raise RuntimeError(f"Facebook upload failed: {resp.status_code} - {body}")
 
+POSTING_SCHEDULE = {"paused_hours": [], "preferred_hours": list(range(24))}
+
+
 def load_and_apply_learning_config():
     """Load learning_config.json and override global constants."""
     if not os.path.exists(LEARNING_CONFIG_FILE):
@@ -1195,7 +1214,7 @@ def load_and_apply_learning_config():
         print(f"[WARN] Failed to load learning config: {e}")
         return None
 
-    global CONTENT_TYPE_WEIGHTS, HOOK_TEMPLATES, CTA_POOL, HASHTAG_POOL, CATEGORY_WEIGHTS
+    global CONTENT_TYPE_WEIGHTS, HOOK_TEMPLATES, CTA_POOL, HASHTAG_POOL, CATEGORY_WEIGHTS, POSTING_SCHEDULE
     changed = []
     if "content_type_weights" in cfg and cfg["content_type_weights"]:
         CONTENT_TYPE_WEIGHTS = cfg["content_type_weights"]
@@ -1212,6 +1231,17 @@ def load_and_apply_learning_config():
     if "category_weights" in cfg and cfg["category_weights"]:
         CATEGORY_WEIGHTS = cfg["category_weights"]
         changed.append("category weights")
+    if "posting_schedule" in cfg and cfg["posting_schedule"]:
+        ps = cfg["posting_schedule"]
+        POSTING_SCHEDULE["paused_hours"] = ps.get("paused_hours", [])
+        POSTING_SCHEDULE["preferred_hours"] = ps.get("preferred_hours", list(range(24)))
+        changed.append("posting schedule")
+        current_hour = datetime.now().hour
+        if current_hour in POSTING_SCHEDULE["paused_hours"]:
+            print(f"[SL][WARN] Current hour ({current_hour}:00) is in paused range — consider if this run is intentional")
+    if "content_pillar_weights" in cfg and cfg["content_pillar_weights"]:
+        print(f"[SL] Content pillar weights: {cfg['content_pillar_weights']}")
+        changed.append("content pillars")
     if changed:
         print(f"[SL] Applied learning config: {', '.join(changed)}")
     return cfg
@@ -1260,6 +1290,18 @@ def process_telegram_csv():
                     finally:
                         if os.path.exists(tmp_path):
                             os.remove(tmp_path)
+            elif msg.get("text"):
+                text = msg["text"]
+                if any(kw in text.lower() for kw in ["laporan", "analisis performa", "ringkasan eksekutif", "total views"]):
+                    print(f"[SL] Report text detected, parsing...")
+                    try:
+                        from self_learning import run_self_learning_from_report
+                        result = run_self_learning_from_report(text[:10000])
+                        summary = _format_learning_summary(result)
+                        notify_telegram(f"[SL] Report processed:\n{summary}")
+                    except Exception as e:
+                        notify_telegram(f"[SL] Report processing FAILED: {e}")
+                        print(f"[SL] Error: {e}")
 
     except Exception as e:
         print(f"[WARN] process_telegram_csv failed: {e}")
