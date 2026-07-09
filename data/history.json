@@ -384,5 +384,13 @@
     "tanggal": "2026-07-09",
     "content_type": "quiz",
     "category": "ujian_sd"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 5 bola merah dan 5 bola biru. Jika kita mengambil 2 bola satu per satu secara acak TANPA pengembalian, berapakah peluang kedua bola yang terambil memiliki warna yang sama?",
+    "jawaban": "B. ⁴⁄₉",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-09",
+    "content_type": "quiz",
+    "category": "ujian_smp"
   }
 ]
