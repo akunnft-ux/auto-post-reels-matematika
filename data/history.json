@@ -436,5 +436,19 @@
     "hook_used": "Baru tahu setelah lulus? Simak ini! 🫠",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Tentukan titik puncak (vertex) dari grafik fungsi kuadrat y = ax² + bx + c.",
+    "jawaban": "C. Gunakan x = -b/2a lalu substitusi nilai x ke fungsi untuk mencari y",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-10",
+    "content_type": "tips",
+    "category": "ujian_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sma",
+    "hook_used": "Hitung dalam 3 detik! Rahasianya di sini ⚡",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
