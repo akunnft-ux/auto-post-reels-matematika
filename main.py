@@ -802,18 +802,15 @@ def render_frame_hook(hook_text, topic, output_path, hook_image_path=None):
     overlay = Image.new("RGBA", (IMG_WIDTH, IMG_HEIGHT), (*accent_rgb, 30))
     img.paste(overlay, (0, 0), overlay)
 
-    # Render Hook Image at the bottom
-    y_offset = 0
+    # Load and scale hook image (70% width), render after text
+    hook_img = None
     if hook_image_path:
         try:
             h_img = Image.open(hook_image_path).convert("RGBA")
             hw, hh = h_img.size
-            scale = IMG_WIDTH / hw
-            new_hh = int(hh * scale)
-            h_img = h_img.resize((IMG_WIDTH, new_hh), getattr(Image, 'Resampling', Image).LANCZOS)
-            img.paste(h_img, (0, IMG_HEIGHT - new_hh), h_img if h_img.mode == "RGBA" else None)
-            # Shift text up based on image height or a fixed amount
-            y_offset = 200
+            target_w = int(IMG_WIDTH * 0.7)
+            scale = target_w / hw
+            hook_img = h_img.resize((target_w, int(hh * scale)), getattr(Image, 'Resampling', Image).LANCZOS)
         except Exception as e:
             print(f"[WARN] Hook image render failed: {e}")
 
@@ -827,11 +824,21 @@ def render_frame_hook(hook_text, topic, output_path, hook_image_path=None):
     draw.text((badge_x + 15, badge_y + 7), f"\u2728 {topic_label}", fill="#FFFFFF", font=font_badge)
 
     hook_lines = wrap_text(hook_text, font_big, draw, IMG_WIDTH - 120)
-    total_h = len(hook_lines) * 90
-    start_y = ((IMG_HEIGHT - total_h) // 2) - y_offset
-    for line in hook_lines:
-        draw.text((IMG_WIDTH // 2, start_y), line, fill="#FFFFFF", font=font_big, anchor="mt")
-        start_y += 90
+    line_h = 90
+    if hook_img:
+        text_y = badge_y + badge_h + 60
+        for line in hook_lines:
+            draw.text((IMG_WIDTH // 2, text_y), line, fill="#FFFFFF", font=font_big, anchor="mt")
+            text_y += line_h
+        img_y = text_y + 50
+        img_x = (IMG_WIDTH - hook_img.width) // 2
+        img.paste(hook_img, (img_x, img_y), hook_img)
+    else:
+        total_h = len(hook_lines) * line_h
+        start_y = (IMG_HEIGHT - total_h) // 2
+        for line in hook_lines:
+            draw.text((IMG_WIDTH // 2, start_y), line, fill="#FFFFFF", font=font_big, anchor="mt")
+            start_y += line_h
 
     draw.text((IMG_WIDTH // 2, IMG_HEIGHT - 80), "Geser untuk jawaban \u25BC", fill="#94A3B8", font=font_sub, anchor="mt")
 
