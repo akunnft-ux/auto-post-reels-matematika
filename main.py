@@ -91,6 +91,9 @@ JAWABAN_TEXT = "#8B2252"
 PENJELASAN_TEXT = "#475569"
 FOOTER_TEXT = "#94A3B8"
 
+HOOK_BG_COLORS = ["#1A3A3A", "#3D1A3D", "#1A3D2A", "#3D2A1A", "#1A2A3D", "#3D1A1A"]
+HOOK_BG_ROTATION_FILE = "data/hook_bg_rotation.json"
+
 SUPERSCRIPT_MAP = {
     "0": "\u2070", "1": "\u00B9", "2": "\u00B2", "3": "\u00B3",
     "4": "\u2074", "5": "\u2075", "6": "\u2076", "7": "\u2077",
@@ -784,7 +787,9 @@ def render_frame_pembahasan(narasi, topic, output_path):
     return output_path
 
 def render_frame_hook(hook_text, topic, output_path, hook_image_path=None):
-    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(HEADER_BG))
+    rotation = load_hook_bg_rotation()
+    bg_color = HOOK_BG_COLORS[rotation["current_index"] % len(HOOK_BG_COLORS)]
+    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(bg_color))
     draw = ImageDraw.Draw(img)
 
     font_big = ImageFont.truetype(FONT_BOLD, 72)
@@ -830,6 +835,8 @@ def render_frame_hook(hook_text, topic, output_path, hook_image_path=None):
 
     draw.text((IMG_WIDTH // 2, IMG_HEIGHT - 80), "Geser untuk jawaban \u25BC", fill="#94A3B8", font=font_sub, anchor="mt")
 
+    next_index = (rotation["current_index"] + 1) % len(HOOK_BG_COLORS)
+    save_hook_bg_rotation(next_index)
     img.save(output_path)
     return output_path
 
@@ -851,6 +858,26 @@ def save_product_rotation(index):
     data = {"current_index": index, "updated_at": datetime.now().isoformat()}
     os.makedirs("data", exist_ok=True)
     with open(PRODUCT_ROTATION_FILE, "w") as f:
+        json.dump(data, f, indent=2)
+
+
+def load_hook_bg_rotation():
+    default = {"current_index": 0, "updated_at": datetime.now().isoformat()}
+    try:
+        if os.path.exists(HOOK_BG_ROTATION_FILE):
+            with open(HOOK_BG_ROTATION_FILE) as f:
+                data = json.load(f)
+            if "current_index" in data and isinstance(data["current_index"], int):
+                return data
+        return default
+    except (json.JSONDecodeError, ValueError):
+        return default
+
+
+def save_hook_bg_rotation(index):
+    data = {"current_index": index, "updated_at": datetime.now().isoformat()}
+    os.makedirs("data", exist_ok=True)
+    with open(HOOK_BG_ROTATION_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
 
