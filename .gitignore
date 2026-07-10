@@ -6,3 +6,10 @@ soal/
 .venv/
 venv/
 test_frame*.png
+
+# Runtime state — jangan dikomit, dibuat ulang otomatis saat runtime
+data/hook_history.json
+data/last_stagger.json
+data/mode.json
+data/product_rotation.json
+data/hook_bg_rotation.json
