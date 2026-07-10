@@ -29,6 +29,16 @@ IMG_WIDTH = 1080
 IMG_HEIGHT = 1920
 FPS = 24
 
+# ── Account strategy (per rekomendasi pemisahan format/tema) ──
+ACCOUNT_TYPE = "page"
+CONTENT_FORMAT = "slide"
+PAGE_MAJOR_THEMES = ["cpns", "ujian_sd", "ujian_smp", "ujian_sma", "olimpiade_sd", "olimpiade_smp", "olimpiade_sma"]
+PAGE_MINOR_THEMES = ["cpns"]
+PAGE_MAJOR_CT_WEIGHTS = {"quiz": 0.8, "fakta": 0.1, "tips": 0.1}  # 80% serious quiz
+PAGE_MINOR_CT_WEIGHTS = {"quiz": 0.2, "fakta": 0.4, "tips": 0.4}  # 20% lighter
+STAGGER_FILE = "data/last_stagger.json"
+STAGGER_MIN_HOURS = 3  # minimum gap between personal & page posts
+
 TTS_VOICE = "id-ID-ArdiNeural"
 TTS_RATE = "-1%"
 TTS_TIMEOUT = 30
@@ -1205,6 +1215,59 @@ def post_to_facebook(video_path, caption):
 POSTING_SCHEDULE = {"paused_hours": [], "preferred_hours": list(range(24))}
 
 
+# NOTE: post_to_facebook_profile() — disabled until FB_USER_TOKEN/FB_USER_ID are ready
+
+
+def check_stagger():
+    """Skip post if last post to the other account was less than STAGGER_MIN_HOURS ago."""
+    if not os.path.exists(STAGGER_FILE):
+        return True
+    try:
+        with open(STAGGER_FILE) as f:
+            data = json.load(f)
+        last_time = datetime.fromisoformat(data.get("last_post_time", ""))
+        hours_since = (datetime.now() - last_time).total_seconds() / 3600
+        if hours_since < STAGGER_MIN_HOURS:
+            print(f"[STAGGER] Only {hours_since:.1f}h since last post to other account — skipping (min {STAGGER_MIN_HOURS}h)")
+            return False
+        return True
+    except (ValueError, KeyError, FileNotFoundError):
+        return True
+
+
+def record_stagger():
+    """Record this post time for staggering."""
+    os.makedirs("data", exist_ok=True)
+    with open(STAGGER_FILE, "w") as f:
+        json.dump({"last_post_time": datetime.now().isoformat()}, f)
+
+
+def pick_content_type_for_account():
+    """80/20 content type selection per account strategy."""
+    roll = random.random()
+    if roll < 0.8:
+        weights = PAGE_MAJOR_CT_WEIGHTS
+    else:
+        weights = PAGE_MINOR_CT_WEIGHTS
+    types = list(weights.keys())
+    w = [weights[t] for t in types]
+    return random.choices(types, weights=w, k=1)[0]
+
+
+def pick_category_for_account():
+    """80/20 category selection: serious exam themes vs lighter."""
+    roll = random.random()
+    if roll < 0.8:
+        pool = PAGE_MAJOR_THEMES
+    else:
+        pool = PAGE_MINOR_THEMES
+    keys = list(CATEGORY_WEIGHTS.keys())
+    available = [k for k in pool if k in keys]
+    if not available:
+        available = keys
+    return random.choice(available)
+
+
 def load_and_apply_learning_config():
     """Load learning_config.json and override global constants."""
     if not os.path.exists(LEARNING_CONFIG_FILE):
@@ -1418,39 +1481,6 @@ def download_telegram_file(file_id, dest_path):
     print(f"[OK] CSV downloaded to {dest_path} ({len(dl.content)} bytes)")
     return True
 
-def parse_csv_with_gemini(csv_path):
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        print("[WARN] GEMINI_API_KEY not set, skipping CSV parse")
-        return []
-    client = genai.Client(api_key=api_key)
-    model_name = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
-    with open(csv_path) as f:
-        raw = f.read()
-    prompt = (
-        "Berikut adalah CSV export Facebook Page Insights. "
-        "Parse CSV ini dan ekstrak data setiap post: post_id, post_date, views (impressions), likes (reactions), comments, shares. "
-        "Kembalikan JSON array of objects, contoh: [{\"post_id\":\"123\",\"post_date\":\"2026-06-01\",\"views\":100,\"likes\":5,\"comments\":1,\"shares\":0}]. "
-        "Jika tidak bisa parse, kembalikan JSON array kosong [].\n\n"
-        f"CSV:\n{raw[:50000]}"
-    )
-    try:
-        response = client.models.generate_content(
-            model=model_name,
-            contents=prompt,
-        )
-        text = response.text.strip()
-        text = text.replace("```json", "").replace("```", "").strip()
-        parsed = json.loads(text)
-        if isinstance(parsed, list):
-            print(f"[OK] Gemini parsed {len(parsed)} records from CSV")
-            return parsed
-        print("[WARN] Gemini returned non-list, skipping")
-        return []
-    except Exception as e:
-        print(f"[WARN] Gemini CSV parse failed: {e}")
-        return []
-
 def fetch_follower_count():
     token = os.environ.get("FB_ACCESS_TOKEN")
     page_id = os.environ.get("FB_PAGE_ID")
@@ -1558,7 +1588,8 @@ def run_analytics_batch():
             if not ok:
                 continue
 
-            records = parse_csv_with_gemini(dest_path)
+            from self_learning.csv_parser import _parse_csv_via_gemini as _gemini_parse
+            records = _gemini_parse(open(dest_path).read())
             if os.path.exists(dest_path):
                 os.remove(dest_path)
 
@@ -1591,47 +1622,6 @@ def run_analytics_batch():
         print(f"[WARN] Analytics batch failed: {e}")
 
     record_growth()
-
-def classify_performance(analytics_records, growth_records):
-    follower_count = growth_records[-1]["follower_count"] if growth_records else 0
-
-    classifications = []
-    for record in analytics_records:
-        views = record.get("views", 0)
-        likes = record.get("likes", 0)
-        comments = record.get("comments", 0)
-        shares = record.get("shares", 0)
-
-        if follower_count < 100:
-            is_viral = views > 1000
-        else:
-            is_viral = views > 10 * follower_count
-
-        engagement = likes + comments + shares
-        engagement_rate = engagement / max(views, 1)
-
-        if is_viral:
-            classification = "viral"
-            metric_triggered = f"views={views}"
-        elif views < 50:
-            classification = "bad"
-            metric_triggered = f"views={views}"
-        elif engagement_rate < 0.01:
-            classification = "bad"
-            metric_triggered = f"engagement_rate={engagement_rate:.4f}"
-        else:
-            classification = "good"
-            metric_triggered = f"engagement_rate={engagement_rate:.4f}"
-
-        classifications.append({
-            "post_id": record.get("post_id"),
-            "classification": classification,
-            "metric_triggered": metric_triggered,
-            "follower_count_at_post": follower_count,
-            "computed_at": datetime.now().isoformat(),
-        })
-
-    return classifications
 
 def run_self_learning_review():
     print(f"[INFO] Running weekly self-learning review...")
@@ -1710,14 +1700,17 @@ def main():
     history = load_history()
     print(f"[INFO] History loaded: {len(history)} entries")
 
-    category = pick_category()
+    if not check_stagger():
+        return
+
+    category = pick_category_for_account()
     cat_label = CATEGORIES.get(category, CATEGORIES["cpns"])["label"]
     print(f"[INFO] Selected category: {category} ({cat_label})")
 
     topic = pick_topic(history)
     print(f"[INFO] Selected topic: {topic} ({TOPICS.get(topic)})")
 
-    content_type = pick_content_type()
+    content_type = pick_content_type_for_account()
     print(f"[INFO] Content type: {content_type}")
 
     hook = get_hook(content_type)
@@ -1770,6 +1763,9 @@ def main():
         "tanggal": today_str,
         "content_type": content_type,
         "category": category,
+        "account_type": ACCOUNT_TYPE,
+        "format": CONTENT_FORMAT,
+        "theme": category,
         "hook_used": hook,
         "cta_used": cta,
         "hashtags_used": caption.split("\n\n")[-1] if "\n\n" in caption else "",
@@ -1778,6 +1774,7 @@ def main():
         entry["post_id"] = post_id
     history.append(entry)
     save_history(history)
+    record_stagger()
     print(f"[OK] History saved")
 
     if os.path.exists(video_filename):

@@ -5,6 +5,8 @@ from copy import deepcopy
 
 LEARNING_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "learning_config.json")
 
+SMOOTHING_ALPHA = 0.3
+
 VARIABLE_ORDER = ["content_type_weights", "hook_ranking", "cta_ranking", "hashtag_ranking"]
 
 DEFAULT_CONFIG = {
@@ -110,10 +112,22 @@ def _adjust_weights(config: dict, classifications: list, analytics_records: list
     if not new_weights:
         return None
 
+    # Normalize computed weights
     total = sum(new_weights.values())
     if total > 0:
         for k in new_weights:
             new_weights[k] = round(max(0.1, min(0.7, new_weights[k] / total)), 2)
+
+    total = sum(new_weights.values())
+    if abs(total - 1.0) > 0.01:
+        diff = round(1.0 - total, 2)
+        max_key = max(new_weights, key=new_weights.get)
+        new_weights[max_key] = round(new_weights[max_key] + diff, 2)
+
+    # Apply exponential smoothing: blend old weights with newly computed
+    for k in new_weights:
+        old_val = old_weights.get(k, 0.25)
+        new_weights[k] = round(SMOOTHING_ALPHA * new_weights[k] + (1 - SMOOTHING_ALPHA) * old_val, 2)
 
     total = sum(new_weights.values())
     if abs(total - 1.0) > 0.01:
@@ -210,7 +224,7 @@ def _compute_template_score(template: str, analytics_records: list, viral_ids: s
         1 for r in analytics_records
         if r.get("post_id") in relevant_ids
         and any(
-            template == (r.get(key) or "")[:len(template)]
+            r.get(key) and r.get(key).strip().startswith(template.strip())
             for key in ("hook_used", "cta_used")
         )
     )
