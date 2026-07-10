@@ -422,5 +422,19 @@
     "hook_used": "Temenmu pasti langsung jawab salah. Buktiin kamu beda — coba dulu! 👇",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tahukah kamu bahwa dalam deret tak hingga 1 - 1 + 1 - 1 + ..., nilai penjumlahannya bisa dianggap ½ meskipun deret tersebut tidak konvergen secara konvensional?",
+    "jawaban": "Karena menggunakan metode Grandi's Series dengan rata-rata hasil parsial",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-10",
+    "content_type": "fakta",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Baru tahu setelah lulus? Simak ini! 🫠",
+    "cta_used": "Follow akun ini biar makin jago matematika! 📚",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
