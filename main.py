@@ -18,7 +18,6 @@ HISTORY_FILE = "data/history.json"
 ANALYTICS_FILE = "data/analytics.json"
 GROWTH_FILE = "data/growth.json"
 MODE_FILE = "data/mode.json"
-PRODUCT_ROTATION_FILE = "data/product_rotation.json"
 PRODUCT_LINKS_FILE = "data/product_links.json"
 PRODUCT_ASSETS_DIR = "assets/shopee"
 HOOK_ASSETS_DIR = "assets/hooks"
@@ -848,26 +847,6 @@ def render_frame_hook(hook_text, topic, output_path, hook_image_path=None):
     return output_path
 
 
-def load_product_rotation():
-    default = {"current_index": 0, "updated_at": datetime.now().isoformat()}
-    try:
-        if os.path.exists(PRODUCT_ROTATION_FILE):
-            with open(PRODUCT_ROTATION_FILE) as f:
-                data = json.load(f)
-            if "current_index" in data and isinstance(data["current_index"], int):
-                return data
-        return default
-    except (json.JSONDecodeError, ValueError):
-        return default
-
-
-def save_product_rotation(index):
-    data = {"current_index": index, "updated_at": datetime.now().isoformat()}
-    os.makedirs("data", exist_ok=True)
-    with open(PRODUCT_ROTATION_FILE, "w") as f:
-        json.dump(data, f, indent=2)
-
-
 def load_hook_bg_rotation():
     default = {"current_index": 0, "updated_at": datetime.now().isoformat()}
     try:
@@ -889,9 +868,8 @@ def save_hook_bg_rotation(index):
 
 
 def pick_product():
-    rotation = load_product_rotation()
-    idx = rotation["current_index"]
-
+    """Deterministic product rotation by date + run hour.
+    No file state needed — every CI run computes the same schedule."""
     product_dirs = sorted([
         d for d in os.listdir(PRODUCT_ASSETS_DIR)
         if os.path.isdir(os.path.join(PRODUCT_ASSETS_DIR, d))
@@ -901,10 +879,14 @@ def pick_product():
         print("[WARN] No product directories found in assets/shopee/")
         return None
 
-    if idx >= len(product_dirs):
-        idx = 0
+    n_products = len(product_dirs)
+    run_slots = {1: 0, 5: 1, 10: 2, 13: 3}
+    current_hour = datetime.now().hour
+    slot = run_slots.get(current_hour, 0)
+    day_offset = date.today().toordinal() % n_products
+    product_index = (slot + day_offset) % n_products
 
-    product_name = product_dirs[idx]
+    product_name = product_dirs[product_index]
     product_path = os.path.join(PRODUCT_ASSETS_DIR, product_name)
     images = sorted([
         os.path.join(product_path, f)
@@ -916,8 +898,8 @@ def pick_product():
         print(f"[WARN] Product '{product_name}' has only {len(images)} images (need 3)")
         return None
 
-    print(f"[INFO] Selected product: {product_name} (index {idx})")
-    return {"index": idx, "name": product_name, "images": images[:3], "next_index": (idx + 1) % max(len(product_dirs), 1)}
+    print(f"[INFO] Selected product: {product_name} (slot {slot}, day_offset {day_offset})")
+    return {"name": product_name, "images": images[:3]}
 
 
 def pick_hook_image():
@@ -1785,10 +1767,6 @@ def main():
         post_id = result.get("id") if result else None
 
     print(f"[OK] Posted successfully")
-
-    if product is not None:
-        save_product_rotation(product["next_index"])
-        print(f"[INFO] Product rotation saved: index {product['next_index']}")
 
     entry = {
         "soal": narasi["soal"],
