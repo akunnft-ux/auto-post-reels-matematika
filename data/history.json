@@ -660,5 +660,19 @@
     "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Sebuah fungsi f didefinisikan sebagai f(x) = 2x - 5. Jika f(a) = 7 dan f(3) = b, berapakah nilai dari a + b?",
+    "jawaban": "C. 9",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-13",
+    "content_type": "quiz",
+    "category": "ujian_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sd",
+    "hook_used": "Di akhir video ada cara cepatnya — tapi coba jawab versi kamu dulu di komentar! 🎬",
+    "cta_used": "Follow akun ini biar makin jago matematika! 📚",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
