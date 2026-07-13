@@ -632,5 +632,19 @@
     "hook_used": "Trik cepat yang gak diajarin di sekolah! 💡",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan bilangan: 3, 4, 7, 11, 18, 29, ...",
+    "jawaban": "C. 47",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-13",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Di akhir video ada cara cepatnya — tapi coba jawab versi kamu dulu di komentar! 🎬",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
