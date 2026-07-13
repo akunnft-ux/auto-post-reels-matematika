@@ -618,5 +618,19 @@
     "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Dalam sebuah ujian, nilai rata-rata 10 siswa adalah 75, jika nilai satu siswa baru dimasukkan maka rata-ratanya menjadi 76, berapakah nilai siswa baru tersebut?",
+    "jawaban": "C. Nilai baru = Rata-rata baru + (Selisih rata-rata × jumlah siswa lama)",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-13",
+    "content_type": "tips",
+    "category": "ujian_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_smp",
+    "hook_used": "Trik cepat yang gak diajarin di sekolah! 💡",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
