@@ -674,5 +674,19 @@
     "hook_used": "Di akhir video ada cara cepatnya — tapi coba jawab versi kamu dulu di komentar! 🎬",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tentukan jumlah 10 suku pertama dari deret aritmatika 2, 5, 8, 11, ...",
+    "jawaban": "C. Gunakan rumus Sn = n/2(2a + (n-1)b)",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-14",
+    "content_type": "tips",
+    "category": "ujian_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_smp",
+    "hook_used": "Save video ini! Pasti berguna nanti 📌",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
