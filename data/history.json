@@ -716,5 +716,19 @@
     "hook_used": "Ini soal yang bikin banyak orang salah karena buru-buru. Jangan sampai kamu juga! 🧐",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Dalam sebuah kelas, rata-rata nilai matematika 10 siswa adalah 70. Jika nilai tertinggi (100) dan nilai terendah (40) dikeluarkan, berapakah rata-rata nilai 8 siswa sisanya?",
+    "jawaban": "A. 70",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-14",
+    "content_type": "quiz",
+    "category": "ujian_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_smp",
+    "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
