@@ -786,5 +786,19 @@
     "hook_used": "Gampang katanya? Coba jawab dulu sebelum lihat pembahasannya. Komentar jawabanmu! 📝",
     "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Diberikan fungsi f(x) = ax + b dengan f(1) = 3 dan f(3) = 7. Jika g(x) = f(f(x)), berapakah nilai dari g(2)?",
+    "jawaban": "B. 11",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-15",
+    "content_type": "quiz",
+    "category": "olimpiade_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_smp",
+    "hook_used": "Ini soal yang bikin banyak orang salah karena buru-buru. Jangan sampai kamu juga! 🧐",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
