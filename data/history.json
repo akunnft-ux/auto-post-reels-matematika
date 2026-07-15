@@ -772,5 +772,19 @@
     "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Sebuah persegi panjang ABCD memiliki panjang AB = 8 cm dan lebar BC = 6 cm. Jika titik P terletak pada sisi CD sehingga luas segitiga ABP adalah ⅓ dari luas persegi panjang ABCD, berapakah panjang CP?",
+    "jawaban": "C. ¹⁶⁄₃ cm",
+    "topik": "geometri",
+    "tanggal": "2026-07-15",
+    "content_type": "quiz",
+    "category": "olimpiade_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_smp",
+    "hook_used": "Gampang katanya? Coba jawab dulu sebelum lihat pembahasannya. Komentar jawabanmu! 📝",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
