@@ -758,5 +758,19 @@
     "hook_used": "Temenmu pasti langsung jawab salah. Buktiin kamu beda — coba dulu! 👇",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan berikut: 2, 3, 6, 11, 20, 37, ...",
+    "jawaban": "B. 68",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-15",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
