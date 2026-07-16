@@ -828,5 +828,19 @@
     "hook_used": "Kalau kamu anak matematika sejati, ini harusnya gampang. Buktiin di komentar! 💪",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dalam barisan bilangan: 1, 2, 6, 24, 120, ...",
+    "jawaban": "D. 720",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-16",
+    "content_type": "quiz",
+    "category": "ujian_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sma",
+    "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
