@@ -800,5 +800,19 @@
     "hook_used": "Ini soal yang bikin banyak orang salah karena buru-buru. Jangan sampai kamu juga! 🧐",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Diberikan x dan y adalah bilangan real positif yang memenuhi persamaan x + y = 10 dan x² + y² = 58. Berapakah nilai dari x³ + y³?",
+    "jawaban": "B. 370",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-16",
+    "content_type": "quiz",
+    "category": "olimpiade_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_smp",
+    "hook_used": "Di akhir video ada cara cepatnya — tapi coba jawab versi kamu dulu di komentar! 🎬",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
