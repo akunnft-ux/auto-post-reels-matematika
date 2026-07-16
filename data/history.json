@@ -842,5 +842,19 @@
     "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Diketahui sebuah fungsi linear f(x) = ax + b. Jika grafik fungsi tersebut melalui titik (2, 5) dan (4, 11), berapakah nilai dari f(f(1))?",
+    "jawaban": "C. 11",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-16",
+    "content_type": "quiz",
+    "category": "ujian_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_smp",
+    "hook_used": "Kalau kamu anak matematika sejati, ini harusnya gampang. Buktiin di komentar! 💪",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
