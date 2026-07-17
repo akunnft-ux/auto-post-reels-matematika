@@ -870,5 +870,19 @@
     "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Bagaimana cara cepat menentukan koordinat titik potong grafik fungsi kuadrat f(x) = ax² + bx + c dengan sumbu Y?",
+    "jawaban": "C. Langsung melihat nilai konstanta c, sehingga titiknya adalah (0, c)",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-17",
+    "content_type": "tips",
+    "category": "ujian_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_smp",
+    "hook_used": "Trik cepat yang gak diajarin di sekolah! 💡",
+    "cta_used": "Follow akun ini biar makin jago matematika! 📚",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
