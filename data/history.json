@@ -912,5 +912,19 @@
     "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Berapakah jumlah dari deret bilangan 1 + 2 + 3 + ... + 50?",
+    "jawaban": "C. Gunakan rumus pasangan angka: (Jumlah angka x (angka terakhir + 1)) / 2",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-18",
+    "content_type": "tips",
+    "category": "olimpiade_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sd",
+    "hook_used": "Save video ini! Pasti berguna nanti 📌",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
