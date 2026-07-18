@@ -926,5 +926,19 @@
     "hook_used": "Save video ini! Pasti berguna nanti 📌",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Dalam sebuah tas terdapat 5 kelereng merah dan 3 kelereng kuning. Jika diambil 2 kelereng secara acak satu per satu tanpa pengembalian, berapakah peluang terambilnya kelereng dengan warna yang sama?",
+    "jawaban": "A. ¹³⁄₂₈",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-18",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
