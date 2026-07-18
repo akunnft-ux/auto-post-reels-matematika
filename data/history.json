@@ -954,5 +954,19 @@
     "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Tahukah kamu bahwa grafik fungsi eksponen f(x) = aˣ dan fungsi logaritma f(x) = ᵃ log x selalu simetris terhadap garis y = x? Fenomena ini terjadi karena kedua fungsi tersebut adalah pasangan fungsi invers satu sama lain.",
+    "jawaban": "Karena fungsi invers mencerminkan domain dan range terhadap y = x.",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-18",
+    "content_type": "fakta",
+    "category": "ujian_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sma",
+    "hook_used": "Ternyata selama ini kamu salah! Cek videonya ▶️",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
