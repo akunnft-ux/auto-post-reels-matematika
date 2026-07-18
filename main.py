@@ -706,14 +706,15 @@ def render_frame_pilihan(narasi, topic, output_path):
     line_h = 75
     gap = 40
 
+    max_box_h = 400
     boxes = []
     for i, pil in enumerate(narasi["pilihan"]):
         letter = chr(65 + i)
-        if not pil.startswith(f"{letter}."):
-            pil = f"{letter}.  {pil}"
+        pil_clean = re.sub(r'^[A-D][\.\)]?\s*', '', pil).strip()
+        pil = f"{letter}. {pil_clean}"
         current_font = font_pil_large if is_fraction(pil) else font_pil
         lines = wrap_text(pil, current_font, draw, box_w - 80)
-        box_h = max(120, len(lines) * line_h + 40)
+        box_h = min(max_box_h, max(120, len(lines) * line_h + 40))
         boxes.append((pil, lines, current_font, box_h))
 
     total_content_h = sum(b[3] for b in boxes) + (len(boxes) - 1) * gap
@@ -721,14 +722,16 @@ def render_frame_pilihan(narasi, topic, output_path):
     available = footer_y - header_h - 60
     y_offset = header_h + 60 + max(20, (available - total_content_h) // 2)
 
+    current_y = y_offset
     for i, (pil, lines, current_font, box_h) in enumerate(boxes):
-        box_y = y_offset + i * (box_h + gap)
+        box_y = current_y
         draw_rounded_rect(draw, [margin_x, box_y, margin_x + box_w, box_y + box_h], 16, PILIHAN_BG)
         draw.rounded_rectangle([margin_x + 2, box_y + 2, margin_x + box_w - 2, box_y + box_h - 2], radius=14, fill=None, outline=topic_bg, width=2)
         draw.rounded_rectangle([margin_x, box_y, margin_x + 14, box_y + box_h], radius=16, fill=topic_bg)
         text_y_start = box_y + (box_h - len(lines) * line_h) // 2
         for j, line in enumerate(lines):
             draw.text((margin_x + 40, text_y_start + j * line_h), line, fill=PILIHAN_TEXT, font=current_font, anchor="lt")
+        current_y += box_h + gap
 
     draw.line([(80, footer_y), (IMG_WIDTH - 80, footer_y)], fill=topic_bg, width=3)
     deco = random.choice(DODDLE_ICONS)
@@ -747,7 +750,7 @@ def render_frame_pembahasan(narasi, topic, output_path):
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), hex_to_rgb(BG_COLOR))
     draw = ImageDraw.Draw(img)
     font_bold = ImageFont.truetype(FONT_BOLD, 66)
-    font_jawab = ImageFont.truetype(FONT_BOLD, 75)
+    font_jawab = ImageFont.truetype(FONT_BOLD, 60)
     font_penjelasan = ImageFont.truetype(FONT_REGULAR, 60)
     font_footer = ImageFont.truetype(FONT_REGULAR, 36)
     font_icon = ImageFont.truetype(FONT_BOLD, 48)
