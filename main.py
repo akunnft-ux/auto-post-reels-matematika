@@ -748,7 +748,7 @@ def render_frame_pembahasan(narasi, topic, output_path):
     draw = ImageDraw.Draw(img)
     font_bold = ImageFont.truetype(FONT_BOLD, 66)
     font_jawab = ImageFont.truetype(FONT_BOLD, 75)
-    font_penjelasan = ImageFont.truetype(FONT_REGULAR, 65)
+    font_penjelasan = ImageFont.truetype(FONT_REGULAR, 60)
     font_footer = ImageFont.truetype(FONT_REGULAR, 36)
     font_icon = ImageFont.truetype(FONT_BOLD, 48)
 
