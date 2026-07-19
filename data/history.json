@@ -1010,5 +1010,19 @@
     "hook_used": "Ada 1 trik yang bikin soal ini kejawab dalam 5 detik. Coba dulu cara manual, terus cek triknya! ⚡",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dari barisan bilangan berikut: 3, 4, 7, 11, 18, 29, ...",
+    "jawaban": "C. 47",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-19",
+    "content_type": "quiz",
+    "category": "ujian_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sma",
+    "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
