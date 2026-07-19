@@ -502,7 +502,8 @@ Aturan:
 - Jangan buat soal yang sama dengan soal-soal sebelumnya
 - Soal sebelumnya: {json.dumps(recent, ensure_ascii=False)}
 - Maksimal 3 kalimat untuk soal
-- Penjelasan maksimal 4 kalimat, fokus pada trik mengerjakannya"""
+- Penjelasan maksimal 4 kalimat, fokus pada trik mengerjakannya
+- Penjelasan (pembahasan) harus KONSISTEN dengan jawaban. Jika jawaban adalah "A. 42", penjelasan harus menjelaskan MENGAPA A (42) yang benar — jangan sampai penjelasan merujuk ke pilihan lain sebagai jawaban yang benar"""
     elif content_type == "fakta":
         prompt = f"""Buat 1 konten fakta matematika yang mengejutkan dan jarang diketahui orang, terkait topik {topic_label}. Konten ini ditujukan untuk {cat['prompt_context']}.
 
@@ -522,7 +523,8 @@ Aturan:
 - Maksimal 2 kalimat untuk fakta
 - Penjelasan 3-4 kalimat
 - Contoh: "Ternyata 0.999... = 1", atau "Ada bilangan yang lebih besar dari tak terhingga"
-- Pastikan faktanya bisa diverifikasi"""
+- Pastikan faktanya bisa diverifikasi
+- Penjelasan harus mendukung jawaban yang dipilih, jangan merujuk ke pilihan lain sebagai jawaban yang benar"""
     else:
         prompt = f"""Buat 1 tips/trik cepat matematika untuk {cat['prompt_context']} dengan topik {topic_label}.
 
@@ -542,7 +544,8 @@ Aturan:
 - Maksimal 2 kalimat untuk soal
 - Penjelasan 3-4 kalimat
 - Fokus pada trik yang bisa dipakai di {cat['prompt_context']}
-- Contoh: "Trik hitung persen dalam 3 detik" atau "Cara cepat deret aritmatika"""
+- Contoh: "Trik hitung persen dalam 3 detik" atau "Cara cepat deret aritmatika"
+- Penjelasan harus KONSISTEN dengan jawaban. Jika jawaban adalah "C. Cara cepat (trikinya)", penjelasan harus membahas trik pada pilihan C, bukan pilihan lain"""
 
     for attempt in range(1, max_retry + 1):
         try:
@@ -569,6 +572,20 @@ Aturan:
             if narasi["jawaban"] not in narasi["pilihan"]:
                 print(f"[WARN] Jawaban not in pilihan after formatting, retry {attempt}")
                 continue
+
+            jawaban_letter = re.match(r'^([A-D])', narasi["jawaban"])
+            if jawaban_letter:
+                correct_letter = jawaban_letter.group(1)
+                other_letters = [l for l in ["A", "B", "C", "D"] if l != correct_letter]
+                other_pattern = "|".join(other_letters)
+                if re.search(
+                    rf'(?:jawaban|jawabannya)\s*(?:yang\s*benar\s*)?(?:adalah|yakni|yaitu)\s*({other_pattern})\b',
+                    narasi["penjelasan"],
+                    re.IGNORECASE
+                ):
+                    print(f"[WARN] Penjelasan contradicts jawaban (mentions another letter as correct), retry {attempt}")
+                    continue
+
             return narasi
         except (json.JSONDecodeError, KeyError, ValueError) as e:
             print(f"[WARN] Gemini attempt {attempt} failed: {e}")
