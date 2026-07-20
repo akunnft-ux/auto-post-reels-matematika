@@ -1052,5 +1052,19 @@
     "hook_used": "Ada 1 trik yang bikin soal ini kejawab dalam 5 detik. Coba dulu cara manual, terus cek triknya! ⚡",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Tahukah kamu bahwa sebuah garis lurus bisa dibentuk oleh angka-angka yang membentuk pola tertentu dalam sebuah grafik? Ternyata, fungsi matematika sederhana bisa membentuk gambar yang rumit seperti lingkaran sempurna tanpa harus menggambarnya manual.",
+    "jawaban": "Persamaan x² + y² = r² akan selalu membentuk sebuah lingkaran sempurna di bidang koordinat.",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-20",
+    "content_type": "fakta",
+    "category": "ujian_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sd",
+    "hook_used": "Fakta mengejutkan yang jarang orang tahu! 🤯",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
