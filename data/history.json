@@ -1094,5 +1094,19 @@
     "hook_used": "Temenmu pasti langsung jawab salah. Buktiin kamu beda — coba dulu! 👇",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Jika grafik fungsi kuadrat f(x) = x² - 4x + k memiliki titik puncak dengan ordinat 3, berapakah nilai k?",
+    "jawaban": "C. 7",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-21",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
