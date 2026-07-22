@@ -1164,5 +1164,19 @@
     "hook_used": "Hitung dalam 3 detik! Rahasianya di sini ⚡",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tahukah kamu bahwa angka 9 memiliki keunikan ajaib dalam perkalian? Jika angka 9 dikalikan dengan angka apa pun, hasil penjumlahan digit-digit dari hasilnya akan selalu kembali menjadi 9.",
+    "jawaban": "Karena angka 9 memiliki sifat unik dalam basis 10 yang membuat kelipatannya selalu berjumlah 9 jika dijumlahkan terus-menerus.",
+    "topik": "aritmatika_aljabar",
+    "tanggal": "2026-07-22",
+    "content_type": "fakta",
+    "category": "ujian_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sd",
+    "hook_used": "Ternyata selama ini kamu salah! Cek videonya ▶️",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
