@@ -1248,5 +1248,19 @@
     "hook_used": "Di akhir video ada cara cepatnya — tapi coba jawab versi kamu dulu di komentar! 🎬",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 3 bola merah dan 3 bola putih. Jika diambil 3 bola sekaligus secara acak, berapakah peluang terambilnya setidaknya 2 bola merah?",
+    "jawaban": "A. ½",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-23",
+    "content_type": "quiz",
+    "category": "ujian_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sma",
+    "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
