@@ -1318,5 +1318,19 @@
     "hook_used": "Ternyata selama ini kamu salah! Cek videonya ▶️",
     "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Jika grafik fungsi kuadrat f(x) = ax² + bx + c memiliki titik puncak (2, 5) dan memotong sumbu-y di titik (0, 1), berapakah nilai dari f(1)?",
+    "jawaban": "C. 4",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-25",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
