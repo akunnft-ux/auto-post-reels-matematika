@@ -1304,5 +1304,19 @@
     "hook_used": "Kalau kamu anak matematika sejati, ini harusnya gampang. Buktiin di komentar! 💪",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Jika kamu berada di sebuah ruangan berisi 23 orang, peluang setidaknya ada dua orang yang memiliki tanggal ulang tahun yang sama ternyata lebih dari 50%. Fenomena ini dikenal dengan Paradoks Ulang Tahun.",
+    "jawaban": "Peluang tersebut adalah 1 dikurangi peluang semua orang memiliki hari ulang tahun yang berbeda.",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-25",
+    "content_type": "fakta",
+    "category": "olimpiade_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_smp",
+    "hook_used": "Ternyata selama ini kamu salah! Cek videonya ▶️",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
