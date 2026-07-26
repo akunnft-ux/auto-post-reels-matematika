@@ -1360,5 +1360,19 @@
     "hook_used": "Ini soal yang bikin banyak orang salah karena buru-buru. Jangan sampai kamu juga! 🧐",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Perhatikan deret angka berikut: 3, 4, 7, 11, 18, 29, x. Berapakah nilai x yang tepat untuk melanjutkan deret tersebut?",
+    "jawaban": "A. 47",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-26",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
