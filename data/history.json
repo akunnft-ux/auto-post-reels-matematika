@@ -1416,5 +1416,19 @@
     "hook_used": "Ini soal yang bikin banyak orang salah karena buru-buru. Jangan sampai kamu juga! 🧐",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Tentukan angka berikutnya dari barisan berikut: 1, 2, 4, 8, 16, 31, ...",
+    "jawaban": "A. 57",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-27",
+    "content_type": "quiz",
+    "category": "ujian_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_smp",
+    "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
