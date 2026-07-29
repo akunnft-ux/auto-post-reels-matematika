@@ -1500,5 +1500,19 @@
     "hook_used": "Save video ini! Pasti berguna nanti 📌",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Jika grafik fungsi y = x² + 2x - 8 memotong sumbu-x di titik A dan B, berapakah panjang ruas garis AB?",
+    "jawaban": "B. 6",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-29",
+    "content_type": "quiz",
+    "category": "ujian_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_smp",
+    "hook_used": "Di akhir video ada cara cepatnya — tapi coba jawab versi kamu dulu di komentar! 🎬",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
