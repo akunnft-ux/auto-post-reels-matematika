@@ -1556,5 +1556,19 @@
     "hook_used": "Cuma 1 dari 20 orang yang bisa jawab soal ini dalam 10 detik. Kamu termasuk? 🎯",
     "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Dalam sebuah kotak terdapat 5 bola merah dan 3 bola biru, jika diambil 2 bola sekaligus, berapakah jumlah kombinasi pasangan bola yang mungkin terbentuk jika urutan tidak diperhatikan?",
+    "jawaban": "C. Gunakan pola segitiga Pascal: baris ke-(n+1), ambil nilai ke-k",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-07-30",
+    "content_type": "tips",
+    "category": "olimpiade_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sd",
+    "hook_used": "Hitung dalam 3 detik! Rahasianya di sini ⚡",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
