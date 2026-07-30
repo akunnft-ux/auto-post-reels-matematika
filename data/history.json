@@ -1570,5 +1570,19 @@
     "hook_used": "Hitung dalam 3 detik! Rahasianya di sini ⚡",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Sebuah fungsi f(x) memiliki aturan: jika x ganjil maka f(x) = x + 3, dan jika x genap maka f(x) = x / 2. Jika kita memulai dengan x = 5, berapakah nilai dari f(f(f(f(5))))?",
+    "jawaban": "A. 1",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-30",
+    "content_type": "quiz",
+    "category": "olimpiade_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sd",
+    "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
+    "cta_used": "Follow akun ini biar makin jago matematika! 📚",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
