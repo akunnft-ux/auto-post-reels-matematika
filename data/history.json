@@ -1584,5 +1584,19 @@
     "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Sebuah segitiga siku-siku memiliki panjang sisi-sisi siku-siku (x-2) cm dan (x+3) cm. Jika luas segitiga tersebut adalah 7 cm², berapakah panjang sisi terpanjang (hipotenusa) dari segitiga tersebut?",
+    "jawaban": "B. 2√13 cm",
+    "topik": "geometri",
+    "tanggal": "2026-07-30",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Cuma 1 dari 20 orang yang bisa jawab soal ini dalam 10 detik. Kamu termasuk? 🎯",
+    "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
