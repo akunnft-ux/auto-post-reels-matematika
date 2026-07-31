@@ -1626,5 +1626,19 @@
     "hook_used": "Kebanyakan guru juga salah menjelaskan ini! 😱",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tahukah kamu bahwa jumlah tak hingga dari deret ½ + ¼ + ⅛ + ¹⁄₁₆ + ... ternyata tepat sama dengan 1? Pola deret ini terus membagi dua angka sebelumnya tanpa henti.",
+    "jawaban": "Jumlahnya tepat sama dengan 1.",
+    "topik": "deret_angka",
+    "tanggal": "2026-07-31",
+    "content_type": "fakta",
+    "category": "olimpiade_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sd",
+    "hook_used": "Baru tahu setelah lulus? Simak ini! 🫠",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
