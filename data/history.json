@@ -1612,5 +1612,19 @@
     "hook_used": "Kebanyakan guru juga salah menjelaskan ini! 😱",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tahukah Anda bahwa terdapat kurva yang disebut 'Kurva Koch Snowflake' yang memiliki keliling tak terhingga, namun tetap memiliki luas yang terbatas? Bagaimana mungkin suatu bentuk memiliki batas yang tidak bisa diukur panjangnya namun menempati ruang yang terbatas?",
+    "jawaban": "Karena nilai limit dari kelilingnya menuju tak hingga, sedangkan limit luasnya konvergen ke suatu nilai.",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-07-31",
+    "content_type": "fakta",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Kebanyakan guru juga salah menjelaskan ini! 😱",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
