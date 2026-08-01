@@ -1654,5 +1654,19 @@
     "hook_used": "Cuma 1 dari 20 orang yang bisa jawab soal ini dalam 10 detik. Kamu termasuk? 🎯",
     "cta_used": "Komen jawabanmu, kasih 🔥 kalau bener!",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Diberikan segitiga ABC dengan panjang sisi AB = 13, BC = 14, dan AC = 15. Jika sebuah lingkaran berjari-jari r berpusat di titik D yang terletak pada sisi BC sedemikian sehingga lingkaran tersebut menyinggung sisi AB dan AC, berapakah nilai r?",
+    "jawaban": "B. 5,6",
+    "topik": "geometri",
+    "tanggal": "2026-08-01",
+    "content_type": "quiz",
+    "category": "olimpiade_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sma",
+    "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
