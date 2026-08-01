@@ -1696,5 +1696,19 @@
     "hook_used": "Kalau kamu anak matematika sejati, ini harusnya gampang. Buktiin di komentar! 💪",
     "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Diberikan fungsi f(x) = x² - 4x + 7. Jika g(x) = f(x-3), berapakah nilai dari g(1)?",
+    "jawaban": "C. 7",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-08-01",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
