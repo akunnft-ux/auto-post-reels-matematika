@@ -1668,5 +1668,19 @@
     "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Berapa banyak cara menyusun huruf pada kata 'MATEMATIKA'?",
+    "jawaban": "C. Menggunakan rumus permutasi unsur yang sama: n! / (k1! * k2! * ... * kn!)",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-08-01",
+    "content_type": "tips",
+    "category": "ujian_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sma",
+    "hook_used": "Hitung dalam 3 detik! Rahasianya di sini ⚡",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
   }
 ]
