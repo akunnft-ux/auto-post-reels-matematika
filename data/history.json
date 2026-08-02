@@ -1710,5 +1710,19 @@
     "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
     "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
     "hashtags_used": "🔗 https://s.shopee.co.id/9UzaK5xWGk"
+  },
+  {
+    "soal": "Tentukan angka selanjutnya dari deret: 2, 6, 12, 20, 30, ...",
+    "jawaban": "C. Gunakan pola perkalian n(n+1) dimana n adalah urutan suku ke-n",
+    "topik": "deret_angka",
+    "tanggal": "2026-08-02",
+    "content_type": "tips",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Hitung dalam 3 detik! Rahasianya di sini ⚡",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
