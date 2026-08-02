@@ -1724,5 +1724,19 @@
     "hook_used": "Hitung dalam 3 detik! Rahasianya di sini ⚡",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Sebuah fungsi ditentukan dengan aturan f(x) = 2x - 5. Jika f(a) = 9 dan f(3) = b, berapakah nilai dari a + b?",
+    "jawaban": "B. 14",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-08-02",
+    "content_type": "quiz",
+    "category": "ujian_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sd",
+    "hook_used": "Temenmu pasti langsung jawab salah. Buktiin kamu beda — coba dulu! 👇",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
