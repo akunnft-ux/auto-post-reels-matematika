@@ -1794,5 +1794,19 @@
     "hook_used": "Kalau kamu anak matematika sejati, ini harusnya gampang. Buktiin di komentar! 💪",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Tentukan hasil dari penjumlahan deret bilangan: 1 - 2 + 3 - 4 + 5 - 6 + ... + 99 - 100.",
+    "jawaban": "C. Mengelompokkan dua suku menjadi satu pasangan (-1) sebanyak setengah dari jumlah suku",
+    "topik": "deret_angka",
+    "tanggal": "2026-08-03",
+    "content_type": "tips",
+    "category": "olimpiade_smp",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_smp",
+    "hook_used": "Trik cepat yang gak diajarin di sekolah! 💡",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
