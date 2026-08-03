@@ -1752,5 +1752,19 @@
     "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Diberikan fungsi f(x) = |x - 2| + 3. Manakah pernyataan yang benar mengenai nilai minimum dari fungsi tersebut untuk semua bilangan real x?",
+    "jawaban": "B. Nilai minimum adalah 3 saat x = 2",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-08-03",
+    "content_type": "quiz",
+    "category": "ujian_sma",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "ujian_sma",
+    "hook_used": "Ada 1 trik yang bikin soal ini kejawab dalam 5 detik. Coba dulu cara manual, terus cek triknya! ⚡",
+    "cta_used": "Follow akun ini biar makin jago matematika! 📚",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
