@@ -1766,5 +1766,19 @@
     "hook_used": "Ada 1 trik yang bikin soal ini kejawab dalam 5 detik. Coba dulu cara manual, terus cek triknya! ⚡",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Sebuah lingkaran dengan luas 100π cm² berada di dalam sebuah persegi. Jika lingkaran tersebut menyinggung keempat sisi persegi, berapakah selisih antara luas persegi dan luas lingkaran?",
+    "jawaban": "D. 100(4 - π)",
+    "topik": "geometri",
+    "tanggal": "2026-08-03",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Temenmu pasti langsung jawab salah. Buktiin kamu beda — coba dulu! 👇",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
