@@ -1878,5 +1878,19 @@
     "hook_used": "Ini soal yang bikin banyak orang salah karena buru-buru. Jangan sampai kamu juga! 🧐",
     "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Sebuah fungsi didefinisikan sebagai f(x) = 2x - 4. Jika f(k) = 2 dan f(2) = m, berapakah nilai dari k + m?",
+    "jawaban": "C. 5",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-08-05",
+    "content_type": "quiz",
+    "category": "olimpiade_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sd",
+    "hook_used": "Jawabannya sesimpel ini, tapi kebanyakan orang overthinking. Tebak dulu, baru cek! 🤯",
+    "cta_used": "Follow @matematikacpns untuk soal baru setiap hari! 🔥",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
   }
 ]
