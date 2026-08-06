@@ -1906,5 +1906,19 @@
     "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9KgA7my9bj"
+  },
+  {
+    "soal": "Sebuah kotak berisi 3 bola merah, 2 bola putih, dan 1 bola hitam. Jika diambil 2 bola sekaligus secara acak, berapakah peluang terambilnya setidaknya satu bola merah?",
+    "jawaban": "B. 0,7",
+    "topik": "peluang_statistika",
+    "tanggal": "2026-08-06",
+    "content_type": "quiz",
+    "category": "cpns",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "cpns",
+    "hook_used": "Ada 1 trik yang bikin soal ini kejawab dalam 5 detik. Coba dulu cara manual, terus cek triknya! ⚡",
+    "cta_used": "Jawab dulu di komentar — reveal ada di akhir video! 📝",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
