@@ -1934,5 +1934,19 @@
     "hook_used": "Menurutmu jawabannya apa? Coba pause dan tebak dulu! 🤔",
     "cta_used": "Follow akun ini biar makin jago matematika! 📚",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Sebuah persegi panjang memiliki panjang 12 cm dan lebar 8 cm. Jika panjangnya ditambah 50% dan lebarnya dikurangi 50%, berapakah luas persegi panjang yang baru?",
+    "jawaban": "B. 72 cm²",
+    "topik": "geometri",
+    "tanggal": "2026-08-06",
+    "content_type": "quiz",
+    "category": "olimpiade_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sd",
+    "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
+    "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
