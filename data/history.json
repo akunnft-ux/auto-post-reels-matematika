@@ -1948,5 +1948,19 @@
     "hook_used": "Tulis jawabanmu di komentar SEBELUM lihat reveal-nya. Yang bener, kasih tanda 🔥 di komentar!",
     "cta_used": "Tulis A/B/C/D di komentar sebelum scroll ke jawaban! 👇",
     "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
+  },
+  {
+    "soal": "Sebuah fungsi didefinisikan dengan aturan f(x) = 2x - 1. Jika f(a + 2) = 13, berapakah nilai dari a?",
+    "jawaban": "A. 4",
+    "topik": "fungsi_grafik",
+    "tanggal": "2026-08-06",
+    "content_type": "quiz",
+    "category": "olimpiade_sd",
+    "account_type": "page",
+    "format": "slide",
+    "theme": "olimpiade_sd",
+    "hook_used": "Gampang katanya? Coba jawab dulu sebelum lihat pembahasannya. Komentar jawabanmu! 📝",
+    "cta_used": "Follow akun ini biar makin jago matematika! 📚",
+    "hashtags_used": "🔗 https://s.shopee.co.id/9fJ0WOwsvl"
   }
 ]
